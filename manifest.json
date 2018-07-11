@@ -10,8 +10,8 @@
   ], 
   "browser_action": {
     "default_icon": {
-      "20": "src = photos\blankPerson.png",
-      "40": "src = photos\blankPerson.png"
+      "20": "images/blankPerson.png",
+      "40": "images/blankPerson.png"
     },
     "default_title": "Color Changer",
     "default_popup": "popup.html"
