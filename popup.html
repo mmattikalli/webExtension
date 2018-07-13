@@ -1,14 +1,37 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="css/styles.css" />
+    
+    <link rel="stylesheet" type="text/css" href="css/mainStyle.css" />
   </head>
   <body>
-    <h1>Change the color of the windows bar!</h1>
+    <div class = "bar">
+      <h1>Welcome to WebAssist!</h1>
+    </div>
     <h2>Color Changer</h2>
-    <button id="changeToRed">Red</button>
-    <button id="changeToBlue">Blue</button>
-    <button id="reset">Reset</button>
+    <button class= "buttonRed" id="changeToRed">Red</button>
+    <button class = "buttonBlue" id="changeToBlue">Blue</button>
+    <button class = "buttonReset" id="reset">Reset</button>
     <script src="js/popup.js"></script>
+
+    <div>
+      <!--command to create a toggle bar-->
+      <label class="switch">
+        <input type="checkbox" id="mySwitch" onclick="myFunction()">
+        <span class="slider round face"></span>
+      </label> 
+      <div>
+          <!--<button class = "buttonNotes" id = "faceID">Facial ID for Private Browsers (learn more)</button> -->
+          <a href ="/facePage.html" class = "buttonNotes"> 
+            Learn More about FaceID for Private Browsers
+          </a>
+      </div>
+
+    </div>
+    <label class="switch">
+        <input type="checkbox">
+        <span class="slider round slouch"></span>
+      </label> 
+
   </body>
 </html>
