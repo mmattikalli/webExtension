@@ -18,7 +18,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    height: 34px; 
+    height: 30px; 
     width: 70px; 
     -webkit-transition: .5s;
     transition: .5s;
@@ -53,7 +53,6 @@ input:checked + .slider.face:before{
 }
 
 /* slouch slider */
-
 .slider.slouch{
     background-color: maroon; 
 }
@@ -68,9 +67,7 @@ input:checked + .slider.slouch:before{
     background-color: maroon; 
 }
 
-
 /* hand slider */
-
 .slider.hand{
     background-color: white;
 }
@@ -90,9 +87,9 @@ input:checked + .slider.hand:before{
 
 /* moves slider */ 
 input:checked + .slider:before {
-    -webkit-transform: translateX(35px);
-    -ms-transform: translateX(35px);
-    transform: translateX(35px);
+    -webkit-transform: translateX(38px);
+    -ms-transform: translateX(38px);
+    transform: translateX(38px);
 }
 
 /* creating rounded sliders */

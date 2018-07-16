@@ -2,11 +2,12 @@
 let red = document.getElementById('changeToRed');
 let blue = document.getElementById('changeToBlue');
 let reset = document.getElementById('reset');
-let IDinfo = document.getElementById('faceID'); 
+let faceIDInfo = document.getElementByID('faceSwitch'); 
 
-function myFunction() {
+function checkedBox() {
   // Get the checkbox
-  var checkBox = document.getElementById("mySwitch");
+  var checkBox = document.getElementById("faceSwitch");
+  console.log(checkBox); 
   // Get the output text
   var text = document.getElementById("text");
 
@@ -18,7 +19,7 @@ function myFunction() {
   }
 } 
 
-// use tabs.insertCSS to change header color on button click
+
 // red
 red.onclick = function() {
   browser.tabs.insertCSS({code: ".c-uhfh .brand-neutral { background: red !important; }"});

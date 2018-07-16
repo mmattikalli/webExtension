@@ -1,0 +1,27 @@
+
+.buttonReset:hover{
+    background-color: lightgrey; 
+  }
+  .buttonReset:active{
+    background-color: darkgrey; 
+  }
+  
+  .buttonRed:hover {
+    background-color: lightcoral; 
+  }
+  
+  .buttonRed:active{
+    background-color: red;
+  }
+  
+  .buttonBlue:hover {
+    background-color: lightblue;
+  }
+  
+  .buttonBlue:active {
+    background-color: darkblue; 
+  }
+  
+  .buttonLayout:notes {
+    background: linear-gradient(grey, blue); 
+  }
