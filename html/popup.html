@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/mainStyle.css" />
+    <link rel="stylesheet" type="text/css" href="css/sliders.css">
+    <script src="js/popup.js"></script>
+  </head>
+
+  <body>
+    <nav class = "topHead">
+      Welcome to WebAssist!
+    </nav>
+
+    <h2>Color Changer</h2>
+    <button class= "buttonRed" id="changeToRed">Red</button>
+    <button class = "buttonBlue" id="changeToBlue">Blue</button>
+    <button class = "buttonReset" id="reset">Reset</button>
+
+
+    <!-- for the face ID switch -->
+    <div> 
+      <h4> 
+        Enable FaceID Security For Your Browser 
+      </h4>
+      <!--command to create a toggle bar-->
+      <label class="switch">
+        <input type="checkbox" id="mySwitch" onclick="myFunction()">
+        <span class="slider round face"></span>
+      </label> 
+      <br> 
+      <div>
+          <!--<button class = "buttonNotes" id = "faceID">Facial ID for Private Browsers (learn more)</button> -->
+          <a href ="/facePage.html" class = "buttonNotes"> 
+            Learn More about FaceID for Private Browsers
+          </a>
+      </div>
+    </div>
+
+    <!--slouch detection features-->
+    <div>
+      <h4>
+        Enable Slouch Detection
+      </h4> 
+      <label class="switch">
+        <input type="checkbox">
+        <span class="slider round slouch"></span>
+      </label> 
+      <br> 
+      <a href = "/slouchPage.html" class = "buttonNotes">
+        Learn More about Slouch Detection
+      </a>
+    </div>
+
+    <!--enable hand tracking features-->
+    <div>
+        <h4>
+          Enable Hand Tracking for Scrolling 
+        </h4> 
+        <label class="switch">
+          <input type="checkbox">
+          <span class="slider round hand"></span>
+        </label> 
+        <br> 
+        <a href = "/handTrackPage.html" class = "buttonNotes">
+          Learn More about Website Hand Tracking Features
+        </a>
+      </div>
+
+
+  </body>
+</html>

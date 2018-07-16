@@ -1,0 +1,104 @@
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 70px;
+    height: 34px;
+    outline-color: black; 
+}
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 34px; 
+    width: 70px; 
+    -webkit-transition: .5s;
+    transition: .5s;
+}
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 7px;
+    bottom: 7px;
+    background-color:#0078D7;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+/* face slider */ 
+.slider.face{
+    background-color: white;
+}
+
+.slider.face:before{
+    background-color: #0078D7;
+}
+
+input:checked + .slider.face {
+    background-color:#0078D7;
+}
+
+input:checked + .slider.face:before{
+    background-color: white; 
+}
+
+/* slouch slider */
+
+.slider.slouch{
+    background-color: maroon; 
+}
+.slider.slouch:before {
+    background-color: lightpink;
+}
+input:checked + .slider.slouch {
+    background-color: lightpink;
+}
+/* changes color of circle after it has been moved */
+input:checked + .slider.slouch:before{
+    background-color: maroon; 
+}
+
+
+/* hand slider */
+
+.slider.hand{
+    background-color: white;
+}
+
+.slider.hand:before{
+    background-color: #0078D7;
+}
+
+input:checked + .slider.hand {
+    background-color:#0078D7;
+}
+
+input:checked + .slider.hand:before{
+    background-color: white; 
+}
+
+
+/* moves slider */ 
+input:checked + .slider:before {
+    -webkit-transform: translateX(35px);
+    -ms-transform: translateX(35px);
+    transform: translateX(35px);
+}
+
+/* creating rounded sliders */
+.slider.round {
+    border-radius: 45px;
+}
+.slider.round:before {
+    border-radius: 50%;
+}

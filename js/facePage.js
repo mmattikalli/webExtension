@@ -1,4 +1,3 @@
-<script>
 var myInput = document.getElementById("psw");
 var letter = document.getElementById("letter");
 var capital = document.getElementById("capital");
@@ -56,4 +55,3 @@ myInput.onkeyup = function() {
     length.classList.add("invalid");
   }
 }
-</script>

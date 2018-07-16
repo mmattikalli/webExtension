@@ -13,7 +13,7 @@
       "20": "images/blankPerson.png",
       "40": "images/blankPerson.png"
     },
-    "default_title": "Color Changer",
+    "default_title": "WebAssist",
     "default_popup": "popup.html"
   },
   "content_scripts": [{
