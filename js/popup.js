@@ -1,24 +1,23 @@
+
 // get the buttons by id
 let red = document.getElementById('changeToRed');
 let blue = document.getElementById('changeToBlue');
 let reset = document.getElementById('reset');
 let faceIDInfo = document.getElementByID('faceSwitch'); 
 
-function checkedBox() {
-  // Get the checkbox
-  var checkBox = document.getElementById("faceSwitch");
-  console.log(checkBox); 
-  // Get the output text
-  var text = document.getElementById("text");
 
-  // If the checkbox is checked, display the output text
-  if (checkBox.checked == true){
-    text.style.display = "block";
-  } else {
-    text.style.display = "none";
+function capture() {
+  html2canvas($('body'),{
+    onrendered: function (canvas) {                     
+      var imgString = canvas.toDataURL("image/png");
+      window.open(imgString);                  
   }
-} 
+});
+}
 
+$("input").blur(function(){
+  alert("FaceID not recognized"); 
+});
 
 // red
 red.onclick = function() {
