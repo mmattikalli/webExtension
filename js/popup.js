@@ -6,18 +6,22 @@ let reset = document.getElementById('reset');
 let faceIDInfo = document.getElementByID('faceSwitch'); 
 
 
-function capture() {
-  html2canvas($('body'),{
-    onrendered: function (canvas) {                     
-      var imgString = canvas.toDataURL("image/png");
-      window.open(imgString);                  
-  }
-});
+
+/* blurs a frame - needs to get the object frame from a capture method*/ 
+
+frame.onclick = function() {
+    console.log("reachingClick"); 
+    if (document.body.getAttribute("class")==="normal")
+    {
+        document.body.setAttribute("class", "toBeBlurred"); 
+    }
+    else{
+        document.body.setAttribute("class", "normal"); 
+    }
 }
 
-$("input").blur(function(){
-  alert("FaceID not recognized"); 
-});
+
+
 
 // red
 red.onclick = function() {

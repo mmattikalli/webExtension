@@ -1,0 +1,8 @@
+.normal
+{
+    filter: none; 
+}
+.toBeBlurred
+{
+    filter: blur(5px);
+}
