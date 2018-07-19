@@ -2,18 +2,20 @@
 <html>
   
   <head>
+    <script src="../js/apiKeys.js"></script>
+
     <link rel="stylesheet" type="text/css" href="../css/mainStyle.css" />
     <link rel="stylesheet" type="text/css" href="../css/sliders.css"/>
     <link rel="stylesheet" type="text/css" href="../css/blurTest.css"/>
     <link rel="stylesheet" type="text/css" href="../css/facePopup.css"/>    
   </head>
 
-  <button type="button" id="enableFaceId">Test Button for FaceID</button>
-
   <body>
     <nav class = "topHead">
       Welcome to WebAssist!
     </nav>
+
+    <button type="button" id="enableFaceId">Test Button for FaceID</button>
  
 
     <!-- for the face ID switch -->
@@ -57,8 +59,22 @@
         <a href = "/handTrackPage.html" class = "buttonNotes">
           Learn More about Website Hand Tracking Features
         </a>
-      </div>
+    
+    </div>
+    <div>
+      <h4>
+        Enable Object Detection
+      </h4> 
+      <label class="switch">
+        <input type="checkbox">
+        <span class="slider round object"></span>
+      </label> 
+      <br> 
+      <a href = "/objectDetectPage.html" class = "buttonNotes">
+        Learn More about Object Detection
+      </a>
+    </div>
 
-      <script src="../js/popup.js"></script>
+    <script src="../js/popup.js"></script>
   </body>
 </html>
