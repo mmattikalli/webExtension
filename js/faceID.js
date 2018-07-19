@@ -33,12 +33,13 @@ let processImage = (image) => { //process an image (get a JSON file)
     }
     //wrapper class version of above REST call
     return faceJS.detectFaces(byteArr, true, true).then(text => {
-        /*
-        this.setState({
-            jsonResponse: JSON.stringify(text)
-        }); */
-        let id = text[0].faceId;
-        return id;
+        if (text.length < 1) {
+            alert("ur face gone");
+            return text[0].faceId;
+        } else {
+            let id = text[0].faceId;
+            return id;
+        }
     });
 }
 
@@ -78,7 +79,7 @@ function capture(mode) {
 function sendToProcess(snapshot, calibrate) {
     if (calibrate === "calibrating" & counter < 1) {
         //if first capture click, get a calibrated face ID
-        
+
         calibrated = snapshot;
         processImage(calibrated).then(id => {
             faceCalibrated = id;
@@ -116,8 +117,8 @@ document.querySelector('.calibrate').addEventListener('click', () => {
 
 
 document.getElementById('enableFaceIdScreen').addEventListener('click', () => {
-    console.log("reaching second click"); 
-    
+    console.log("reaching second click");
+
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({
             video: true
