@@ -57,7 +57,7 @@ class FaceJS {
     /**
      * Detect faces in an image.
      *
-     * @param {Uint8Array} image The image to detect faces in.
+     * @param {Blob|BufferSource} image The image to detect faces in.
      * @param {boolean} [faceId] Whether or not to return ids of the faces.
      * @param {boolean} [faceLandmarks] Whether or not to return landmarks of the faces.
      * @param {Array<string>} [faceAttributes=[]] What attributes of the face to return.
@@ -65,6 +65,10 @@ class FaceJS {
      * @returns {Promise<Object>} The request reponse.
      */
     detectFaces(image, faceId, faceLandmarks, faceAttributes) {
+        if (image === undefined) {
+            throw new Error('image is not an optional parameter');
+        }
+
         let parameters = [];
         if (faceId !== undefined) {
             parameters.push({
@@ -99,6 +103,13 @@ class FaceJS {
      * @returns {Promise<Object>} The response request.
      */
     verifyFace(faceId1, faceId2) {
+        if (faceId1 === undefined) {
+            throw new Error('faceId1 is not an optional parameter');
+        }
+        if (faceId2 === undefined) {
+            throw new Error('faceId2 is not an optional parameter');
+        }
+
         return this.sendRequest('verify', 'POST', [], JSON.stringify({
             faceId1: faceId1,
             faceId2: faceId2
