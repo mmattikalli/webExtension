@@ -4,21 +4,17 @@
   <head>
     <link rel="stylesheet" type="text/css" href="../css/mainStyle.css" />
     <link rel="stylesheet" type="text/css" href="../css/sliders.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/buttons.css"/>
     <link rel="stylesheet" type="text/css" href="../css/blurTest.css"/>
-
-    <script src="..js/popup.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/facePopup.css"/>    
   </head>
+
+  <button type="button" id="enableFaceId">Test Button for FaceID</button>
 
   <body>
     <nav class = "topHead">
       Welcome to WebAssist!
     </nav>
-
-    <h2>Color Changer</h2>
-    <button class= "buttonRed" id="changeToRed">Red</button>
-    <button class = "buttonBlue" id="changeToBlue">Blue</button>
-    <button class = "buttonReset" id="reset">Reset</button>
+ 
 
     <!-- for the face ID switch -->
     <div> 
@@ -27,16 +23,10 @@
       </h4>
       <!--command to create a toggle bar-->
       <label class="switch">
-        <input type="checkbox" id="faceSwitch" onclick = "faceRecogWindow">
+        <input type="checkbox" id="faceSwitch">
         <span class="slider round face"></span>
       </label> 
-      <br> 
-      <div>
-          <!--<button class = "buttonNotes" id = "faceID">Facial ID for Private Browsers (learn more)</button> -->
-          <a href ="/facePage.html" class = "buttonNotes"> 
-            Learn More about FaceID for Private Browsers
-          </a>
-      </div>
+
     </div>
 
     <!--slouch detection features-->
@@ -68,5 +58,7 @@
           Learn More about Website Hand Tracking Features
         </a>
       </div>
+
+      <script src="../js/popup.js"></script>
   </body>
 </html>

@@ -1,15 +1,15 @@
 /* main styles */
 
 * {
-    background-color: #ededed; 
-    color: black;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex; 
-    align-content: center; 
-    justify-content: center; 
-    margin: 3px; 
-    padding: 3px;  
-    flex-direction: column; 
+  background-color: #ededed; 
+  color: black;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex; 
+  align-content: center; 
+  justify-content: center; 
+  margin: 3px; 
+  padding: 3px;  
+  flex-direction: column; 
 }
 
 nav {
