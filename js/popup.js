@@ -5,13 +5,17 @@
 
 
 // for the extension
-let faceButton = document.getElementById("enableFaceId"); 
+//let faceButton = document.getElementById("enableFaceId"); 
+document.addEventListener("DOMContentLoaded", function () {
+    let faceSwitch = document.getElementById("faceSwitch"); 
 
-faceButton.onclick = function()
-{
-    console.log("reaching click");
-    window.open('../html/facePopup.html', 'faceStuffOrSomething');
-}
+    faceSwitch.onclick = function(){
+        console.log("reaching click");
+        setTimeout(function() {
+            location.replace('../html/facePopup.html');
+        }, 700);
+    }
+});
 
 // for the second webpage 
 /*
