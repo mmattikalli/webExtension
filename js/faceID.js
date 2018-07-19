@@ -108,7 +108,7 @@ document.querySelector('.calibrate').addEventListener('click', () => {
         ticker = setInterval(() => {
             console.log("ticking");
             capture("current");
-        }, 5000);
+        }, 8000);
     } else {
 
     }
