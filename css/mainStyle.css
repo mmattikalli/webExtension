@@ -7,9 +7,9 @@
   display: flex; 
   align-content: center; 
   justify-content: center; 
+  flex-direction: column; 
   margin: 3px; 
   padding: 3px;  
-  flex-direction: column; 
 }
 
 nav {

@@ -128,3 +128,17 @@ document.getElementById('enableFaceIdScreen').addEventListener('click', () => {
         });
     }
 })
+
+
+
+// goes back to homepage
+document.addEventListener("DOMContentLoaded", function () {
+    let faceSwitchBack = document.getElementById("faceSwitchBackwards"); 
+
+    faceSwitchBack.onclick = function(){
+        console.log("reaching click");
+        setTimeout(function() {
+            location.replace('../html/popup.html');
+        }, 700);
+    }
+});

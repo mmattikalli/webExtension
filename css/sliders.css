@@ -52,6 +52,24 @@ input:checked + .slider.face:before{
     background-color: white; 
 }
 
+/* faceID going back to popup page  */
+
+.slider.face.back{
+    background-color:#0078D7;
+}
+
+.slider.face.back:before{
+    background-color: white;
+}
+
+input:checked + .slider.face.back {
+    background-color: white;
+}
+
+input:checked + .slider.face.back:before{
+    background-color:#0078D7;
+}
+
 /* slouch slider */
 .slider.slouch{
     background-color: white;

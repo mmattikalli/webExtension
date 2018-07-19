@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+
 // for the second webpage 
 /*
 let enableFace = document.getElementById("enableFaceIdScreen");

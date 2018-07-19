@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="css/mainStyle.css">
+        <link rel="stylesheet" type="text/css" href="../css/mainStyle.css">
+        <link rel="stylesheet" type="text/css" href="../css/sliders.css">
 
         <script src="../js/apiKeys.js"></script>
         <script src="../js/face.js"></script>
@@ -18,7 +19,17 @@
         </h2>
         <button type="button" id="enableFaceIdScreen">Enable</button>
 
-
+        <div> 
+            <h4> 
+              Disable Face ID for your browser [go back to homepage] 
+            </h4>
+            <!--command to create a toggle bar-->
+            <label class="switch"  id="faceSwitchBackwards">
+              <input type="checkbox"/>
+              <span class="slider round face back"></span>
+            </label> 
+      
+          </div>
 
         <center class="tracking-container">
             <video id="video" width="640" height="480" autoplay></video>
