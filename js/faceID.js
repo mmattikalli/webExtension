@@ -81,10 +81,9 @@ function captureFrame(video) {
     document.body.appendChild(canvas);
     canvas.getContext('2d').drawImage(video, 0, 0, video.width, video.height);
 
+    let url = canvas.toDataURL('image/png');
     // get image data URL and remove canvas
     canvas.parentNode.removeChild(canvas);
-
-    let url = canvas.toDataURL('image/png');
 
     var data = url.split(',')[1];
 
@@ -137,10 +136,13 @@ document.querySelector('#calibrate').addEventListener('click', () => {
 
             faceJS.detectFaces(captureFrame(video), true)
             .then(faces => {
-                for (face in faces) {
+                faces.forEach(face => {
+                    console.log("itworkedtoreachforloop");
                     faceJS.verifyFace(calibratedId, face.faceId)
-                    .then()
-                }
+                    .then(result => { 
+                        console.log("itworked");
+                    });
+                });  
             });
         }, 8000);
     }
