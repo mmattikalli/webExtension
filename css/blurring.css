@@ -1,8 +1,7 @@
-.normal
-{
-    filter: none; 
+.normal {
+    filter: none;
 }
-.toBeBlurred
-{
+
+.toBeBlurred {
     filter: blur(5px);
 }

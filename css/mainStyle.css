@@ -1,5 +1,6 @@
 /* main styles */
 * {
+
   background-color: #ededed;
   color: black; 
   display: flex; 
@@ -12,6 +13,7 @@
 body * {
   margin: 3px; 
   padding: 3px;  
+
 }
 
 body {
@@ -28,33 +30,33 @@ nav {
   height: 80px; 
   margin: 0px; 
   padding: 10px; 
-
 }
 
-.topHead{
-  color: white; 
-  font-size: 30px;
-  text-align: center; 
+.topHead {
+    color: white;
+    font-size: 30px;
+    text-align: center;
 }
 
 p {
-  flex-direction: row;
+    flex-direction: row;
 }
 
-.buttonNotes{
-  color: darkslategrey;
+.buttonNotes {
+    color: darkslategrey;
 }
-.buttonNotes:hover{
-  color: black; 
+
+.buttonNotes:hover {
+    color: black;
 }
 
 .blurredElement {
-  filter: blur(5px); 
+    filter: blur(5px);
 }
-
 
 /* for the titles on the pages */
 
 .titles {
   font-style: normal; 
 }
+
