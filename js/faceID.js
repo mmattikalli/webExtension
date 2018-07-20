@@ -1,28 +1,16 @@
-let captured = false;
-let video = document.getElementById('video'); //THis is used when face tracking is off and only the webcam is being instantiated
+let captured = false; // Make local
+let video = document.getElementById('video'); // THis is used when face tracking is off and only the webcam is being instantiated
 let trackingCanvas = document.querySelector('.canvas2'); //tracking canvas
 
-let mediaStream; //stores stream object
-let calibrated; //calibrated image
-let current; //current image
-let faceCalibrated; //calibrated face ID
-let counter = 0; //defines what will be considered calibrated - when counter = 0 - and when current - not 0
+let calibratedId; // calibrated face ID
+let counter = 0; // defines what will be considered calibrated - when counter = 0 - and when current - not 0
 
+let faceJS = new FaceJS(AZURE_KEYS.key1, "westcentralus"); // Declaration of new wrapper object
 
-let faceJS = new FaceJS(AZURE_KEYS.key1, "westcentralus"); //Declaration of new wrapper object
-
-let ticker; //initializes var for interval of snapshots 
-
-
-
-
-let processImage = (image) => { //process an image (get a JSON file)
-    //console.log(image); //test
-
-    var sourceImageUrl = image
-
-    //All this converts png to Uint8Array to send to Azure
-    var data = sourceImageUrl.split(',')[1];
+// TODO(MD): Make a named function
+let processImage = (image) => { // process an image (get a JSON file)
+    // All this converts png to Uint8Array to send to Azure
+    var data = image.split(',')[1];
 
     var bytes = window.atob(data);
     var buf = new ArrayBuffer(bytes.length);
@@ -31,7 +19,8 @@ let processImage = (image) => { //process an image (get a JSON file)
     for (var i = 0; i < bytes.length; i++) {
         byteArr[i] = bytes.charCodeAt(i);
     }
-    //wrapper class version of above REST call
+
+    // wrapper class version of above REST call
     return faceJS.detectFaces(byteArr, true, true).then(text => {
         if (text.length < 1) {
             alert("ur face gone");
@@ -76,42 +65,84 @@ function capture(mode) {
     sendToProcess(snapshot, mode);
 }
 
+/**
+ * Capture a single frame from a video element
+ *
+ * @param {HTMLVideoElement} video The video element to capture
+ */
+function captureFrame(video) {
+    let canvas = document.createElement('canvas');
+
+    // set canvas dimensions to video ones to not truncate picture
+    canvas.width = video.width;
+    canvas.height = video.height;
+
+    // copy full video frame into the canvas
+    document.body.appendChild(canvas);
+    canvas.getContext('2d').drawImage(video, 0, 0, video.width, video.height);
+
+    // get image data URL and remove canvas
+    canvas.parentNode.removeChild(canvas);
+
+    let url = canvas.toDataURL('image/png');
+
+    var data = url.split(',')[1];
+
+    var bytes = window.atob(data);
+    var buf = new ArrayBuffer(bytes.length);
+    var byteArr = new Uint8Array(buf);
+
+    for (var i = 0; i < bytes.length; i++) {
+        byteArr[i] = bytes.charCodeAt(i);
+    }
+
+    return byteArr;
+}
+
 function sendToProcess(snapshot, calibrate) {
-    if (calibrate === "calibrating" & counter < 1) {
+    if (calibrate === "calibrating") {
         //if first capture click, get a calibrated face ID
 
-        calibrated = snapshot;
-        processImage(calibrated).then(id => {
-            faceCalibrated = id;
+        processImage(snapshot).then(id => {
+            calibratedId = id;
         });
         console.log("issavingstatement");
     } else { //otherwise get a current face ID
         console.log("savingstatement2");
-        current = snapshot;
-        processImage(current).then(id => {
+        processImage(snapshot).then(id => {
             console.log("reaching process image");
-            faceJS.verifyFace(faceCalibrated, id).then(text => {
+            faceJS.verifyFace(calibratedId, id).then(text => {
                 console.log(JSON.stringify(text));
             });
         });
     }
-    counter++; //increment counter after each call
 }
 
 
-//when the button is clicked, execute this method 
-//encompasses all face tracking 
-document.querySelector('.calibrate').addEventListener('click', () => {
+//when the button is clicked, execute this method
+//encompasses all face tracking
+document.querySelector('#calibrate').addEventListener('click', () => {
     //Starting Webcam without using face tracking
     if (counter < 1) {
-        capture("calibrating");
-        counter = 1;
-        ticker = setInterval(() => {
-            console.log("ticking");
-            capture("current");
-        }, 8000);
-    } else {
+        faceJS.detectFaces(captureFrame(video), true)
+        .then(faces => {
+            calibratedId = faces[0].faceId;
+        });
 
+        // capture("calibrating");
+        counter = 1;
+        setInterval(() => {
+            // console.log("ticking");
+            // capture("current");
+
+            faceJS.detectFaces(captureFrame(video), true)
+            .then(faces => {
+                for (face in faces) {
+                    faceJS.verifyFace(calibratedId, face.faceId)
+                    .then()
+                }
+            });
+        }, 8000);
     }
 });
 
@@ -123,7 +154,6 @@ document.getElementById('enableFaceIdScreen').addEventListener('click', () => {
         navigator.mediaDevices.getUserMedia({
             video: true
         }).then(function (stream) {
-            mediaStream = stream;
             video.src = window.URL.createObjectURL(stream);
             video.play();
         });
@@ -134,7 +164,7 @@ document.getElementById('enableFaceIdScreen').addEventListener('click', () => {
 
 // goes back to homepage
 document.addEventListener("DOMContentLoaded", function () {
-    let faceSwitchBack = document.getElementById("faceSwitchBackwards"); 
+    let faceSwitchBack = document.getElementById("faceSwitchBackwards");
 
     faceSwitchBack.onclick = function(){
         console.log("reaching click");
