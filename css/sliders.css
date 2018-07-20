@@ -1,16 +1,21 @@
-
 /* The switch - the box around the slider */
+
 .switch {
     position: relative;
     display: inline-block;
     width: 70px;
     height: 34px;
-    outline-color: black; 
+    outline-color: black;
 }
+
 /* Hide default HTML checkbox */
-.switch input {display:none;}
+
+.switch input {
+    display: none;
+}
 
 /* The slider */
+
 .slider {
     position: absolute;
     cursor: pointer;
@@ -18,11 +23,12 @@
     left: 0;
     right: 0;
     bottom: 0;
-    height: 30px; 
-    width: 70px; 
+    height: 30px;
+    width: 70px;
     -webkit-transition: .5s;
     transition: .5s;
 }
+
 .slider:before {
     position: absolute;
     content: "";
@@ -30,107 +36,117 @@
     width: 20px;
     left: 7px;
     bottom: 7px;
-    background-color:#0078D7;
+    background-color: #0078D7;
     -webkit-transition: .4s;
     transition: .4s;
 }
 
-/* face slider */ 
-.slider.face{
+/* face slider */
+
+.slider.face {
     background-color: white;
 }
 
-.slider.face:before{
+.slider.face:before {
     background-color: #0078D7;
 }
 
-input:checked + .slider.face {
-    background-color:#0078D7;
+input:checked+.slider.face {
+    background-color: #0078D7;
 }
 
-input:checked + .slider.face:before{
-    background-color: white; 
+input:checked+.slider.face:before {
+    background-color: white;
 }
 
 /* faceID going back to popup page  */
 
-.slider.face.back{
-    background-color:#0078D7;
+.slider.face.back {
+    background-color: #0078D7;
 }
 
-.slider.face.back:before{
+.slider.face.back:before {
     background-color: white;
 }
 
-input:checked + .slider.face.back {
+input:checked+.slider.face.back {
     background-color: white;
 }
 
-input:checked + .slider.face.back:before{
-    background-color:#0078D7;
+input:checked+.slider.face.back:before {
+    background-color: #0078D7;
 }
 
 /* slouch slider */
-.slider.slouch{
+
+.slider.slouch {
     background-color: white;
 }
+
 .slider.slouch:before {
-    background-color:#0078D7;
+    background-color: #0078D7;
 }
-input:checked + .slider.slouch {
-    background-color:#0078D7;
+
+input:checked+.slider.slouch {
+    background-color: #0078D7;
 }
+
 /* changes color of circle after it has been moved */
-input:checked + .slider.slouch:before{
+
+input:checked+.slider.slouch:before {
     background-color: white;
 }
 
 /* hand slider */
-.slider.hand{
+
+.slider.hand {
     background-color: white;
 }
 
-.slider.hand:before{
+.slider.hand:before {
     background-color: #0078D7;
 }
 
-input:checked + .slider.hand {
-    background-color:#0078D7;
+input:checked+.slider.hand {
+    background-color: #0078D7;
 }
 
-input:checked + .slider.hand:before{
-    background-color: white; 
+input:checked+.slider.hand:before {
+    background-color: white;
 }
-
 
 /* object detect slider */
-.slider.object{
+
+.slider.object {
     background-color: white;
 }
 
-.slider.object:before{
+.slider.object:before {
     background-color: #0078D7;
 }
 
-input:checked + .slider.object {
-    background-color:#0078D7;
+input:checked+.slider.object {
+    background-color: #0078D7;
 }
 
-input:checked + .slider.object:before{
-    background-color: white; 
+input:checked+.slider.object:before {
+    background-color: white;
 }
 
-/* moves slider */ 
-input:checked + .slider:before {
+/* moves slider */
+
+input:checked+.slider:before {
     -webkit-transform: translateX(38px);
     -ms-transform: translateX(38px);
     transform: translateX(38px);
 }
 
 /* creating rounded sliders */
+
 .slider.round {
     border-radius: 45px;
 }
+
 .slider.round:before {
     border-radius: 50%;
 }
