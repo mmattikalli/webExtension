@@ -24,6 +24,7 @@ class FaceJS {
      *
      * @returns {Promise<Response>} The request response.
      */
+    
     sendRequest(endpoint, method, parameters, body, contentType) {
         // Format the url for the request
         let url = `https://${this.region}.api.cognitive.microsoft.com/face/v1.0/${endpoint}`;

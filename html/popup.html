@@ -15,10 +15,14 @@
       Welcome to WebAssist!
     </nav>
 
+    <a href = "/infoPage.html" class = "buttonNotes">
+      Learn More About Our Features
+    </a>
+    
     <!-- for the face ID switch -->
     <div> 
-      <h4> 
-        Enable FaceID Security For Your Browser 
+      <h4 class = "titles"> 
+        FaceID Security
       </h4>
       <!--command to create a toggle bar-->
       <label class="switch"  id="faceSwitch">
@@ -31,46 +35,38 @@
     <!--slouch detection features-->
     <div>
       <h4>
-        Enable Slouch Detection
+        Slouch Detection
       </h4> 
       <label class="switch">
         <input type="checkbox"/>
         <span class="slider round slouch"></span>
       </label> 
-      <br> 
-      <a href = "/slouchPage.html" class = "buttonNotes">
-        Learn More about Slouch Detection
-      </a>
     </div>
 
     <!--enable hand tracking features-->
     <div>
         <h4>
-          Enable Hand Tracking for Scrolling 
+          Hand Tracking for Scrolling
         </h4> 
         <label class="switch">
           <input type="checkbox"/>
           <span class="slider round hand"></span>
         </label> 
-        <br> 
-        <a href = "/handTrackPage.html" class = "buttonNotes">
-          Learn More about Website Hand Tracking Features
-        </a>
-    
     </div>
+
+    <!-- object recognition feature-->
     <div>
       <h4>
-        Enable Object Detection
+        Object Detection
       </h4> 
       <label class="switch">
         <input type="checkbox">
         <span class="slider round object"></span>
-      </label> 
-      <br> 
-      <a href = "/objectDetectPage.html" class = "buttonNotes">
-        Learn More about Object Detection
-      </a>
+      </label>  
     </div>
+
+    <br>
+
 
     <script src="../js/popup.js"></script>
   </body>
