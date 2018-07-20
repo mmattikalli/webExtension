@@ -41,30 +41,6 @@ function stopVideo(stream) {
     window.URL.revokeObjectURL(stream);
 }
 
-//captures a frame of a stream
-function capture(mode) {
-    // add canvas element
-    let canvas = document.createElement('canvas');
-
-    // set canvas dimensions to video ones to not truncate picture
-    const videoElement = document.querySelector('video');
-    canvas.width = videoElement.width;
-    canvas.height = videoElement.height;
-
-    // copy full video frame into the canvas
-    document.body.appendChild(canvas);
-    canvas.getContext('2d').drawImage(videoElement, 0, 0, videoElement.width, videoElement.height);
-
-    // get image data URL and remove canvas
-    let snapshot = canvas.toDataURL('image/png');
-    canvas.parentNode.removeChild(canvas);
-
-    // update grid picture source
-    document.querySelector('#grid').setAttribute('src', snapshot);
-
-    sendToProcess(snapshot, mode);
-}
-
 /**
  * Capture a single frame from a video element
  *
@@ -98,26 +74,6 @@ function captureFrame(video) {
     return byteArr;
 }
 
-function sendToProcess(snapshot, calibrate) {
-    if (calibrate === "calibrating") {
-        //if first capture click, get a calibrated face ID
-
-        processImage(snapshot).then(id => {
-            calibratedId = id;
-        });
-        console.log("issavingstatement");
-    } else { //otherwise get a current face ID
-        console.log("savingstatement2");
-        processImage(snapshot).then(id => {
-            console.log("reaching process image");
-            faceJS.verifyFace(calibratedId, id).then(text => {
-                console.log(JSON.stringify(text));
-            });
-        });
-    }
-}
-
-
 //when the button is clicked, execute this method
 //encompasses all face tracking
 document.querySelector('#calibrate').addEventListener('click', () => {
@@ -139,10 +95,10 @@ document.querySelector('#calibrate').addEventListener('click', () => {
                 faces.forEach(face => {
                     console.log("itworkedtoreachforloop");
                     faceJS.verifyFace(calibratedId, face.faceId)
-                    .then(result => { 
+                    .then(result => {
                         console.log("itworked");
                     });
-                });  
+                });
             });
         }, 8000);
     }
