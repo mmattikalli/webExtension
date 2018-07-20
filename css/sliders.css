@@ -57,6 +57,7 @@ input:checked + .slider {
 input:checked + .slider:before{
     background-color: white; 
 
+}
 
 /* all sliders coloring - switches to blue background on the next page  */
 
