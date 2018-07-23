@@ -1,9 +1,12 @@
-span.facePageOpen {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: black;
+.enable:hover{
+    background-color: lightblue;
+    color: black; 
 }
 
-span.facePageHeader {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: maroon;
+
+.enable.click{
+    background-color: darkblue; 
+    color: white; 
+
 }
+
