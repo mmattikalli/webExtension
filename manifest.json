@@ -1,4 +1,3 @@
-
 {
   "name": "WebAssist",
   "author": "Microsoft Edge Extension Developer",
@@ -6,8 +5,10 @@
   "description": "Assistance for your web browser",
   "permissions": [
     "*",
-    "tabs"
-  ], 
+    "tabs",
+    "activeTabs",
+    "video-capture"
+  ],
   "browser_action": {
     "default_icon": {
       "20": "images/blankPerson.png",
@@ -16,15 +17,21 @@
     "default_title": "WebAssist",
     "default_popup": "html/popup.html"
   },
-  "content_scripts": [{
-    "matches": [
+  "content_scripts": [
+    {
+      "matches": [
         "<all_urls>"
+      ],
+      "js": [
+        "js/content.js"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "background": {
+    "scripts": [
+      "js/background.js"
     ],
-    "js": ["js/content.js"],
-    "run_at": "document_end"
-}],
-"background": {
-  "scripts": ["js/background.js"],
-  "persistent": true
-}
+    "persistent": true
+  }
 }

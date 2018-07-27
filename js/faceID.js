@@ -7,31 +7,6 @@ let counter = 0; // defines what will be considered calibrated - when counter = 
 
 let faceJS = new FaceJS(AZURE_KEYS.key1, "westcentralus"); // Declaration of new wrapper object
 
-// TODO(MD): Make a named function
-let processImage = (image) => { // process an image (get a JSON file)
-    // All this converts png to Uint8Array to send to Azure
-    var data = image.split(',')[1];
-
-    var bytes = window.atob(data);
-    var buf = new ArrayBuffer(bytes.length);
-    var byteArr = new Uint8Array(buf);
-
-    for (var i = 0; i < bytes.length; i++) {
-        byteArr[i] = bytes.charCodeAt(i);
-    }
-
-    // wrapper class version of above REST call
-    return faceJS.detectFaces(byteArr, true, true).then(text => {
-        if (text.length < 1) {
-            alert("ur face gone");
-            return text[0].faceId;
-        } else {
-            let id = text[0].faceId;
-            return id;
-        }
-    });
-}
-
 //stops video, clearing out the feed on the page and unloading memory
 function stopVideo(stream) {
     const video = document.querySelector('video');
@@ -76,47 +51,48 @@ function captureFrame(video) {
 
 //when the button is clicked, execute this method
 //encompasses all face tracking
+
 document.querySelector('#calibrate').addEventListener('click', () => {
-    //Starting Webcam without using face tracking
+    // Prevent spam clicking
     if (counter < 1) {
         faceJS.detectFaces(captureFrame(video), true)
-        .then(faces => {
-            calibratedId = faces[0].faceId;
-        });
-
-        // capture("calibrating");
+            .then(faces => {
+                calibratedId = faces[0].faceId;
+            });
         counter = 1;
         setInterval(() => {
-            // console.log("ticking");
-            // capture("current");
-
             faceJS.detectFaces(captureFrame(video), true)
-            .then(faces => {
-                faces.forEach(face => {
-                    console.log("itworkedtoreachforloop");
-                    faceJS.verifyFace(calibratedId, face.faceId)
-                    .then(result => {
-                        console.log("itworked");
-                    });
+                .then(faces => {
+                    if (faces.length < 1) {
+                        alert("ur face gone");
+                    } else {
+                        faces.forEach(face => {
+                            console.log("itworkedtoreachforloop");
+                            faceJS.verifyFace(calibratedId, face.faceId)
+                                .then(result => {
+                                    console.log(result);
+                                });
+                        });
+                    }
                 });
-            });
         }, 8000);
     }
 });
 
+function handleResponse(message) {
+    console.log(`Message from the background script:  ${message.response}`);
+}
+
+function handleError(error) {
+    console.log(`Error: ${error}`);
+}
 
 document.getElementById('enableFaceIdScreen').addEventListener('click', () => {
     console.log("reaching second click");
-
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({
-            video: true
-        }).then(function (stream) {
-            video.src = window.URL.createObjectURL(stream);
-            video.play();
-        });
-    }
-})
+    browser.runtime.sendMessage({
+        send: "sent"
+    }).then(handleResponse, handleError);
+});
 
 
 
@@ -124,9 +100,9 @@ document.getElementById('enableFaceIdScreen').addEventListener('click', () => {
 document.addEventListener("DOMContentLoaded", function () {
     let faceSwitchBack = document.getElementById("faceSwitchBackwards");
 
-    faceSwitchBack.onclick = function(){
+    faceSwitchBack.onclick = function () {
         console.log("reaching click");
-        setTimeout(function() {
+        setTimeout(function () {
             location.replace('../html/popup.html');
         }, 700);
     }
