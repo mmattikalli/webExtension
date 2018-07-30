@@ -69,6 +69,7 @@ class FaceJS {
             throw new Error('image is not an optional parameter');
         }
 
+        // Add parameters to the Azure request based on the optional parameters
         let parameters = [];
         if (faceId !== undefined) {
             parameters.push({
