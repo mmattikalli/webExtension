@@ -90,7 +90,7 @@ function captureFrame(video) {
 //when the button is clicked, execute this method
 //encompasses all face tracking
 
-document.querySelector('.calibrate').addEventListener('click', () => {
+document.querySelector('#calibrate').addEventListener('click', () => {
     // Prevent spam clicking
     if (counter < 1) {
         faceJS.detectFaces(captureFrame(video), true)
@@ -117,7 +117,7 @@ document.querySelector('.calibrate').addEventListener('click', () => {
     }
 });
 
-document.getElementById("enableFaceIdScreen").addEventListener("click", () => {
+document.getElementById("enableFaceSecurity").addEventListener("click", () => {
     browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         browser.tabs.sendMessage(tabs[0].id, { greeting: "hello" }, function (response) {
             console.log(response.farewell);
