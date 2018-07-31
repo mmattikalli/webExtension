@@ -7,7 +7,7 @@
   "permissions": [
     "*",
     "tabs"
-  ], 
+  ],
   "browser_action": {
     "default_icon": {
       "20": "images/blankPerson.png",
@@ -24,7 +24,7 @@
     "run_at": "document_end"
 }],
 "background": {
-  "scripts": ["js/background.js"],
+  "page": "html/background.html",
   "persistent": true
 }
 }
