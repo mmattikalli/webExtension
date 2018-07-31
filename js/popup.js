@@ -7,11 +7,11 @@
 // for the extension
 //let faceButton = document.getElementById("enableFaceId"); 
 document.addEventListener("DOMContentLoaded", function () {
-    let faceSwitch = document.getElementById("faceSwitch"); 
+    let faceSwitch = document.getElementById("faceSwitch");
 
-    faceSwitch.onclick = function(){
-        console.log("reaching click");
-        setTimeout(function() {
+    faceSwitch.onclick = function () {
+        console.log("reaching click popup");
+        setTimeout(function () {
             location.replace('../html/facePopup.html');
         }, 700);
     }

@@ -79,35 +79,26 @@ document.querySelector('#calibrate').addEventListener('click', () => {
     }
 });
 
-function handleResponse(message) {
-    console.log(`Message from the background script:  ${message.response}`);
-}
-
-function handleError(error) {
-    console.log(`Error: ${error}`);
-}
-
-document.getElementById('enableFaceIdScreen').addEventListener('click', () => {
-    console.log("reaching second click");
-    browser.runtime.sendMessage({
-        send: "sent"
-    }).then(handleResponse, handleError);
-});
-
-
 
 // goes back to homepage
 document.addEventListener("DOMContentLoaded", function () {
     let faceSwitchBack = document.getElementById("faceSwitchBackwards");
 
     faceSwitchBack.onclick = function () {
-        console.log("reaching click");
+        console.log("reaching click faceId");
         setTimeout(function () {
             location.replace('../html/popup.html');
         }, 700);
     }
 });
 
+document.getElementById("enableFaceIdScreen").addEventListener("click", () => {
+    browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        browser.tabs.sendMessage(tabs[0].id, { greeting: "hello" }, function (response) {
+            console.log(response.farewell);
+        });
+    });
+});
 
 
 
