@@ -1,41 +1,49 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="../css/mainStyle.css">
-        <link rel="stylesheet" type="text/css" href="../css/sliders.css">
-        <link rel="stylesheet" type="text/css" href="../css/faceStyle.css">
 
-        <script src="../js/apiKeys.js"></script>
-        <script src="../js/face.js"></script>
-    </head>
-    <body>
-        <h1>
-            WebAssist FaceID
-        </h1>
-        <h2>
-            Click Enable to Begin Secure Browsing
-        </h2>
-        <h3>
-            Click here for our privacy and security information
-        </h3>
-        <button type="button" id="enableFaceIdScreen" class = "enable">Enable</button>
+<head>
+    <script src="..\js\jquery\jquery.min.js"></script>
+    <script src="..\js\jquery\html2canvas.js"></script>
+    <script src="..\js\jquery\jquery.plugin.html2canvas.js"></script>
 
-        <div>
-            <h4>
-              Disable Face ID for your browser [go back to homepage]
-            </h4>
-            <!--command to create a toggle switch-->
-            <label class="switch"  id="faceSwitch">
-              <input type="checkbox" checked/>
-              <span class="slider round"></span>
-            </label>
+    <link rel="stylesheet" type="text/css" href="../css/mainStyle.css" />
+    <link rel="stylesheet" type="text/css" href="../css/sliders.css" />
+    <link rel="stylesheet" type="text/css" href="../css/faceStyle.css" />
 
-          </div>
+    <script src="../js/apiKeys.js"></script>
+    <script src="../js/face.js"></script>
+</head>
 
+<body>
+    <nav class="topHead">
+        WebAssist FaceID Security
+    </nav>
+
+    <div class="mainPanel">
+        <!-- go back to the homepage button-->
+        <p>
+            Go back to the homepage
+        </p>
+        <!--command to create a toggle switch-->
+        <label class="switch" id="faceSwitch">
+            <input type="checkbox" checked />
+            <span class="slider round"></span>
+        </label>
+
+        <p>
+            Click to enable and begin secure browsing
+        </p>
+
+        <button type="button" id="enableFaceSecurity" class="enable">Enable</button>
+    </div>
+
+    <div>
+        <!-- creates video container -->
         <center class="tracking-container">
             <video id="video" width="640" height="480" autoplay></video>
             <canvas class="canvas2" width="640" height="480"></canvas>
         </center>
+
         <div id="stream"></div>
 
         <div id="jsonOutput" style="width:600px; display:table-cell;">
@@ -45,10 +53,13 @@
             </textarea>
         </div>
 
-        <img id="grid" src="#"/>
-        <p class="button" > <button class="calibrate"> Calibrate </button></p>
+        <img id="grid" src="#" />
+        <p class="button">
+            <button id="calibrate"> Calibrate </button>
+        </p>
 
         <!--js code-->
         <script src="../js/faceID.js"></script>
-    </body>
+</body>
+
 </html>

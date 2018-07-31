@@ -7,12 +7,13 @@
   "description": "Assistance for your web browser",
   "permissions": [
     "<all_urls>",
+    "activeTab",
     "tabs"
   ],
   "browser_action": {
     "default_icon": {
-      "20": "images/blankPerson.png",
-      "40": "images/blankPerson.png"
+      "20": "./images/logo4.png",
+      "40": "./images/logo4.png"
     },
     "default_title": "WebAssist",
     "default_popup": "html/popup.html"
