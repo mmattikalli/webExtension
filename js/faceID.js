@@ -122,10 +122,13 @@ document.getElementById('enableFaceIdScreen').addEventListener('click', () => {
 
 // goes back to homepage
 document.addEventListener("DOMContentLoaded", function () {
-    let faceSwitchBack = document.getElementById("faceSwitchBackwards");
+    let faceSwitch = document.getElementById("faceSwitch");
 
-    faceSwitchBack.onclick = function(){
+    faceSwitch.onclick = function(){
         console.log("reaching click");
+
+        browser.runtime.sendMessage({ type: 'SetSetting', name: 'faceIdEnabled', value: false });
+
         setTimeout(function() {
             location.replace('../html/popup.html');
         }, 700);
