@@ -7,6 +7,44 @@ let counter = 0; // defines what will be considered calibrated - when counter = 
 
 let faceJS = new FaceJS(AZURE_KEYS.key1, "westcentralus"); // Declaration of new wrapper object
 
+// goes back to homepage
+document.addEventListener("DOMContentLoaded", function () {
+    let switchBack = document.getElementById("faceSwitch");
+
+    switchBack.onclick = function(){
+        browser.runtime.sendMessage({ type: 'SetSetting', name: 'faceIdEnabled', value: false });
+
+        setTimeout(function() {
+            location.replace('../html/popup.html');
+        }, 700);
+    }
+});
+
+// TODO(MD): Make a named function
+let processImage = (image) => { // process an image (get a JSON file)
+    // All this converts png to Uint8Array to send to Azure
+    var data = image.split(',')[1];
+
+    var bytes = window.atob(data);
+    var buf = new ArrayBuffer(bytes.length);
+    var byteArr = new Uint8Array(buf);
+
+    for (var i = 0; i < bytes.length; i++) {
+        byteArr[i] = bytes.charCodeAt(i);
+    }
+
+    // wrapper class version of above REST call
+    return faceJS.detectFaces(byteArr, true, true).then(text => {
+        if (text.length < 1) {
+            alert("ur face gone");
+            return text[0].faceId;
+        } else {
+            let id = text[0].faceId;
+            return id;
+        }
+    });
+}
+
 //stops video, clearing out the feed on the page and unloading memory
 function stopVideo(stream) {
     const video = document.querySelector('video');
@@ -79,19 +117,6 @@ document.querySelector('#calibrate').addEventListener('click', () => {
     }
 });
 
-
-// goes back to homepage
-document.addEventListener("DOMContentLoaded", function () {
-    let faceSwitchBack = document.getElementById("faceSwitchBackwards");
-
-    faceSwitchBack.onclick = function () {
-        console.log("reaching click faceId");
-        setTimeout(function () {
-            location.replace('../html/popup.html');
-        }, 700);
-    }
-});
-
 document.getElementById("enableFaceIdScreen").addEventListener("click", () => {
     browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         browser.tabs.sendMessage(tabs[0].id, { greeting: "hello" }, function (response) {
@@ -99,12 +124,3 @@ document.getElementById("enableFaceIdScreen").addEventListener("click", () => {
         });
     });
 });
-
-
-
-
-
-
-
-
-
