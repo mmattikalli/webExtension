@@ -2,6 +2,8 @@
 <html>
 
 <head>
+    <script src="../js/jquery-3.3.1.min.js"></script>
+    
     <link rel="stylesheet" type="text/css" href="../css/mainStyle.css" />
     <link rel="stylesheet" type="text/css" href="../css/sliders.css" />
     <link rel="stylesheet" type="text/css" href="../css/blurTest.css" />
@@ -12,57 +14,58 @@
         Welcome to WebAssist!
     </nav>
 
-    <a href = "/infoPage.html" class = "buttonNotes">
-      Learn More About Our Features
-    </a>
-    
-   
-    <div> 
-      <h4 class = "titles"> 
-        FaceID Security
-      </h4>
-      <!--command to create a toggle bar-->
-      <label class="switch"  id="faceSwitch">
-        <input type="checkbox"/>
-        <span class="slider round"></span>
-      </label> 
+    <div class="mainPanel">
+        <div>
+            <p class="titles">
+                FaceID Security
+            </p>
+            <!--command to create a toggle bar-->
+            <label class="switch" id="faceSwitch">
+                <input type="checkbox" />
+                <span class="slider round"></span>
+            </label>
 
-  </div>
-    <!--slouch detection features-->
-    <div>
+        </div>
+        <!--slouch detection features-->
+        <div>
 
-      <h4>
-        Slouch Detection
-      </h4> 
-      <label class="switch" id="slouchSwitch">
-        <input type="checkbox"/>
-        <span class="slider round"></span>
-      </label> 
+            <p class="titles">
+                Slouch Detection
+            </p>
+            <label class="switch" id="slouchSwitch">
+                <input type="checkbox" />
+                <span class="slider round"></span>
+            </label>
+
+        </div>
+
+        <!--enable hand tracking features-->
+        <div>
+            <p class="titles">
+                Hand Tracking for Scrolling
+            </p>
+            <label class="switch" id="handTracking">
+                <input type="checkbox" />
+                <span class="slider round"></span>
+            </label>
+        </div>
+
+        <!-- object recognition feature-->
+        <div>
+            <p class="titles">
+                Object Detection
+            </p>
+            <label class="switch" id="objectSearch">
+                <input type="checkbox">
+                <span class="slider round"></span>
+            </label>
+        </div>
+
+        <a href="./infoPage.html" class="buttonNotes">
+            Learn More About Our Features
+        </a>
 
     </div>
-
-    <!--enable hand tracking features-->
-    <div>
-        <h4>
-          Hand Tracking for Scrolling
-        </h4> 
-        <label class="switch" id="handTracking">
-          <input type="checkbox"/>
-          <span class="slider round"></span>
-        </label> 
-    </div>
-
-    <!-- object recognition feature-->
-    <div>
-      <h4>
-        Object Detection
-      </h4> 
-      <label class="switch" id="objectSearch">
-        <input type="checkbox">
-        <span class="slider round"></span>
-      </label> 
-  </div>
-
 
     <script src="../js/popup.js"></script>
 </body>
