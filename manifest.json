@@ -24,7 +24,8 @@
         "<all_urls>"
       ],
       "js": [
-        "js/content.js"
+        "js/content.js",
+        "js/faceID.js"
       ],
       "run_at": "document_end"
     }

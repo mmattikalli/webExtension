@@ -5,8 +5,13 @@ var video = document.createElement("video");
 
 video.autoplay = true;
 video.id = "vid";
-video.style.width = "640px";
-video.style.height = "480px";
+video.style.width = "320px";
+video.style.height = "240px";
+video.style.position = "fixed";
+video.style.bottom = "10px";
+video.style.left = "10px";
+video.style.borderRadius = "5px";
+//video.style.display = "none";
 
 btn.style.position = "fixed";
 btn.style.bottom = "10px";
@@ -34,16 +39,24 @@ btn.addEventListener("click", function () {
             // }
         }).catch(function (e) { console.log(e); })
     }
-});
 
-btn.addEventListener('click', function () {
-    chrome.runtime.sendMessage({
-        greeting: "Greeting from the content script"
-    }).then(function (message) {
-        console.log(`Message from the background script:  ${message.response}`);
-    }).catch(function (error) {
-        console.log(`Error: ${error}`);
-    });
+
 });
 
 
+function handleResponse(message) {
+    alert(`Message from the background script:  ${message.response}`);
+}
+
+function handleError(error) {
+    alert(`Error: ${error}`);
+}
+
+function notifyBackgroundPage(e) {
+    browser.runtime.sendMessage({
+        greeting: "hola"
+    }, handleResponse);
+    //sending.then(handleResponse, handleError);
+}
+
+btn.addEventListener("click", notifyBackgroundPage);
