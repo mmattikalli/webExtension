@@ -1,5 +1,36 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="../css/mainStyle.css">
+        <link rel="stylesheet" type="text/css" href="../css/sliders.css">
+        <link rel="stylesheet" type="text/css" href="../css/faceStyle.css">
+
+        <script src="../js/apiKeys.js"></script>
+        <script src="../js/face.js"></script>
+    </head>
+    <body>
+        <h1>
+            WebAssist FaceID
+        </h1>
+        <h2>
+            Click Enable to Begin Secure Browsing
+        </h2>
+        <h3>
+            Click here for our privacy and security information
+        </h3>
+        <button type="button" id="enableFaceIdScreen" class = "enable">Enable</button>
+
+        <div>
+            <h4>
+              Disable Face ID for your browser [go back to homepage]
+            </h4>
+            <!--command to create a toggle switch-->
+            <label class="switch"  id="faceSwitch">
+              <input type="checkbox" checked/>
+              <span class="slider round"></span>
+            </label>
+
+          </div>
 
 <head>
     <script src="..\js\jquery\jquery.min.js"></script>
@@ -25,9 +56,9 @@
             Go back to the homepage
         </p>
         <!--command to create a toggle switch-->
-        <label class="switch" id="faceSwitchBackwards">
+        <label class="switch" id="faceSwitch">
             <input type="checkbox" />
-            <span class="slider round back"></span>
+            <span class="slider round"></span>
         </label>
 
         <p>
@@ -56,15 +87,10 @@
             </textarea>
         </div>
 
-        <img id="grid" src="#" />
-        <p class="button">
-            <button class="calibrate"> Calibrate </button>
-        </p>
+        <img id="grid" src="#"/>
+        <p class="button" > <button class="calibrate"> Calibrate </button></p>
 
-
-    </div>
-    <!--js code-->
-    <script src="../js/faceUI.js"></script>
-</body>
-
+        <!--js code-->
+        <script src="../js/faceID.js"></script>
+    </body>
 </html>

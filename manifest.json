@@ -1,5 +1,6 @@
 
 {
+  "manifest_version": 2,
   "name": "WebAssist",
   "author": "Microsoft Edge Extension Developer",
   "version": "1.1",
@@ -8,7 +9,7 @@
     "<all_urls>",
     "activeTab",
     "tabs"
-  ], 
+  ],
   "browser_action": {
     "default_icon": {
       "20": "./images/logo4.png",

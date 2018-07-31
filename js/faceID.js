@@ -10,10 +10,11 @@ let faceJS = new FaceJS(AZURE_KEYS.key1, "westcentralus"); // Declaration of new
 
 // goes back to homepage
 document.addEventListener("DOMContentLoaded", function () {
-    let switchBack = document.getElementById("faceSwitchBackwards");
+    let switchBack = document.getElementById("faceSwitch");
 
     switchBack.onclick = function(){
-        console.log("reaching click");
+        browser.runtime.sendMessage({ type: 'SetSetting', name: 'faceIdEnabled', value: false });
+
         setTimeout(function() {
             location.replace('../html/popup.html');
         }, 700);
@@ -130,7 +131,3 @@ document.getElementById('enableFaceIdScreen').addEventListener('click', () => {
         });
     }
 })
-
-
-
-
