@@ -11,10 +11,10 @@ let faceJS = new FaceJS(AZURE_KEYS.key1, "westcentralus"); // Declaration of new
 document.addEventListener("DOMContentLoaded", function () {
     let switchBack = document.getElementById("faceSwitch");
 
-    switchBack.onclick = function(){
+    switchBack.onclick = function () {
         browser.runtime.sendMessage({ type: 'SetSetting', name: 'faceIdEnabled', value: false });
 
-        setTimeout(function() {
+        setTimeout(function () {
             location.replace('../html/popup.html');
         }, 700);
     }
@@ -90,7 +90,7 @@ function captureFrame(video) {
 //when the button is clicked, execute this method
 //encompasses all face tracking
 
-document.querySelector('#calibrate').addEventListener('click', () => {
+document.querySelector('.calibrate').addEventListener('click', () => {
     // Prevent spam clicking
     if (counter < 1) {
         faceJS.detectFaces(captureFrame(video), true)

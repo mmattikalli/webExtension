@@ -8,8 +8,7 @@
     "*",
     "tabs",
     "activeTabs",
-    "videoCapture",
-    "<all_urls>"
+    "videoCapture"
   ],
   "browser_action": {
     "default_icon": {
@@ -37,4 +36,3 @@
     "persistent": true
   }
 }
-
