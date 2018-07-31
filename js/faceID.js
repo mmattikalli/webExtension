@@ -7,6 +7,20 @@ let counter = 0; // defines what will be considered calibrated - when counter = 
 
 let faceJS = new FaceJS(AZURE_KEYS.key1, "westcentralus"); // Declaration of new wrapper object
 
+
+// goes back to homepage
+document.addEventListener("DOMContentLoaded", function () {
+    let switchBack = document.getElementById("faceSwitch");
+
+    switchBack.onclick = function(){
+        browser.runtime.sendMessage({ type: 'SetSetting', name: 'faceIdEnabled', value: false });
+
+        setTimeout(function() {
+            location.replace('../html/popup.html');
+        }, 700);
+    }
+});
+
 // TODO(MD): Make a named function
 let processImage = (image) => { // process an image (get a JSON file)
     // All this converts png to Uint8Array to send to Azure
@@ -117,20 +131,3 @@ document.getElementById('enableFaceIdScreen').addEventListener('click', () => {
         });
     }
 })
-
-
-
-// goes back to homepage
-document.addEventListener("DOMContentLoaded", function () {
-    let faceSwitch = document.getElementById("faceSwitch");
-
-    faceSwitch.onclick = function(){
-        console.log("reaching click");
-
-        browser.runtime.sendMessage({ type: 'SetSetting', name: 'faceIdEnabled', value: false });
-
-        setTimeout(function() {
-            location.replace('../html/popup.html');
-        }, 700);
-    }
-});

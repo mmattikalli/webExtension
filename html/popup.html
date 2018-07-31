@@ -12,62 +12,57 @@
         Welcome to WebAssist!
     </nav>
 
-    <!-- for the face ID switch -->
-    <div>
-        <h4>
-            Enable FaceID Security For Your Browser
-        </h4>
-        <!--command to create a toggle bar-->
-        <label class="switch" id="faceSwitch">
-            <input type="checkbox" />
-            <span class="slider round face"></span>
-        </label>
+    <a href = "/infoPage.html" class = "buttonNotes">
+      Learn More About Our Features
+    </a>
+    
+   
+    <div> 
+      <h4 class = "titles"> 
+        FaceID Security
+      </h4>
+      <!--command to create a toggle bar-->
+      <label class="switch"  id="faceSwitch">
+        <input type="checkbox"/>
+        <span class="slider round"></span>
+      </label> 
 
-    </div>
-
+  </div>
     <!--slouch detection features-->
     <div>
-        <h4>
-            Enable Slouch Detection
-        </h4>
-        <label class="switch">
-            <input type="checkbox" />
-            <span class="slider round slouch"></span>
-        </label>
-        <br>
-        <a href="/slouchPage.html" class="buttonNotes">
-            Learn More about Slouch Detection
-        </a>
+
+      <h4>
+        Slouch Detection
+      </h4> 
+      <label class="switch" id="slouchSwitch">
+        <input type="checkbox"/>
+        <span class="slider round"></span>
+      </label> 
+
     </div>
 
     <!--enable hand tracking features-->
     <div>
         <h4>
-            Enable Hand Tracking for Scrolling
-        </h4>
-        <label class="switch">
-            <input type="checkbox" />
-            <span class="slider round hand"></span>
-        </label>
-        <br>
-        <a href="/handTrackPage.html" class="buttonNotes">
-            Learn More about Website Hand Tracking Features
-        </a>
+          Hand Tracking for Scrolling
+        </h4> 
+        <label class="switch" id="handTracking">
+          <input type="checkbox"/>
+          <span class="slider round"></span>
+        </label> 
     </div>
 
+    <!-- object recognition feature-->
     <div>
-        <h4>
-            Enable Object Detection
-        </h4>
-        <label class="switch">
-            <input type="checkbox">
-            <span class="slider round object"></span>
-        </label>
-        <br>
-        <a href="/objectDetectPage.html" class="buttonNotes">
-            Learn More about Object Detection
-        </a>
-    </div>
+      <h4>
+        Object Detection
+      </h4> 
+      <label class="switch" id="objectSearch">
+        <input type="checkbox">
+        <span class="slider round"></span>
+      </label> 
+  </div>
+
 
     <script src="../js/popup.js"></script>
 </body>

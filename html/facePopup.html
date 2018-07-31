@@ -1,56 +1,54 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="../css/mainStyle.css">
+        <link rel="stylesheet" type="text/css" href="../css/sliders.css">
+        <link rel="stylesheet" type="text/css" href="../css/faceStyle.css">
 
-<head>
-    <link rel="stylesheet" type="text/css" href="../css/mainStyle.css">
-    <link rel="stylesheet" type="text/css" href="../css/sliders.css">
+        <script src="../js/apiKeys.js"></script>
+        <script src="../js/face.js"></script>
+    </head>
+    <body>
+        <h1>
+            WebAssist FaceID
+        </h1>
+        <h2>
+            Click Enable to Begin Secure Browsing
+        </h2>
+        <h3>
+            Click here for our privacy and security information
+        </h3>
+        <button type="button" id="enableFaceIdScreen" class = "enable">Enable</button>
 
-    <script src="../js/apiKeys.js"></script>
-    <script src="../js/face.js"></script>
-</head>
+        <div>
+            <h4>
+              Disable Face ID for your browser [go back to homepage]
+            </h4>
+            <!--command to create a toggle switch-->
+            <label class="switch"  id="faceSwitch">
+              <input type="checkbox" checked/>
+              <span class="slider round"></span>
+            </label>
 
-<body>
-    <h1>
-        WebAssist FaceID - Would You like to enable? [would you like to open the webcam]
-    </h1>
-    <h2>
-        click here for our privacy and security information
-    </h2>
-    <button type="button" id="enableFaceIdScreen">Enable</button>
+          </div>
 
-    <div>
-        <h4>
-            Disable Face ID for your browser [go back to homepage]
-        </h4>
-        <!--command to create a toggle bar-->
-        <label class="switch" id="faceSwitch">
-            <input type="checkbox" checked />
-            <span class="slider round face"></span>
-        </label>
-    </div>
+        <center class="tracking-container">
+            <video id="video" width="640" height="480" autoplay></video>
+            <canvas class="canvas2" width="640" height="480"></canvas>
+        </center>
+        <div id="stream"></div>
 
-    <center class="tracking-container">
-        <video id="video" width="640" height="480" autoplay></video>
-        <canvas class="canvas2" width="640" height="480"></canvas>
-    </center>
+        <div id="jsonOutput" style="width:600px; display:table-cell;">
+            Response:
+            <textarea id="responseTextArea" class="UIInput" style="width:580px; height:400px;">
+                {this.state.jsonResponse}
+            </textarea>
+        </div>
 
-    <div id="stream"></div>
+        <img id="grid" src="#"/>
+        <p class="button" > <button class="calibrate"> Calibrate </button></p>
 
-    <div id="jsonOutput" style="width:600px; display:table-cell;">
-        Response:
-        <textarea id="responseTextArea" class="UIInput" style="width:580px; height:400px;">
-            {this.state.jsonResponse}
-        </textarea>
-    </div>
-
-    <img id="grid" src="#" />
-
-    <p>
-        <button id="calibrate"> Calibrate </button>
-    </p>
-
-    <!--js code-->
-    <script src="../js/faceID.js"></script>
-</body>
-
+        <!--js code-->
+        <script src="../js/faceID.js"></script>
+    </body>
 </html>
