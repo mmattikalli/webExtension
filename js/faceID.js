@@ -1,6 +1,6 @@
 let captured = false; // Make local
 let video = document.getElementById('video'); // This is used when face tracking is off and only the webcam is being instantiated
-let trackingCanvas = document.getElementByID('canvas'); //tracking canvas
+let trackingCanvas = document.getElementById('canvas'); //tracking canvas
 
 let calibratedId; // calibrated face ID
 let counter = 0; // defines what will be considered calibrated - when counter = 0 - and when current - not 0

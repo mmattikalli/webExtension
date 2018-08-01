@@ -8,7 +8,14 @@ browser.runtime.onMessage.addListener(
                 "from a content script:" + sender.tab.url :
                 "from the extension");
 
-            var video = document.createElement("video"); //Creates element to be appended
+            let video = document.createElement("video"); //Creates element to be appended
+            let divContainer = document.createElement("div");
+            divContainer.appendChild(video);
+
+            document.body.appendChild(divContainer); 
+            divContainer.style.display = "flex";
+            divContainer.style.alignContent = "center"; 
+            divContainer.style.justifyContent = "center"; 
 
             //Setting up video element
             video.autoplay = true;
@@ -16,12 +23,17 @@ browser.runtime.onMessage.addListener(
             video.style.width = "320px";
             video.style.height = "240px";
             video.style.position = "fixed";
-            video.style.bottom = "10px";
-            video.style.left = "10px";
+            //video.style.bottom = "10px";
+            //video.style.left = "10px";
             video.style.borderRadius = "5px";
             video.style.zIndex = "10000000000";
-            document.body.appendChild(video);
 
+
+            if (divContainer.style.alignItems === "center")
+            {
+                console.log("divContainer align"); 
+            }
+            
             //Getting the video element, first checking if the user has an accessible webcam
             if (navigator.mediaDevices.getUserMedia) {
                 navigator.mediaDevices.getUserMedia({ //Get webcam stream
@@ -29,10 +41,14 @@ browser.runtime.onMessage.addListener(
                 }).then(function (stream) { //set video elemnt's src to the webcam stream
                     var video = document.getElementById('vid');
                     video.srcObject = stream;
-                }).catch(function (e) { console.log(e); }) //error catch
+                }).catch(function (e) {
+                    console.log(e);
+                }) //error catch
             }
             if (request.type == "GetVideo") //Send a response back to extension script
-                sendResponse({ type: "video" });
+                sendResponse({
+                    type: "video"
+                });
 
             counter = 1;
         }
