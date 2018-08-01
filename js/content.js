@@ -47,9 +47,25 @@ browser.runtime.onMessage.addListener(
     }
 );
 
-// let isBlurred = false;
-
-// // content script recieves message from background to perform an action 
-// if (window.location.href == "https://www.wikipedia.org/") {
-//     document.body.style.filter = "blur(20px)";
-// }
+var insertedNodes = [];
+var removedNodes = [];
+var observer = new MutationObserver(function (mutations) {
+    if (mutations[0].removedNodes != null) {
+        mutations.forEach(function (mutation) {
+            for (var i = 0; i < mutation.removedNodes.length; i++) {
+                console.log("removed");
+                removedNodes.push(mutation.removedNodes[i]);
+                console.log(removedNodes);
+            }
+        });
+    } else if (mutations[0].addedNodes != null) {
+        mutations.forEach(function (mutation) {
+            for (var i = 0; i < mutation.addedNodes.length; i++) {
+                console.log("gottem");
+                insertedNodes.push(mutation.addedNodes[i]);
+                console.log(insertedNodes);
+            }
+        });
+    }
+});
+observer.observe(document, { attributes: true, childList: true, subtree: true });
