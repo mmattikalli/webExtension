@@ -125,3 +125,10 @@ document.getElementById("enableFaceSecurity").addEventListener("click", () => {
         });
     });
 });
+
+document.getElementById("blur").addEventListener("click", () => {
+    browser.tabs.query({ active: true, currentWindow: true }, function (tabs) { //Get tabs with specified properties
+        //Send a message out to get a response
+        browser.tabs.sendMessage(tabs[0].id, { type: "BlurActive" });
+    });
+})

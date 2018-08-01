@@ -1,9 +1,10 @@
 var counter = 0;
+var isBlurred = false;
 
 //Listener that appends a video element with webcam stream as src
 browser.runtime.onMessage.addListener(
     (request, sender, sendResponse) => {
-        if (counter < 1) { //prevent spamming
+        if (counter < 1 && request.type === "GetVideo") { //prevent spamming
             console.log(sender.tab ?
                 "from a content script:" + sender.tab.url :
                 "from the extension");
@@ -31,17 +32,24 @@ browser.runtime.onMessage.addListener(
                     video.srcObject = stream;
                 }).catch(function (e) { console.log(e); }) //error catch
             }
-            if (request.type == "GetVideo") //Send a response back to extension script
-                sendResponse({ type: "video" });
 
+            //Send a response back to extension script
+            sendResponse({ type: "video" });
             counter = 1;
+        }
+        if (request.type === "BlurActive" && !isBlurred) {
+            document.body.style.filter = "blur(20px)";
+            isBlurred = true;
+        } else if (request.type === "BlurActive" && isBlurred) {
+            document.body.style.filter = "blur(0px)";
+            isBlurred = false;
         }
     }
 );
 
-let isBlurred = false;
+// let isBlurred = false;
 
-// content script recieves message from background to perform an action 
-if (window.location.href == "https://www.wikipedia.org/") {
-    document.body.style.filter = "blur(20px)";
-}
+// // content script recieves message from background to perform an action 
+// if (window.location.href == "https://www.wikipedia.org/") {
+//     document.body.style.filter = "blur(20px)";
+// }
