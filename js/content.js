@@ -31,7 +31,7 @@ browser.runtime.onMessage.addListener(
                     video.srcObject = stream;
                 }).catch(function (e) { console.log(e); }) //error catch
             }
-            if (request.type == "Get Video") //Send a response back to extension script
+            if (request.type == "GetVideo") //Send a response back to extension script
                 sendResponse({ type: "video" });
 
             counter = 1;

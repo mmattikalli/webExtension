@@ -5,7 +5,7 @@
   "manifest_version": 2,
   "description": "Assistance for your web browser",
   "permissions": [
-    "*",
+    "<all_urls>",
     "tabs",
     "activeTabs",
     "videoCapture"
