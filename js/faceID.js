@@ -117,8 +117,10 @@ document.querySelector('#calibrate').addEventListener('click', () => {
     }
 });
 
+//Event Listener for when enable is clicked
 document.getElementById("enableFaceSecurity").addEventListener("click", () => {
-    browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    browser.tabs.query({ active: true, currentWindow: true }, function (tabs) { //Get tabs with specified properties
+        //Send a message out to get a response
         browser.tabs.sendMessage(tabs[0].id, { greeting: "hello" }, function (response) {
             console.log(response.farewell);
         });
