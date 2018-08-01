@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="../css/mainStyle.css" />
     <link rel="stylesheet" type="text/css" href="../css/sliders.css" />
     <link rel="stylesheet" type="text/css" href="../css/faceStyle.css" />
+    <link rel="stylesheet" type="text/css" href="../css/videoStyle.css" />
 
     <script src="../js/apiKeys.js"></script>
     <script src="../js/face.js"></script>
@@ -21,31 +22,34 @@
 
     <div class="mainPanel">
         <!-- go back to the homepage button-->
-        <p>
+        <p class = "titles">
             Go back to the homepage
         </p>
+
         <!--command to create a toggle switch-->
         <label class="switch" id="faceSwitch">
             <input type="checkbox" checked />
             <span class="slider round"></span>
         </label>
 
-        <p>
+        <p class = "titles">
             Click to enable and begin secure browsing
         </p>
 
         <button type="button" id="enableFaceSecurity" class="enable">Enable</button>
     </div>
 
+    <!--Video container for video stream - to check if face is calibrated-->
     <div>
         <!-- creates video container -->
         <center class="tracking-container">
-            <video id="video" width="640" height="480" autoplay></video>
-            <canvas class="canvas2" width="640" height="480"></canvas>
+            <video class = "vidStream" id="video" autoplay></video>
+            <canvas class = "vidStream" id="canvas" ></canvas>
         </center>
 
         <div id="stream"></div>
 
+        <!-- display area of video-->
         <div id="jsonOutput" style="width:600px; display:table-cell;">
             Response:
             <textarea id="responseTextArea" class="UIInput" style="width:580px; height:400px;">
@@ -54,6 +58,8 @@
         </div>
 
         <img id="grid" src="#" />
+
+        <!-- calibration button on video screen (not needed, should eventually calibrate automatically)-->
         <p class="button">
             <button id="calibrate"> Calibrate </button>
         </p>

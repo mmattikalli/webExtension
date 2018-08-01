@@ -1,12 +1,11 @@
-.enable:hover{
+/* for the faceID page */ 
+
+.enable:hover {
     background-color: lightblue;
-    color: black; 
+    color: black;
 }
 
-
-.enable.click{
-    background-color: darkblue; 
-    color: white; 
-
+.enable:active {
+    background-color: darkblue;
+    color: white;
 }
-
