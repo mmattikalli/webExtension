@@ -105,7 +105,6 @@ document.querySelector('#calibrate').addEventListener('click', () => {
                         alert("ur face gone");
                     } else {
                         faces.forEach(face => {
-                            console.log("itworkedtoreachforloop");
                             faceJS.verifyFace(calibratedId, face.faceId)
                                 .then(result => {
                                     console.log(result);
