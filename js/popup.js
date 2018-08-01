@@ -4,7 +4,7 @@
 //let faceButton = document.getElementById("enableFaceId");
 document.addEventListener("DOMContentLoaded", function () {
     let faceSwitch = document.getElementById("faceSwitch");
-
+  
     browser.runtime.sendMessage({ type: 'GetSetting', name: 'faceIdEnabled' }, enabled => {
         let checkbox = faceSwitch.querySelector('input');
         checkbox.checked = enabled;

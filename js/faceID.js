@@ -7,15 +7,14 @@ let counter = 0; // defines what will be considered calibrated - when counter = 
 
 let faceJS = new FaceJS(AZURE_KEYS.key1, "westcentralus"); // Declaration of new wrapper object
 
-
 // goes back to homepage
 document.addEventListener("DOMContentLoaded", function () {
     let switchBack = document.getElementById("faceSwitch");
 
-    switchBack.onclick = function(){
+    switchBack.onclick = function () {
         browser.runtime.sendMessage({ type: 'SetSetting', name: 'faceIdEnabled', value: false });
 
-        setTimeout(function() {
+        setTimeout(function () {
             location.replace('../html/popup.html');
         }, 700);
     }
@@ -90,44 +89,39 @@ function captureFrame(video) {
 
 //when the button is clicked, execute this method
 //encompasses all face tracking
+
 document.querySelector('#calibrate').addEventListener('click', () => {
-    //Starting Webcam without using face tracking
+    // Prevent spam clicking
     if (counter < 1) {
         faceJS.detectFaces(captureFrame(video), true)
-        .then(faces => {
-            calibratedId = faces[0].faceId;
-        });
-
-        // capture("calibrating");
+            .then(faces => {
+                calibratedId = faces[0].faceId;
+            });
         counter = 1;
         setInterval(() => {
-            // console.log("ticking");
-            // capture("current");
-
             faceJS.detectFaces(captureFrame(video), true)
-            .then(faces => {
-                faces.forEach(face => {
-                    console.log("itworkedtoreachforloop");
-                    faceJS.verifyFace(calibratedId, face.faceId)
-                    .then(result => {
-                        console.log("itworked");
-                    });
+                .then(faces => {
+                    if (faces.length < 1) {
+                        alert("ur face gone");
+                    } else {
+                        faces.forEach(face => {
+                            faceJS.verifyFace(calibratedId, face.faceId)
+                                .then(result => {
+                                    console.log(result);
+                                });
+                        });
+                    }
                 });
-            });
         }, 8000);
     }
 });
 
-
-document.getElementById('enableFaceIdScreen').addEventListener('click', () => {
-    console.log("reaching second click");
-
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({
-            video: true
-        }).then(function (stream) {
-            video.src = window.URL.createObjectURL(stream);
-            video.play();
+//Event Listener for when enable is clicked
+document.getElementById("enableFaceSecurity").addEventListener("click", () => {
+    browser.tabs.query({ active: true, currentWindow: true }, function (tabs) { //Get tabs with specified properties
+        //Send a message out to get a response
+        browser.tabs.sendMessage(tabs[0].id, { type: "GetVideo" }, function (response) {
+            console.log(response.type);
         });
-    }
-})
+    });
+});
