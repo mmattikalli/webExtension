@@ -57,26 +57,28 @@ var insertedNodes = [];
 var removedNodes = [];
 
 //Create mutation observer
+//document.addEventListener("DOMContentLoaded", function () {
 var observer = new MutationObserver(function (mutations) {
-    if (mutations[0].removedNodes != null) { //If something is removed
-        mutations.forEach(function (mutation) {
-            for (var i = 0; i < mutation.removedNodes.length; i++) {
-                console.log("removed");
-                removedNodes.push(mutation.removedNodes[i]);
-                console.log(removedNodes);
-            }
-        });
-    }
-    if (mutations[0].addedNodes != null) { //If something added
-        mutations.forEach(function (mutation) {
-            for (var i = 0; i < mutation.addedNodes.length; i++) {
-                console.log("gottem");
-                insertedNodes.push(mutation.addedNodes[i]);
-                console.log(insertedNodes);
-            }
-        });
-    }
+    console.log("mutationObjectCallback invoked.");
+
+    mutations.forEach(function (mutationRecord) {
+        if (mutationRecord.type === "attribute") {
+            console.log(mutationRecord.attributeName);
+            console.log(mutationRecord.oldValue);
+        }
+
+    });
 });
 
 //tell oberver what to observe
-observer.observe(document, { attributes: true, childList: true, subtree: true });
+observer.observe(
+    document.body,
+    {
+        attributeFilter: ["style"],
+        attributeOldValue: true,
+        childList: true,
+        subtree: true
+    }
+);
+console.log(observer);
+//});
