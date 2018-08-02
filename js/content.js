@@ -9,13 +9,13 @@ browser.runtime.onMessage.addListener(
                 "from the extension");
 
             let video = document.createElement("video"); //Creates element to be appended
-            let divContainer = document.createElement("div");
-            divContainer.appendChild(video);
+            //let divContainer = document.createElement("div");
+            //divContainer.appendChild(video);
 
-            document.body.appendChild(divContainer); 
-            divContainer.style.display = "flex";
-            divContainer.style.alignContent = "center"; 
-            divContainer.style.justifyContent = "center"; 
+            //document.body.appendChild(divContainer); 
+            //divContainer.style.display = "flex";
+            //divContainer.style.alignContent = "center"; 
+            //divContainer.style.justifyContent = "center"; 
 
             //Setting up video element
             video.autoplay = true;
@@ -23,16 +23,10 @@ browser.runtime.onMessage.addListener(
             video.style.width = "320px";
             video.style.height = "240px";
             video.style.position = "fixed";
-            //video.style.bottom = "10px";
-            //video.style.left = "10px";
+            video.style.transformOrigin = "center center"; 
             video.style.borderRadius = "5px";
             video.style.zIndex = "10000000000";
 
-
-            if (divContainer.style.alignItems === "center")
-            {
-                console.log("divContainer align"); 
-            }
             
             //Getting the video element, first checking if the user has an accessible webcam
             if (navigator.mediaDevices.getUserMedia) {
