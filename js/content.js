@@ -37,20 +37,25 @@ browser.runtime.onMessage.addListener(
             sendResponse({ type: "video" });
             counter = 1;
         }
+
+        //If recieving a message with type BlurActive and isBlurred is false, it will blur webpage
         if (request.type === "BlurActive" && !isBlurred) {
             document.body.style.filter = "blur(20px)";
             isBlurred = true;
-        } else if (request.type === "BlurActive" && isBlurred) {
+        } else if (request.type === "BlurActive" && isBlurred) { //Does opposite of statement above
             document.body.style.filter = "blur(0px)";
             isBlurred = false;
         }
     }
 );
 
+//mutation listener for when an element is removed
 var insertedNodes = [];
 var removedNodes = [];
+
+//Create mutation observer
 var observer = new MutationObserver(function (mutations) {
-    if (mutations[0].removedNodes != null) {
+    if (mutations[0].removedNodes != null) { //If something is removed
         mutations.forEach(function (mutation) {
             for (var i = 0; i < mutation.removedNodes.length; i++) {
                 console.log("removed");
@@ -58,7 +63,7 @@ var observer = new MutationObserver(function (mutations) {
                 console.log(removedNodes);
             }
         });
-    } else if (mutations[0].addedNodes != null) {
+    } else if (mutations[0].addedNodes != null) { //If something added
         mutations.forEach(function (mutation) {
             for (var i = 0; i < mutation.addedNodes.length; i++) {
                 console.log("gottem");
@@ -68,4 +73,6 @@ var observer = new MutationObserver(function (mutations) {
         });
     }
 });
+
+//tell oberver what to observe
 observer.observe(document, { attributes: true, childList: true, subtree: true });
