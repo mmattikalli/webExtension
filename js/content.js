@@ -20,13 +20,16 @@ browser.runtime.onMessage.addListener(
             //Setting up video element
             video.autoplay = true;
             video.id = "vid";
-            video.style.width = "320px";
-            video.style.height = "240px";
+            video.style.width = "350px";
+            video.style.height = "350px";
             video.style.position = "fixed";
-            video.style.transformOrigin = "center center"; 
-            video.style.borderRadius = "5px";
+            video.style.top = "30%"; 
+            video.style.left = "50%"; 
+            video.style.transform = "translate(-50%, -50%)";
+            video.style.borderRadius = "350px";
             video.style.zIndex = "10000000000";
 
+            document.body.appendChild(video); 
             
             //Getting the video element, first checking if the user has an accessible webcam
             if (navigator.mediaDevices.getUserMedia) {
