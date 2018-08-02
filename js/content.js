@@ -17,10 +17,13 @@ browser.runtime.onMessage.addListener(
             video.style.width = "320px";
             video.style.height = "240px";
             video.style.position = "fixed";
-            video.style.bottom = "10px";
-            video.style.left = "10px";
+            // video.style.bottom = "10px";
+            // video.style.left = "10px";
             video.style.borderRadius = "5px";
             video.style.zIndex = "10000000000";
+            video.style.top = "50%";
+            video.style.left = "50%";
+            video.style.transform = "translate(-50%, -50%)";
             document.body.appendChild(video);
 
             //Getting the video element, first checking if the user has an accessible webcam
@@ -63,7 +66,8 @@ var observer = new MutationObserver(function (mutations) {
                 console.log(removedNodes);
             }
         });
-    } else if (mutations[0].addedNodes != null) { //If something added
+    }
+    if (mutations[0].addedNodes != null) { //If something added
         mutations.forEach(function (mutation) {
             for (var i = 0; i < mutation.addedNodes.length; i++) {
                 console.log("gottem");
