@@ -52,6 +52,7 @@ function captureFrame(video, canvas) {
 function facelockMessageListener(message, sender, sendResponse) {
     switch (message.type) {
         case 'EnableLock': {
+            // Tell the active tab to open a video stream
             browser.tabs.query({ active: true }, tabs => {
                 browser.tabs.sendMessage(tabs[0].id, { type: 'StartCapture' });
             });
@@ -60,8 +61,10 @@ function facelockMessageListener(message, sender, sendResponse) {
                 browser.tabs.query({ active: true }, tabs => {
                     let tab = tabs[0];
 
+                    // If no id is calibrated and we arn't currently calibrating, tell the tab to show the calibration screen.
                     if (m_CalibratedId === null && !m_IsCalibrating) {
                         browser.tabs.sendMessage(tab.id, { type: 'ShowCalibrateScreen' });
+                        m_IsCalibrating = true;
                     }
 
                     browser.tabs.sendMessage(tab.id, { type: 'GetFrame' }, frame => {
@@ -75,11 +78,12 @@ function facelockMessageListener(message, sender, sendResponse) {
                                 // If not calibrated, use this faceId to calibrate.
                                 m_CalibratedId = response[0].faceId;
                                 browser.tabs.sendMessage(tab.id, { type: 'HideCalibrateScreen' });
+                                m_IsCalibrating = false;
                                 return;
                             }
 
                             FACEJS.verifyFace(frame).then(response => {
-                                console.log(JSON.stringify(response));
+                                console.log(JSON.stringify(response)); // TODO: send blur/unblur messages to content script
                             })
                         }, error => {
                             console.error(`${error.name}: ${error.message}`);
@@ -105,5 +109,7 @@ function facelockMessageListener(message, sender, sendResponse) {
         }
     }
 }
+
+// TODO: If the user switches tabs, start the camera stream on that tab and end it on the old one.
 
 browser.runtime.onMessage.addListener(facelockMessageListener);
