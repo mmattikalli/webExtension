@@ -8,30 +8,36 @@ browser.runtime.onMessage.addListener(
                 "from a content script:" + sender.tab.url :
                 "from the extension");
 
-            let video = document.createElement("video"); //Creates element to be appended
+            document.body.style.zIndex = "10000";
+            //document.body.style.filter = "blur(20px)";
+
+            // creates video element 
+            let video = document.createElement("video"); 
+
+            //creates new div for video 
             let divContainer = document.createElement("div");
-            
+            divContainer.id = "divContainer"; 
+
             // clears preset div settings 
-            divContainer.style.clear = "both"; 
+            divContainer.style.clear = "both";
 
             // sets divContainer to be a flexbox
-            divContainer.style.display = "flex"; 
-        
-            
-            divContainer.style.position = "fixed"; 
-            divContainer.style.zIndex = "12431342345"; 
-            divContainer.style.width = "100%"; 
-            divContainer.style.height = "100%"; 
-            
-            // moving elements within the divContainer 
-            divContainer.style.alignItems = "center"; 
-            divContainer.style.justifyContent = "center"; 
-            divContainer.style.flexDirection = "column"; 
+            divContainer.style.display = "flex";
 
-            divContainer.style.top = "35%"; 
-            divContainer.style.left = "50%"; 
-            divContainer.style.right = "50%"; 
-            divContainer.style.bottom = "50%"; 
+            // moving elements within the divContainer using flexbox properties 
+            divContainer.style.alignItems = "center";
+            divContainer.style.justifyContent = "center";
+            divContainer.style.flexDirection = "column";
+
+            divContainer.style.position = "fixed";
+            divContainer.style.zIndex = "100000000";
+            divContainer.style.width = "100%";
+            divContainer.style.height = "100%";
+
+            divContainer.style.top = "35%";
+            divContainer.style.left = "50%";
+            divContainer.style.right = "50%";
+            divContainer.style.bottom = "50%";
             divContainer.style.transform = "translate(-50%, -50%)";
 
             //Setting up video element
@@ -44,17 +50,21 @@ browser.runtime.onMessage.addListener(
             // video.style.left = "50%"; 
             // video.style.transform = "translate(-50%, -50%)";
             video.style.borderRadius = "350px";
-            //video.style.zIndex = "10000000000";
 
             divContainer.appendChild(video);
 
-            let para = document.createElement("h1"); 
-            para.innerHTML= "WebAssist FaceID Technology Calibrating..."; 
-            //para.style.alignContent
-            divContainer.appendChild(para); 
+            let para = document.createElement("h1");
+            para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+            para.style.fontSize = "40px"; 
+            para.style.textAlign = "center"; 
+            para.innerHTML = "WebAssist FaceID Technology Calibrating...";
+            divContainer.appendChild(para);
 
-            document.body.appendChild(divContainer); 
-            
+            document.body.appendChild(divContainer);
+
+
+            //divContainer.style.filter = "none";
+
             //Getting the video element, first checking if the user has an accessible webcam
             if (navigator.mediaDevices.getUserMedia) {
                 navigator.mediaDevices.getUserMedia({ //Get webcam stream
