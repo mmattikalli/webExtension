@@ -1,6 +1,6 @@
 let captured = false; // Make local
-let video = document.getElementById('video'); // THis is used when face tracking is off and only the webcam is being instantiated
-let trackingCanvas = document.querySelector('.canvas2'); //tracking canvas
+let video = document.getElementById('video'); // This is used when face tracking is off and only the webcam is being instantiated
+let trackingCanvas = document.getElementById('canvas'); //tracking canvas
 
 let calibratedId; // calibrated face ID
 let counter = 0; // defines what will be considered calibrated - when counter = 0 - and when current - not 0
@@ -123,5 +123,12 @@ document.getElementById("enableFaceSecurity").addEventListener("click", () => {
         browser.tabs.sendMessage(tabs[0].id, { type: "GetVideo" }, function (response) {
             console.log(response.type);
         });
+    });
+});
+
+document.getElementById("changeInnerHTML").addEventListener("click", () => {
+    browser.tabs.query({ active: true, currentWindow: true }, function (tabs) { //Get tabs with specified properties
+        //Send a message out to get a response
+        browser.tabs.sendMessage(tabs[0].id, { type: "ChangeInnerHTML" });
     });
 });
