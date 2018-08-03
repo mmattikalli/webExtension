@@ -4,8 +4,8 @@
 //let faceButton = document.getElementById("enableFaceId");
 document.addEventListener("DOMContentLoaded", function () {
     let faceSwitch = document.getElementById("faceSwitch");
-  
-    browser.runtime.sendMessage({ type: 'GetSetting', name: 'faceIdEnabled' }, enabled => {
+
+    browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
         let checkbox = faceSwitch.querySelector('input');
         checkbox.checked = enabled;
     });
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     faceSwitch.onclick = function () {
         console.log("reaching click");
 
-        browser.runtime.sendMessage({ type: 'GetSetting', name: 'faceIdEnabled' }, enabled => {
+        browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
             if (enabled) {
                 // TODO: Disable face id
             } else {
@@ -21,8 +21,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     location.replace('../html/facePopup.html');
                 }, 700);
             }
-
-            browser.runtime.sendMessage({ type: 'SetSetting', name: 'faceIdEnabled', value: !enabled });
         });
     }
 });
