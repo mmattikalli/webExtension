@@ -9,27 +9,51 @@ browser.runtime.onMessage.addListener(
                 "from the extension");
 
             let video = document.createElement("video"); //Creates element to be appended
-            //let divContainer = document.createElement("div");
-            //divContainer.appendChild(video);
+            let divContainer = document.createElement("div");
+            
+            // clears preset div settings 
+            divContainer.style.clear = "both"; 
 
-            //document.body.appendChild(divContainer); 
-            //divContainer.style.display = "flex";
-            //divContainer.style.alignContent = "center"; 
-            //divContainer.style.justifyContent = "center"; 
+            // sets divContainer to be a flexbox
+            divContainer.style.display = "flex"; 
+        
+            
+            divContainer.style.position = "fixed"; 
+            divContainer.style.zIndex = "12431342345"; 
+            divContainer.style.width = "100%"; 
+            divContainer.style.height = "100%"; 
+            
+            // moving elements within the divContainer 
+            divContainer.style.alignItems = "center"; 
+            divContainer.style.justifyContent = "center"; 
+            divContainer.style.flexDirection = "column"; 
+
+            divContainer.style.top = "35%"; 
+            divContainer.style.left = "50%"; 
+            divContainer.style.right = "50%"; 
+            divContainer.style.bottom = "50%"; 
+            divContainer.style.transform = "translate(-50%, -50%)";
 
             //Setting up video element
             video.autoplay = true;
             video.id = "vid";
-            video.style.width = "350px";
-            video.style.height = "350px";
-            video.style.position = "fixed";
-            video.style.top = "30%"; 
-            video.style.left = "50%"; 
-            video.style.transform = "translate(-50%, -50%)";
+            video.style.width = "450px";
+            video.style.height = "450px";
+            // video.style.position = "fixed";
+            // video.style.top = "30%"; 
+            // video.style.left = "50%"; 
+            // video.style.transform = "translate(-50%, -50%)";
             video.style.borderRadius = "350px";
-            video.style.zIndex = "10000000000";
+            //video.style.zIndex = "10000000000";
 
-            document.body.appendChild(video); 
+            divContainer.appendChild(video);
+
+            let para = document.createElement("h1"); 
+            para.innerHTML= "WebAssist FaceID Technology Calibrating..."; 
+            //para.style.alignContent
+            divContainer.appendChild(para); 
+
+            document.body.appendChild(divContainer); 
             
             //Getting the video element, first checking if the user has an accessible webcam
             if (navigator.mediaDevices.getUserMedia) {
