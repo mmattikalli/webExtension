@@ -4,7 +4,7 @@
 /**
  * @type {FaceJS}
  */
-const FACEJS = new FaceJS(AZURE_KEYS.key1, 'westcentralus');
+const FACEJS = new FaceJS(AZURE_KEYS.keys[0], AZURE_KEYS.region);
 
 /**
  * The face id of the calibrated face. Null if no face has been calibrated.
@@ -106,6 +106,11 @@ function facelockMessageListener(message, sender, sendResponse) {
             });
             m_LockIntervalId = null;
             m_CalibratedId = null;
+            break;
+        }
+        case 'IsLockEnabled': {
+            // The lock is enabled if the interval is not null.
+            sendResponse(m_LockIntervalId !== null);
             break;
         }
     }
