@@ -67,15 +67,9 @@ browser.runtime.onMessage.addListener(
             let para = document.createElement("h1");
             para.id = "para";
             para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
-<<<<<<< HEAD
             para.style.fontSize = "40px"; 
             para.style.textAlign = "center"; 
             para.innerHTML = "Calibrating...";
-=======
-            para.style.fontSize = "40px";
-            para.style.textAlign = "center";
-            para.innerHTML = "WebAssist FaceID Technology Calibrating...";
->>>>>>> f1a226a1f974ad674806a351fbd41fbd5ceaba4f
             divContainer.appendChild(para);
 
             // video attached to divContainer, attached to webpage
