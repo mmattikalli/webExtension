@@ -107,6 +107,11 @@ function facelockMessageListener(message, sender, sendResponse) {
             m_CalibratedId = null;
             break;
         }
+        case 'IsLockEnabled': {
+            // The lock is enabled if the interval is not null.
+            sendResponse(m_LockIntervalId !== null);
+            break;
+        }
     }
 }
 
