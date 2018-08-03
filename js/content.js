@@ -3,7 +3,7 @@ var counter = 0;
 //Listener that appends a video element with webcam stream as src
 browser.runtime.onMessage.addListener(
     (request, sender, sendResponse) => {
-        if (counter < 1) { //prevent spamming
+        if (counter < 10 && request.type === "GetVideo") { //prevent spamming
             console.log(sender.tab ?
                 "from a content script:" + sender.tab.url :
                 "from the extension");
@@ -12,11 +12,11 @@ browser.runtime.onMessage.addListener(
             //document.body.style.filter = "blur(20px)";
 
             // creates video element 
-            let video = document.createElement("video"); 
+            let video = document.createElement("video");
 
             //creates new div for video 
             let divContainer = document.createElement("div");
-            divContainer.id = "divContainer"; 
+            divContainer.id = "divContainer";
 
             // clears preset div settings 
             divContainer.style.clear = "both";
@@ -54,9 +54,10 @@ browser.runtime.onMessage.addListener(
             divContainer.appendChild(video);
 
             let para = document.createElement("h1");
+            para.id = "para";
             para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
-            para.style.fontSize = "40px"; 
-            para.style.textAlign = "center"; 
+            para.style.fontSize = "40px";
+            para.style.textAlign = "center";
             para.innerHTML = "WebAssist FaceID Technology Calibrating...";
             divContainer.appendChild(para);
 
@@ -76,13 +77,19 @@ browser.runtime.onMessage.addListener(
                     console.log(e);
                 }) //error catch
             }
-            if (request.type == "GetVideo") //Send a response back to extension script
-                sendResponse({
-                    type: "video"
-                });
-
-            counter = 1;
         }
+        if (request.type == "GetVideo") //Send a response back to extension script
+            sendResponse({
+                type: "video"
+            });
+
+        if (request.type === "ChangeInnerHTML") {
+            let para = document.getElementById("para");
+            para.innerHTML = para.innerHTML.replace("WebAssist FaceID Technology Calibrating...", "Calibrated!");
+        }
+
+        counter = 1;
+
     }
 );
 
