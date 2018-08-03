@@ -50,6 +50,7 @@ function captureFrame(video, canvas) {
 }
 
 function facelockMessageListener(message, sender, sendResponse) {
+    console.log(message.type);
     switch (message.type) {
         case 'EnableLock': {
             // Tell the active tab to open a video stream
@@ -101,7 +102,7 @@ function facelockMessageListener(message, sender, sendResponse) {
                 } else if (m_IsLocked) {
                     browser.tabs.sendMessage(tabs[0].id, { type: 'Unblur' });
                 }
-                browser.tabs.sendMessage(tabs[0].id, { type: 'StopCapture' });
+                browser.tabs.sendMessage(tabs[0].id, { type: 'EndCapture' });
             });
             m_LockIntervalId = null;
             m_CalibratedId = null;
