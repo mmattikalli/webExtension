@@ -4,7 +4,7 @@
 /**
  * @type {FaceJS}
  */
-const FACEJS = new FaceJS(AZURE_KEYS.keys[0], AZURE_KEYS.region);
+const FACEJS = new FaceJS(AZURE_KEYS.keys[1], AZURE_KEYS.region);
 
 /**
  * The face id of the calibrated face. Null if no face has been calibrated.
@@ -69,14 +69,19 @@ function facelockMessageListener(message, sender, sendResponse) {
                     }
 
                     browser.tabs.sendMessage(tab.id, { type: 'GetFrame' }, frame => {
-                        FACEJS.detectFaces(frame).then(response => {
-                            if (reponse.length === 0) {
+                        console.log("frame recieved");
+                        FACEJS.detectFaces(frame, true).then(response => {
+                            if (response.length === 0) {
                                 // Skip if no faces are found.
                                 return;
                             }
 
                             if (m_CalibratedId === null) {
                                 // If not calibrated, use this faceId to calibrate.
+                                console.log(JSON.stringify(response));
+                                for (let i = 0; i < response.length; i++) {
+                                    console.log(response[i]);
+                                }
                                 m_CalibratedId = response[0].faceId;
                                 browser.tabs.sendMessage(tab.id, { type: 'HideCalibrateScreen' });
                                 m_IsCalibrating = false;
@@ -91,7 +96,7 @@ function facelockMessageListener(message, sender, sendResponse) {
                         });
                     });
                 });
-            }, 1000);
+            }, 3000);
             break;
         }
         case 'DisableLock': {
