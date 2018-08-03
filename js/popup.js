@@ -2,7 +2,7 @@
 // get the buttons by id
 // for the extension
 //let faceButton = document.getElementById("enableFaceId");
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
     let faceSwitch = document.getElementById("faceSwitch");
 
     browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
@@ -10,15 +10,17 @@ document.addEventListener("DOMContentLoaded", function () {
         checkbox.checked = enabled;
     });
 
-    faceSwitch.onclick = function () {
+    faceSwitch.onclick = () => {
         console.log("reaching click");
 
         browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
             if (enabled) {
-                // TODO: Disable face id
+                setTimeout(() => {
+                    browser.runtime.sendMessage({ type: 'DisableLock' });
+                }, 700);
             } else {
-                setTimeout(function () {
-                    location.replace('../html/facePopup.html');
+                setTimeout(() => {
+                    browser.runtime.sendMessage({ type: 'EnableLock' });
                 }, 700);
             }
         });
