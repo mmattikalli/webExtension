@@ -4,8 +4,6 @@ let newWebsiteDiv = document.createElement("div");
 //Listener that appends a video element with webcam stream as src
 browser.runtime.onMessage.addListener(
     (request, sender, sendResponse) => {
-        console.log(request.type);
-    
         if (counter < 10 && request.type === "GetVideo") { //prevent spamming
             console.log(sender.tab ?
                 "from a content script:" + sender.tab.url :
