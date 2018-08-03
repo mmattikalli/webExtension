@@ -1,3 +1,5 @@
+document.body.style.filter = "blur(0px)";
+
 var counter = 0;
 var isBlurred = false;
 
@@ -52,33 +54,22 @@ browser.runtime.onMessage.addListener(
     }
 );
 
-//mutation listener for when an element is removed
-var insertedNodes = [];
-var removedNodes = [];
-
 //Create mutation observer
-//document.addEventListener("DOMContentLoaded", function () {
-var observer = new MutationObserver(function (mutations) {
-    console.log("mutationObjectCallback invoked.");
-
-    mutations.forEach(function (mutationRecord) {
-        if (mutationRecord.type === "attribute") {
-            console.log(mutationRecord.attributeName);
-            console.log(mutationRecord.oldValue);
-        }
-
-    });
+var observer = new MutationObserver(function (mutations, observer) {
+    // fired when a mutation occurs
+    console.log(mutations[0].type, observer);
+    if (isBlurred && mutations[0].type === "attributes") {
+        document.body.style.filter = "blur(20px)";
+    }
 });
 
 //tell oberver what to observe
 observer.observe(
-    document.body,
+    document,
     {
-        attributeFilter: ["style"],
+        attributes: true,
         attributeOldValue: true,
         childList: true,
         subtree: true
     }
 );
-console.log(observer);
-//});
