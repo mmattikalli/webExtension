@@ -23,31 +23,9 @@ let m_LockIntervalId = null;
 let m_IsCalibrating = false;
 
 /**
- * @param {HTMLVideoElement} video
- * @param {HTMLCanvasElement} canvas
- *
- * @returns {Uint8Array}
+ * @type {?number}
  */
-function captureFrame(video, canvas) {
-    canvas.width = video.width;
-    canvas.height = video.height;
-
-    canvas.getContext('2d').lineTo(50, 50);
-    canvas.getContext('2d').drawImage(video, 0, 0);
-
-    // convert the canvas to a base64-encoded png file
-    let data = canvas.toDataURL('image/png').split(',')[1];
-
-    let bytes = atob(data);
-    let buffer = new ArrayBuffer(bytes.length);
-    let byteArr = new Uint8Array(buffer);
-
-    for (let i = 0; i < bytes.length; i++) {
-        byteArr[i] = bytes.charCodeAt(i);
-    }
-
-    return byteArr;
-}
+let m_CurrentTab = null;
 
 function facelockMessageListener(message, sender, sendResponse) {
     switch (message.type) {
@@ -95,14 +73,7 @@ function facelockMessageListener(message, sender, sendResponse) {
         }
         case 'DisableLock': {
             clearInterval(m_LockIntervalId);
-            browser.tabs.query({ active: true }, tabs => {
-                if (m_IsCalibrating) {
-                    browser.tabs.sendMessage(tabs[0].id, { type: 'HideCalibrateScreen' });
-                } else if (m_IsLocked) {
-                    browser.tabs.sendMessage(tabs[0].id, { type: 'Unblur' });
-                }
-                browser.tabs.sendMessage(tabs[0].id, { type: 'StopCapture' });
-            });
+            cleanupTab(m_CurrentTab);
             m_LockIntervalId = null;
             m_CalibratedId = null;
             break;
@@ -115,6 +86,39 @@ function facelockMessageListener(message, sender, sendResponse) {
     }
 }
 
-// TODO: If the user switches tabs, start the camera stream on that tab and end it on the old one.
+function tabSwitchHandler(activeInfo) {
+    if (m_CurrentTab !== null) {
+        cleanupTab(m_CurrentTab);
+    }
 
+    if (activeInfo.tabId !== null) {
+        setupTab(activeInfo.tabId);
+    }
+    m_CurrentTab = activeInfo.tabId;
+}
+
+function setupTab(tabId) {
+    if (m_LockIntervalId !== null) {
+        browser.tabs.sendMessage(tabId, { type: 'StartCapture' });
+
+        if (m_IsCalibrating) {
+            browser.tabs.sendMessage(tabId, { type: 'ShowCalibrateScreen' });
+        } else if (m_IsLocked) {
+            browser.tabs.sendMessage(tabId, { type: 'Unblur' });
+        }
+    }
+}
+
+function cleanupTab(tabId) {
+    if (m_LockIntervalId !== null) {
+        if (m_IsCalibrating) {
+            browser.tabs.sendMessage(tabId, { type: 'HideCalibrateScreen' });
+        } else if (m_IsLocked) {
+            browser.tabs.sendMessage(tabId, { type: 'Unblur' });
+        }
+        browser.tabs.sendMessage(tabId, { type: 'EndCapture' });
+    }
+}
+
+browser.tabs.onActivated.addListener(tabSwitchHandler);
 browser.runtime.onMessage.addListener(facelockMessageListener);
