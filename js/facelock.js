@@ -1,3 +1,27 @@
+/// <reference path="apiKeys.js" />
+/// <reference path="face.js" />
+
+/**
+ * @type {FaceJS}
+ */
+const FACEJS = new FaceJS(AZURE_KEYS.key1, 'westcentralus');
+
+/**
+ * The face id of the calibrated face. Null if no face has been calibrated.
+ *
+ * @type {?string}
+ */
+let m_CalibratedId = null;
+
+/**
+ * The id of the interval that controls the lock. Null if lock is disabled.
+ *
+ * @type {?number}
+ */
+let m_LockIntervalId = null;
+
+let m_IsCalibrating = false;
+
 /**
  * @param {HTMLVideoElement} video
  * @param {HTMLCanvasElement} canvas
@@ -25,19 +49,61 @@ function captureFrame(video, canvas) {
     return byteArr;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    let videoElement = document.querySelector('#facelockVideo');
-    let canvasElement = document.querySelector('#facelockCanvas');
+function facelockMessageListener(message, sender, sendResponse) {
+    switch (message.type) {
+        case 'EnableLock': {
+            browser.tabs.query({ active: true }, tabs => {
+                browser.tabs.sendMessage(tabs[0].id, { type: 'StartCapture' });
+            });
 
-    navigator.mediaDevices.getUserMedia({
-        video: true
-    }).then(stream => {
-        video.width = stream.width;
-        video.height = stream.height;
+            m_LockIntervalId = setInterval(() => {
+                browser.tabs.query({ active: true }, tabs => {
+                    let tab = tabs[0];
 
-        setInterval((video, canvas) => {
-            let frame = captureFrame(video, canvas);
-            console.log(frame.length);
-        }, 8000, videoElement, canvasElement);
-    });
-});
+                    if (m_CalibratedId === null && !m_IsCalibrating) {
+                        browser.tabs.sendMessage(tab.id, { type: 'ShowCalibrateScreen' });
+                    }
+
+                    browser.tabs.sendMessage(tab.id, { type: 'GetFrame' }, frame => {
+                        FACEJS.detectFaces(frame).then(response => {
+                            if (reponse.length === 0) {
+                                // Skip if no faces are found.
+                                return;
+                            }
+
+                            if (m_CalibratedId === null) {
+                                // If not calibrated, use this faceId to calibrate.
+                                m_CalibratedId = response[0].faceId;
+                                browser.tabs.sendMessage(tab.id, { type: 'HideCalibrateScreen' });
+                                return;
+                            }
+
+                            FACEJS.verifyFace(frame).then(response => {
+                                console.log(JSON.stringify(response));
+                            })
+                        }, error => {
+                            console.error(`${error.name}: ${error.message}`);
+                        });
+                    });
+                });
+            }, 1000);
+            break;
+        }
+        case 'DisableLock': {
+            clearInterval(m_LockIntervalId);
+            browser.tabs.query({ active: true }, tabs => {
+                if (m_IsCalibrating) {
+                    browser.tabs.sendMessage(tabs[0].id, { type: 'HideCalibrateScreen' });
+                } else if (m_IsLocked) {
+                    browser.tabs.sendMessage(tabs[0].id, { type: 'Unblur' });
+                }
+                browser.tabs.sendMessage(tabs[0].id, { type: 'StopCapture' });
+            });
+            m_LockIntervalId = null;
+            m_CalibratedId = null;
+            break;
+        }
+    }
+}
+
+browser.runtime.onMessage.addListener(facelockMessageListener);
