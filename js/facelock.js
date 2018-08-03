@@ -4,7 +4,7 @@
 /**
  * @type {FaceJS}
  */
-const FACEJS = new FaceJS(AZURE_KEYS.key1, 'westcentralus');
+const FACEJS = new FaceJS(AZURE_KEYS.key[0], AZURE_KEYS.region);
 
 /**
  * The face id of the calibrated face. Null if no face has been calibrated.
