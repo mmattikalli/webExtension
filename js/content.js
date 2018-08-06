@@ -84,11 +84,11 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 function setupVid() {
     // setting up video element
     video.autoplay = true;
-    //video.style.display = "none";
+    video.style.display = "none";
     video.style.width = "450px";
     video.style.height = "450px";
     video.style.borderRadius = "350px";
-    video.style.zIndex = "21434536743436566";
+    video.style.zIndex = "1000000001";
 
     //Getting the video element, first checking if the user has an accessible webcam
     navigator.mediaDevices.getUserMedia({ //Get webcam stream

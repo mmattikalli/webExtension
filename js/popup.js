@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
     faceCheckbox.addEventListener('click', () => {
         browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
             if (enabled) {
-                console.log("ooooooooooo");
                 setTimeout(() => {
                     browser.runtime.sendMessage({ type: 'DisableLock' });
                 }, 700);
