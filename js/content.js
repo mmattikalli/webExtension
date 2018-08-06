@@ -55,6 +55,17 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             break;
         case "Blur":
             addBlur('Locked');
+            navigator.mediaDevices.getUserMedia({ //Get webcam stream
+                video: true
+            }).then(function (stream) { //set video elemnt's src to the webcam stream
+                m_Stream = stream;
+                video.srcObject = stream;
+                let vidTrack = stream.getVideoTracks()[0];
+                video.width = vidTrack.getSettings().width;
+                video.height = vidTrack.getSettings().height;
+            }).catch(function (e) {
+                console.log(e);
+            }); //error catch
             break;
         case "ShowCalibrateScreen":
             document.body.removeChild(video);
