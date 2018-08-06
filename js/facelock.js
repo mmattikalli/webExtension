@@ -90,6 +90,7 @@ function tabSwitchHandler(activeInfo) {
 }
 
 function tabUpdateHandler(tabId, changeInfo, tabInfo) {
+    // Only setup the tab if facelock is enabled
     if (m_LockIntervalId === null) {
         return;
     }
