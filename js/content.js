@@ -4,11 +4,23 @@ let newWebsiteDiv = document.createElement("div");
 //Listener that appends a video element with webcam stream as src
 browser.runtime.onMessage.addListener(
     (request, sender, sendResponse) => {
+        console.log(request.type); 
+        if ("StartCapture" === request.type) {
+            addBlur(); 
+            console.log(request.type); 
+            
+        }
+        if ("EndCapture" === request.type) {
+            removeBlur(); 
+            console.log(request.type); 
+        }
+
         if (counter < 10 && request.type === "GetVideo") { //prevent spamming
             console.log(sender.tab ?
                 "from a content script:" + sender.tab.url :
                 "from the extension");
-
+            
+            
 
             //Getting the video element, first checking if the user has an accessible webcam
             if (navigator.mediaDevices.getUserMedia) {
@@ -112,4 +124,23 @@ function addBlur() {
 function removeBlur() {
     newWebsiteDiv.style.filter = "none"; 
     document.body.innerHTML = newWebsiteDiv.innerHTML;
+}
+
+function addCheck() {
+    let checkElement = document.createElement("div"); 
+    checkElement.id = "checkElement"; 
+    checkElement.appendChild("../images/windowsCheckmark.png"); 
+    document.body.appendChild(checkElement); 
+
+    // align with video stream 
+    checkElement.style.top = "35%";
+    checkElement.style.left = "50%";
+    checkElement.style.right = "50%";
+    checkElement.style.bottom = "50%";
+    checkElement.style.transform = "translate(-50%, -50%)";
+}
+
+function removeCheck() {
+    let checkElement1 = document.getElementById("checkElement"); 
+    document.body.removeChild(checkElement1); 
 }
