@@ -1,5 +1,6 @@
 var counter = 0;
-let newWebsiteDiv = document.createElement("div");
+let newWebsiteDiv = document.createElement("div"); // div for copied website html 
+let divContainer = document.createElement("div"); // container for vid element 
 
 //Listener that appends a video element with webcam stream as src
 browser.runtime.onMessage.addListener(
@@ -67,8 +68,7 @@ function addBlur() {
     // creates video element 
     let video = document.createElement("video");
 
-    //creates new div for video 
-    let divContainer = document.createElement("div");
+    // sets id for divContainer (global)
     divContainer.id = "divContainer";
 
     // clears preset div settings 
@@ -115,6 +115,7 @@ function addBlur() {
     divContainer.appendChild(para);
 
     // video attached to divContainer, attached to webpage
+    fadeIn(divContainer); 
     document.body.appendChild(divContainer);
 
     // blurs only the background text 
@@ -135,6 +136,7 @@ function addCheck() {
     img.style.width = "350px";
     img.style.height = "350px";
 
+    // appends image to checkElement container 
     checkElement.appendChild(img);
 
     // sets checkElement to be a flexbox
@@ -156,13 +158,44 @@ function addCheck() {
     checkElement.style.bottom = "50%";
     checkElement.style.transform = "translate(-50%, -50%)";
 
+    fadeIn(checkElement); 
     document.body.appendChild(checkElement);
+    
 }
 
 /**
  * Function removing both the check and the blur 
  */
 function removeBlur() {
+    let paragraph = document.getElementById("para"); 
+    fadeOut(paragraph.innerHTML);  
+    divContainer.innerHTML = ""; 
     newWebsiteDiv.style.filter = "none";
     document.body.innerHTML = newWebsiteDiv.innerHTML;
+}
+
+function fadeIn(element) {
+    var op = 0.1;  // initial opacity
+    //element.style.display = 'block';
+    var timer = setInterval(function () {
+        if (op >= 1){
+            clearInterval(timer);
+        }
+        element.style.opacity = op;
+        element.style.filter = "alpha(opacity=" + op * 100 + ")";
+        op += op * 0.1;
+    }, 20);
+}
+
+function fadeOut(element) {
+    var op = 1;  // initial opacity
+    var timer = setInterval(function () {
+        if (op <= 0.1){
+            clearInterval(timer);
+            element.style.display = 'none';
+        }
+        element.style.opacity = op;
+        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+        op -= op * 0.1;
+    }, 100);
 }
