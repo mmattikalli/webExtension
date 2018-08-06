@@ -4,23 +4,23 @@ let newWebsiteDiv = document.createElement("div");
 //Listener that appends a video element with webcam stream as src
 browser.runtime.onMessage.addListener(
     (request, sender, sendResponse) => {
-        console.log(request.type); 
+        console.log(request.type);
+
+        // for testing purposes
         if ("StartCapture" === request.type) {
-            addBlur(); 
-            console.log(request.type); 
-            
+            addBlur();
+            addCheck();
+            console.log(request.type);
         }
         if ("EndCapture" === request.type) {
-            removeBlur(); 
-            console.log(request.type); 
+            removeBlur();
+            console.log(request.type);
         }
 
         if (counter < 10 && request.type === "GetVideo") { //prevent spamming
             console.log(sender.tab ?
                 "from a content script:" + sender.tab.url :
                 "from the extension");
-            
-            
 
             //Getting the video element, first checking if the user has an accessible webcam
             if (navigator.mediaDevices.getUserMedia) {
@@ -45,7 +45,6 @@ browser.runtime.onMessage.addListener(
         }
 
         counter = 1;
-
     }
 );
 /**
@@ -55,7 +54,7 @@ browser.runtime.onMessage.addListener(
  */
 function addBlur() {
     // move all of website html into a div
-    
+
     let websiteBody = document.body.innerHTML;
     document.body.innerHTML = "";
 
@@ -100,7 +99,7 @@ function addBlur() {
     video.style.width = "450px";
     video.style.height = "450px";
     video.style.borderRadius = "350px";
-    video.style.zIndex = "21434536743436566";
+    video.style.zIndex = "1000000001";
 
     // adds video to divContainer 
     divContainer.appendChild(video);
@@ -121,26 +120,48 @@ function addBlur() {
     newWebsiteDiv.style.filter = "blur(20px)";
 }
 
-function removeBlur() {
-    newWebsiteDiv.style.filter = "none"; 
-    document.body.innerHTML = newWebsiteDiv.innerHTML;
-}
-
+/**
+ * Adds check to the top of the video stream when necessary
+ */
 function addCheck() {
-    let checkElement = document.createElement("div"); 
-    checkElement.id = "checkElement"; 
-    checkElement.appendChild("../images/windowsCheckmark.png"); 
-    document.body.appendChild(checkElement); 
+    let checkElement = document.createElement("div");
+    var img = document.createElement("img");
 
-    // align with video stream 
+    //gets image from an online source
+    img.src = "https://png.icons8.com/windows/1600/0063B1/checked";
+
+    //sets image dimensions to smaller than the video
+    img.style.width = "350px";
+    img.style.height = "350px";
+
+    checkElement.appendChild(img);
+
+    // sets checkElement to be a flexbox
+    checkElement.style.display = "flex";
+
+    // formatting elements within the checkElement div
+    checkElement.style.alignItems = "center";
+    checkElement.style.justifyContent = "center";
+    checkElement.style.flexDirection = "column";
+
+    checkElement.style.position = "fixed";
+    checkElement.style.zIndex = "1000000002";
+    checkElement.style.width = "100%";
+    checkElement.style.height = "100%";
+
     checkElement.style.top = "35%";
     checkElement.style.left = "50%";
     checkElement.style.right = "50%";
     checkElement.style.bottom = "50%";
     checkElement.style.transform = "translate(-50%, -50%)";
+
+    document.body.appendChild(checkElement);
 }
 
-function removeCheck() {
-    let checkElement1 = document.getElementById("checkElement"); 
-    document.body.removeChild(checkElement1); 
+/**
+ * Function removing both the check and the blur 
+ */
+function removeBlur() {
+    newWebsiteDiv.style.filter = "none";
+    document.body.innerHTML = newWebsiteDiv.innerHTML;
 }
