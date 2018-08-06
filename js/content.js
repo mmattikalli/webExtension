@@ -105,7 +105,6 @@ browser.runtime.onMessage.addListener(
         }
 
         counter = 1;
-
     }
 );
 
@@ -125,7 +124,7 @@ function setupVid() {
 /**
  * Creates a new div to move current webpage html into
  * Creates a new div to append video and text
- * Blurs the current webpage 
+ * Blurs the current webpage
  */
 function addBlur(onScreenText) {
     // move all of website html into a div
@@ -136,14 +135,14 @@ function addBlur(onScreenText) {
     document.body.appendChild(newWebsiteDiv);
     newWebsiteDiv.innerHTML = websiteBody;
 
-    // sets document zindex lower than the divContainer     
+    // sets document zindex lower than the divContainer
     document.body.style.zIndex = "10000";
 
-    //creates new div for video 
+    //creates new div for video
     let divContainer = document.createElement("div");
     divContainer.id = "divContainer";
 
-    // clears preset div settings 
+    // clears preset div settings
     divContainer.style.clear = "both";
 
     // sets divContainer to be a flexbox
@@ -165,10 +164,10 @@ function addBlur(onScreenText) {
     divContainer.style.bottom = "50%";
     divContainer.style.transform = "translate(-50%, -50%)";
 
-    // adds video to divContainer 
+    // adds video to divContainer
     divContainer.appendChild(video);
 
-    // creates text to put on screen with video element 
+    // creates text to put on screen with video element
     let para = document.createElement("h1");
     para.id = "para";
     para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
@@ -180,40 +179,52 @@ function addBlur(onScreenText) {
     // video attached to divContainer, attached to webpage
     document.body.appendChild(divContainer);
 
-    // blurs only the background text 
+    // blurs only the background text
     newWebsiteDiv.style.filter = "blur(20px)";
 }
 
+/**
+ * Adds check to the top of the video stream when necessary
+ */
+function addCheck() {
+    let checkElement = document.createElement("div");
+    var img = document.createElement("img");
+
+    //gets image from an online source
+    img.src = "https://png.icons8.com/windows/1600/0063B1/checked";
+
+    //sets image dimensions to smaller than the video
+    img.style.width = "350px";
+    img.style.height = "350px";
+
+    checkElement.appendChild(img);
+
+    // sets checkElement to be a flexbox
+    checkElement.style.display = "flex";
+
+    // formatting elements within the checkElement div
+    checkElement.style.alignItems = "center";
+    checkElement.style.justifyContent = "center";
+    checkElement.style.flexDirection = "column";
+
+    checkElement.style.position = "fixed";
+    checkElement.style.zIndex = "1000000002";
+    checkElement.style.width = "100%";
+    checkElement.style.height = "100%";
+
+    checkElement.style.top = "35%";
+    checkElement.style.left = "50%";
+    checkElement.style.right = "50%";
+    checkElement.style.bottom = "50%";
+    checkElement.style.transform = "translate(-50%, -50%)";
+
+    document.body.appendChild(checkElement);
+}
+
+/**
+ * Function removing both the check and the blur
+ */
 function removeBlur() {
     newWebsiteDiv.style.display = "none";
     document.body.innerHTML = newWebsiteDiv.innerHTML;
 }
-
-// //Create mutation observer
-// var observer = new MutationObserver(function (mutations, observer) {
-//     // fired when a mutation occurs
-//     console.log(mutations[0].type, observer);
-//     if (isBlurred && mutations[0].type === "attributes") {
-//         newWebsiteDiv.style.filter = "blur(20px)";
-//     }
-
-//     if (isBlurred && mutations[0].type === "childList") {
-//         if (mutations[0].removedNodes) {
-//             mutations[0].removedNodes.forEach(removed => {
-//                 console.log("adding removed");
-//                 document.body.appendChild(removed);
-//             });
-//         }
-//     }
-// });
-
-// //tell oberver what to observe
-// observer.observe(
-//     document,
-//     {
-//         attributes: true,
-//         attributeOldValue: true,
-//         childList: true,
-//         subtree: true
-//     }
-// );

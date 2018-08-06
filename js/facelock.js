@@ -20,8 +20,6 @@ let m_CalibratedId = null;
  */
 let m_LockIntervalId = null;
 
-let m_IsCalibrating = false;
-
 let m_IsLocked = false;
 
 /**
@@ -33,25 +31,14 @@ function facelockMessageListener(message, sender, sendResponse) {
     console.log(message.type);
     switch (message.type) {
         case 'EnableLock': {
-            // Tell the active tab to open a video stream
             browser.tabs.query({ active: true }, tabs => {
-                browser.tabs.sendMessage(tabs[0].id, { type: 'StartCapture' });
-            });
+                m_CurrentTab = tabs[0].id;
 
-            m_LockIntervalId = setInterval(() => {
-                browser.tabs.query({ active: true }, tabs => {
-                    let tab = tabs[0];
+                setupTab(m_CurrentTab);
 
-                    // If no id is calibrated and we arn't currently calibrating, tell the tab to show the calibration screen.
-                    if (m_CalibratedId === null && !m_IsCalibrating) {
-                        browser.tabs.sendMessage(tab.id, { type: 'ShowCalibrateScreen' });
-                        m_IsCalibrating = true;
-                    }
-
-                    browser.tabs.sendMessage(tab.id, { type: 'GetFrame' }, frame => {
-                        console.log("frame recieved");
-                        console.log(frame);
-                        FACEJS.detectFaces(frame, true).then(response => {
+                m_LockIntervalId = setInterval(() => {
+                    browser.tabs.sendMessage(m_CurrentTab, { type: 'GetFrame' }, frame => {
+                        FACEJS.detectFaces(frame).then(response => {
                             if (response.length === 0) {
                                 // Skip if no faces are found.
                                 return;
@@ -64,32 +51,24 @@ function facelockMessageListener(message, sender, sendResponse) {
                                     console.log(response[i]);
                                 }
                                 m_CalibratedId = response[0].faceId;
-                                browser.tabs.sendMessage(tab.id, { type: 'HideCalibrateScreen' });
-                                m_IsCalibrating = false;
-                                console.log("this is " + m_IsCalibrating);
-                                return;
+                                browser.tabs.sendMessage(m_CurrentTab, { type: 'HideCalibrateScreen' });
+                            } else {
+                                FACEJS.verifyFace(m_CalibratedId, response[0].faceId).then(resp => {
+                                    console.log(JSON.stringify(resp));
+                                });
                             }
-
-                            FACEJS.verifyFace(frame).then(response => {
-                                console.log(JSON.stringify(response)); // TODO: send blur/unblur messages to content script
-                            })
-                        }, error => {
-                            console.error(`${error.name}: ${error.message}`);
                         });
                     });
-                });
-            }, 6000);
+                }, 1000);
+            });
             break;
         }
         case 'DisableLock': {
-            browser.tabs.query({ active: true }, tabs => {
-                m_CurrentTab = tabs[0].id;
-                clearInterval(m_LockIntervalId);
-                m_IsLocked = true;
-                cleanupTab(m_CurrentTab);
-                m_LockIntervalId = null;
-                m_CalibratedId = null;
-            });
+            clearInterval(m_LockIntervalId);
+            cleanupTab(m_CurrentTab);
+            m_LockIntervalId = null;
+            m_CalibratedId = null;
+            m_IsLocked = false;
             break;
         }
         case 'IsLockEnabled': {
@@ -101,6 +80,10 @@ function facelockMessageListener(message, sender, sendResponse) {
 }
 
 function tabSwitchHandler(activeInfo) {
+    if (m_LockIntervalId === null) {
+        return;
+    }
+
     if (m_CurrentTab !== null) {
         cleanupTab(m_CurrentTab);
     }
@@ -111,30 +94,31 @@ function tabSwitchHandler(activeInfo) {
     m_CurrentTab = activeInfo.tabId;
 }
 
+/**
+ * Setup a tab for capture
+ * @param {number} tabId
+ */
 function setupTab(tabId) {
-    if (m_LockIntervalId !== null) {
-        browser.tabs.sendMessage(tabId, { type: 'StartCapture' });
+    browser.tabs.sendMessage(tabId, { type: 'StartCapture' });
 
-        if (m_IsCalibrating) {
-            browser.tabs.sendMessage(tabId, { type: 'ShowCalibrateScreen' });
-        } else if (m_IsLocked) {
-            browser.tabs.sendMessage(tabId, { type: 'Unblur' });
-        }
+    if (m_CalibratedId === null) {
+        // If we need to calibrate, show the calibration screen.
+        browser.tabs.sendMessage(tabId, { type: 'ShowCalibrateScreen' });
+    } else if (m_IsLocked) {
+        // If the browser is currently locked, blur the tab.
+        browser.tabs.sendMessage(tabId, { type: 'Blur' });
     }
 }
 
 function cleanupTab(tabId) {
-    console.log(m_LockIntervalId);
-    console.log(m_IsCalibrating);
-    console.log(m_IsLocked);
-    if (m_LockIntervalId !== null) {
-        if (m_IsCalibrating) {
-            browser.tabs.sendMessage(tabId, { type: 'HideCalibrateScreen' });
-        } else if (m_IsLocked) {
-            browser.tabs.sendMessage(tabId, { type: 'Unblur' });
-        }
-        browser.tabs.sendMessage(tabId, { type: 'EndCapture' });
+    if (m_CalibratedId === null) {
+        // If we were calibrating, hide the calibration screen.
+        browser.tabs.sendMessage(tabId, { type: 'HideCalibrateScreen' });
+    } else if (m_IsLocked) {
+        // If we were locked, hide the lock screen.
+        browser.tabs.sendMessage(tabId, { type: 'Unblur' });
     }
+    browser.tabs.sendMessage(tabId, { type: 'EndCapture' });
 }
 
 browser.tabs.onActivated.addListener(tabSwitchHandler);
