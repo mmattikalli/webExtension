@@ -95,7 +95,7 @@ function addBlur() {
 
     // setting up video element
     video.autoplay = true;
-    video.id = "vid";
+    video.id = "vid"; 
     video.style.width = "450px";
     video.style.height = "450px";
     video.style.borderRadius = "350px";
@@ -128,7 +128,7 @@ function addCheck() {
     var img = document.createElement("img");
 
     //gets image from an online source
-    img.src = "https://png.icons8.com/windows/1600/0063B1/checked";
+    img.src = "https://png.icons8.com/windows/1600/0063B1/checked"; 
 
     //sets image dimensions to smaller than the video
     img.style.width = "350px";
