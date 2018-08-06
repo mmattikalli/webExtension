@@ -1,12 +1,11 @@
-let isBlurred = false;
-let counter = 0;
-
 let canvas = document.createElement("canvas"); //Pre-load the Canvas for capturing
 canvas.style.display = "none";
 
 let video = document.createElement("video"); //Pre-load the video
 
 let newWebsiteDiv = document.createElement("div");
+
+let m_Stream = null;
 
 /**
  * @param {HTMLVideoElement} video
@@ -15,108 +14,83 @@ let newWebsiteDiv = document.createElement("div");
  * @returns {Uint8Array}
  */
 function captureFrame(video, canvas) {
-    canvas.width = 1000;
-    canvas.height = 1000;
-    console.log(canvas.width);
-    console.log(canvas.height);
+    console.log(`Video size: ${video.width}x${video.height}`);
+    canvas.width = video.width;
+    canvas.height = video.height;
 
     document.body.appendChild(canvas);
-    canvas.getContext('2d').drawImage(video, 0, 0, 1000, 1000);
+    canvas.getContext('2d').drawImage(video, 0, 0);
 
     // convert the canvas to a base64-encoded png file
     let data = canvas.toDataURL('image/png').split(',')[1];
     document.body.removeChild(canvas);
 
-    let bytes = atob(data);
-    let buffer = new ArrayBuffer(bytes.length);
-    let byteArr = new Uint8Array(buffer);
-
-    for (let i = 0; i < bytes.length; i++) {
-        byteArr[i] = bytes.charCodeAt(i);
-    }
-
-    return byteArr;
+    return data;
 }
 
 //Listener that appends a video element with webcam stream as src
-browser.runtime.onMessage.addListener(
-    (request, sender, sendResponse) => {
-        console.log(request.type);
-        switch (request.type) {
-            case 'StartCapture':
-                console.log(sender.tab ?
-                    "from a content script:" + sender.tab.url :
-                    "from the extension");
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    console.log(request.type);
+    switch (request.type) {
+        case 'StartCapture':
+            console.log(sender.tab ?
+                "from a content script:" + sender.tab.url :
+                "from the extension");
 
-                isBlurred = true;
-
-                setupVid();
-
-                //Getting the video element, first checking if the user has an accessible webcam
-                if (navigator.mediaDevices.getUserMedia) {
-                    navigator.mediaDevices.getUserMedia({ //Get webcam stream
-                        video: true
-                    }).then(function (stream) { //set video elemnt's src to the webcam stream
-                        video.srcObject = stream;
-                    }).catch(function (e) {
-                        console.log(e);
-                    }) //error catch
-                }
-                break;
-            case "EndCapture": //Does it by itself
-                console.log("Capture Ended");
-                document.body.removeChild(document.getElementById("vid"));
-                break;
-            case "GetFrame":
-                if (video.srcObject !== null) {
-                    sendResponse(captureFrame(video, canvas));
-                } else {
-                    console.log("No webcam stream available");
-                }
-                break;
-            case "Unblur":
-                isBlurred = false;
-                removeBlur();
-                break;
-            case "Blur":
-                break;
-            case "ShowCalibrateScreen":
-                document.body.removeChild(video);
-                video.style.display = "inherit";
-                addBlur("Calibrating...");
-                if (navigator.mediaDevices.getUserMedia) {
-                    navigator.mediaDevices.getUserMedia({ //Get webcam stream
-                        video: true
-                    }).then(function (stream) { //set video elemnt's src to the webcam stream
-                        video.srcObject = stream;
-                    }).catch(function (e) {
-                        console.log(e);
-                    }) //error catch
-                }
-                break;
-            case "HideCalibrateScreen":
-                isBlurred = false;
-                console.log("hiding calibration screen");
-                removeBlur();
-                setupVid();
-                break;
-            default:
-                console.log("Invalid Request Type");
-        }
-
-        counter = 1;
+            setupVid();
+            break;
+        case "EndCapture": //Does it by itself
+            document.body.removeChild(video);
+            break;
+        case "GetFrame":
+            if (video.srcObject !== null) {
+                sendResponse(captureFrame(video, canvas));
+            } else {
+                console.log("No webcam stream available");
+            }
+            break;
+        case "Unblur":
+            removeBlur();
+            setupVid();
+            break;
+        case "Blur":
+            addBlur('Locked');
+            break;
+        case "ShowCalibrateScreen":
+            document.body.removeChild(video);
+            video.style.display = "inherit";
+            addBlur("Calibrating...");
+            break;
+        case "HideCalibrateScreen":
+            removeBlur();
+            setupVid();
+            break;
+        default:
+            console.log("Invalid Request Type");
     }
-);
+});
 
 function setupVid() {
     // setting up video element
     video.autoplay = true;
-    video.id = "vid";
     //video.style.display = "none";
-    video.style.width = "1000px";
-    video.style.height = "1000px";
+    video.style.width = "450px";
+    video.style.height = "450px";
     video.style.borderRadius = "350px";
     video.style.zIndex = "21434536743436566";
+
+    //Getting the video element, first checking if the user has an accessible webcam
+    navigator.mediaDevices.getUserMedia({ //Get webcam stream
+        video: true
+    }).then(function (stream) { //set video elemnt's src to the webcam stream
+        m_Stream = stream;
+        video.srcObject = stream;
+        let vidTrack = stream.getVideoTracks()[0];
+        video.width = vidTrack.getSettings().width;
+        video.height = vidTrack.getSettings().height;
+    }).catch(function (e) {
+        console.log(e);
+    }); //error catch
 
     document.body.appendChild(video);
 }

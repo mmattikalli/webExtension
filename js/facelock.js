@@ -38,28 +38,50 @@ function facelockMessageListener(message, sender, sendResponse) {
 
                 m_LockIntervalId = setInterval(() => {
                     browser.tabs.sendMessage(m_CurrentTab, { type: 'GetFrame' }, frame => {
-                        FACEJS.detectFaces(frame).then(response => {
-                            if (response.length === 0) {
-                                // Skip if no faces are found.
+                        let bytes = atob(frame);
+                        let buffer = new ArrayBuffer(bytes.length);
+                        let byteArr = new Uint8Array(buffer);
+
+                        for (let i = 0; i < bytes.length; i++) {
+                            byteArr[i] = bytes.charCodeAt(i);
+                        }
+
+                        FACEJS.detectFaces(byteArr).then(response => {
+                            if (response.error) {
+                                console.error(response.error.message);
                                 return;
                             }
 
                             if (m_CalibratedId === null) {
                                 // If not calibrated, use this faceId to calibrate.
-                                console.log(JSON.stringify(response));
-                                for (let i = 0; i < response.length; i++) {
-                                    console.log(response[i]);
+                                if (response.length > 0) {
+                                    m_CalibratedId = response[0].faceId;
+                                    browser.tabs.sendMessage(m_CurrentTab, { type: 'HideCalibrateScreen' });
                                 }
-                                m_CalibratedId = response[0].faceId;
-                                browser.tabs.sendMessage(m_CurrentTab, { type: 'HideCalibrateScreen' });
                             } else {
+                                if (response.length === 0) {
+                                    m_IsLocked = true;
+                                    browser.tabs.sendMessage(m_CurrentTab, { type: 'Blur' });
+                                }
+
                                 FACEJS.verifyFace(m_CalibratedId, response[0].faceId).then(resp => {
-                                    console.log(JSON.stringify(resp));
+                                    if (resp.error) {
+                                        console.error(resp.error.message);
+                                        return;
+                                    }
+
+                                    if (!resp.isIdentical && !m_IsLocked) {
+                                        m_IsLocked = true;
+                                        browser.tabs.sendMessage(m_CurrentTab, { type: 'Blur' });
+                                    } else if (m_IsLocked) {
+                                        browser.tabs.sendMessage(m_CurrentTab, { type: 'Unblur' });
+                                        m_IsLocked = false;
+                                    }
                                 });
                             }
                         });
                     });
-                }, 1000);
+                }, 10000);
             });
             break;
         }
