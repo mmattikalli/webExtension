@@ -108,6 +108,7 @@ function addBlur() {
     let para = document.createElement("h1");
     para.id = "para";
     para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    para.style.fontWeight = "light"; 
     para.style.fontSize = "40px";
     para.style.textAlign = "center";
     para.innerHTML = "Calibrating...";
