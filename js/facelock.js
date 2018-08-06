@@ -44,12 +44,13 @@ function facelockMessageListener(message, sender, sendResponse) {
 
                     // If no id is calibrated and we arn't currently calibrating, tell the tab to show the calibration screen.
                     if (m_CalibratedId === null && !m_IsCalibrating) {
-                        //browser.tabs.sendMessage(tab.id, { type: 'ShowCalibrateScreen' });
+                        browser.tabs.sendMessage(tab.id, { type: 'ShowCalibrateScreen' });
                         m_IsCalibrating = true;
                     }
 
                     browser.tabs.sendMessage(tab.id, { type: 'GetFrame' }, frame => {
                         console.log("frame recieved");
+                        console.log(frame);
                         FACEJS.detectFaces(frame, true).then(response => {
                             if (response.length === 0) {
                                 // Skip if no faces are found.
@@ -65,6 +66,7 @@ function facelockMessageListener(message, sender, sendResponse) {
                                 m_CalibratedId = response[0].faceId;
                                 browser.tabs.sendMessage(tab.id, { type: 'HideCalibrateScreen' });
                                 m_IsCalibrating = false;
+                                console.log("this is " + m_IsCalibrating);
                                 return;
                             }
 
@@ -76,7 +78,7 @@ function facelockMessageListener(message, sender, sendResponse) {
                         });
                     });
                 });
-            }, 3000);
+            }, 6000);
             break;
         }
         case 'DisableLock': {

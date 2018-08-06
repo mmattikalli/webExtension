@@ -1,9 +1,12 @@
 let isBlurred = false;
 let counter = 0;
-let canvas = document.createElement("canvas");
+
+let canvas = document.createElement("canvas"); //Pre-load the Canvas for capturing
 canvas.style.display = "none";
-let video = document.createElement("video");
-video.style.display = "none";
+
+let video = document.createElement("video"); //Pre-load the video
+
+let newWebsiteDiv = document.createElement("div");
 
 /**
  * @param {HTMLVideoElement} video
@@ -12,14 +15,17 @@ video.style.display = "none";
  * @returns {Uint8Array}
  */
 function captureFrame(video, canvas) {
-    canvas.width = video.width;
-    canvas.height = video.height;
+    canvas.width = 1000;
+    canvas.height = 1000;
+    console.log(canvas.width);
+    console.log(canvas.height);
 
-    canvas.getContext('2d').lineTo(50, 50);
-    canvas.getContext('2d').drawImage(video, 0, 0);
+    document.body.appendChild(canvas);
+    canvas.getContext('2d').drawImage(video, 0, 0, 1000, 1000);
 
     // convert the canvas to a base64-encoded png file
     let data = canvas.toDataURL('image/png').split(',')[1];
+    document.body.removeChild(canvas);
 
     let bytes = atob(data);
     let buffer = new ArrayBuffer(bytes.length);
@@ -31,8 +37,6 @@ function captureFrame(video, canvas) {
 
     return byteArr;
 }
-
-let newWebsiteDiv = document.createElement("div");
 
 //Listener that appends a video element with webcam stream as src
 browser.runtime.onMessage.addListener(
@@ -46,9 +50,7 @@ browser.runtime.onMessage.addListener(
 
                 isBlurred = true;
 
-                video.style.display = "inherit";
                 setupVid();
-                addBlur("Calibrating...");
 
                 //Getting the video element, first checking if the user has an accessible webcam
                 if (navigator.mediaDevices.getUserMedia) {
@@ -61,8 +63,9 @@ browser.runtime.onMessage.addListener(
                     }) //error catch
                 }
                 break;
-            case "EndCapture":
-
+            case "EndCapture": //Does it by itself
+                console.log("Capture Ended");
+                document.body.removeChild(document.getElementById("vid"));
                 break;
             case "GetFrame":
                 if (video.srcObject !== null) {
@@ -78,11 +81,24 @@ browser.runtime.onMessage.addListener(
             case "Blur":
                 break;
             case "ShowCalibrateScreen":
-                //addBlur("Calibrating...");
+                document.body.removeChild(video);
+                video.style.display = "inherit";
+                addBlur("Calibrating...");
+                if (navigator.mediaDevices.getUserMedia) {
+                    navigator.mediaDevices.getUserMedia({ //Get webcam stream
+                        video: true
+                    }).then(function (stream) { //set video elemnt's src to the webcam stream
+                        video.srcObject = stream;
+                    }).catch(function (e) {
+                        console.log(e);
+                    }) //error catch
+                }
                 break;
             case "HideCalibrateScreen":
                 isBlurred = false;
+                console.log("hiding calibration screen");
                 removeBlur();
+                setupVid();
                 break;
             default:
                 console.log("Invalid Request Type");
@@ -97,10 +113,13 @@ function setupVid() {
     // setting up video element
     video.autoplay = true;
     video.id = "vid";
-    video.style.width = "450px";
-    video.style.height = "450px";
+    //video.style.display = "none";
+    video.style.width = "1000px";
+    video.style.height = "1000px";
     video.style.borderRadius = "350px";
     video.style.zIndex = "21434536743436566";
+
+    document.body.appendChild(video);
 }
 
 /**
@@ -166,6 +185,35 @@ function addBlur(onScreenText) {
 }
 
 function removeBlur() {
-    newWebsiteDiv.style.filter = "none";
+    newWebsiteDiv.style.display = "none";
     document.body.innerHTML = newWebsiteDiv.innerHTML;
 }
+
+// //Create mutation observer
+// var observer = new MutationObserver(function (mutations, observer) {
+//     // fired when a mutation occurs
+//     console.log(mutations[0].type, observer);
+//     if (isBlurred && mutations[0].type === "attributes") {
+//         newWebsiteDiv.style.filter = "blur(20px)";
+//     }
+
+//     if (isBlurred && mutations[0].type === "childList") {
+//         if (mutations[0].removedNodes) {
+//             mutations[0].removedNodes.forEach(removed => {
+//                 console.log("adding removed");
+//                 document.body.appendChild(removed);
+//             });
+//         }
+//     }
+// });
+
+// //tell oberver what to observe
+// observer.observe(
+//     document,
+//     {
+//         attributes: true,
+//         attributeOldValue: true,
+//         childList: true,
+//         subtree: true
+//     }
+// );
