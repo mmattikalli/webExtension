@@ -156,6 +156,7 @@ function addBlur(onScreenText) {
     let para = document.createElement("h1");
     para.id = "para";
     para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    para.style.fontWeight = "light";
     para.style.fontSize = "40px";
     para.style.textAlign = "center";
     para.innerHTML = onScreenText;
@@ -176,7 +177,7 @@ function addCheck() {
     var img = document.createElement("img");
 
     //gets image from an online source
-    img.src = "https://png.icons8.com/windows/1600/0063B1/checked";
+    img.src = "https://i.imgur.com/tPtOgvK.png";
 
     //sets image dimensions to smaller than the video
     img.style.width = "350px";
