@@ -75,6 +75,10 @@ function facelockMessageListener(message, sender, sendResponse) {
 }
 
 function tabSwitchHandler(activeInfo) {
+    if (m_LockIntervalId === null) {
+        return;
+    }
+
     if (m_CurrentTab !== null) {
         cleanupTab(m_CurrentTab);
     }
@@ -85,20 +89,28 @@ function tabSwitchHandler(activeInfo) {
     m_CurrentTab = activeInfo.tabId;
 }
 
+/**
+ * Setup a tab for capture
+ * @param {number} tabId
+ */
 function setupTab(tabId) {
     browser.tabs.sendMessage(tabId, { type: 'StartCapture' });
 
     if (m_CalibratedId === null) {
+        // If we need to calibrate, show the calibration screen.
         browser.tabs.sendMessage(tabId, { type: 'ShowCalibrateScreen' });
     } else if (m_IsLocked) {
-        browser.tabs.sendMessage(tabId, { type: 'Unblur' });
+        // If the browser is currently locked, blur the tab.
+        browser.tabs.sendMessage(tabId, { type: 'Blur' });
     }
 }
 
 function cleanupTab(tabId) {
     if (m_CalibratedId === null) {
+        // If we were calibrating, hide the calibration screen.
         browser.tabs.sendMessage(tabId, { type: 'HideCalibrateScreen' });
     } else if (m_IsLocked) {
+        // If we were locked, hide the lock screen.
         browser.tabs.sendMessage(tabId, { type: 'Unblur' });
     }
     browser.tabs.sendMessage(tabId, { type: 'EndCapture' });
