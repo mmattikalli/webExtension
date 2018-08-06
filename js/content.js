@@ -2,6 +2,9 @@ var counter = 0;
 let newWebsiteDiv = document.createElement("div"); // div for copied website html 
 let divContainer = document.createElement("div"); // container for vid element 
 
+
+
+
 //Listener that appends a video element with webcam stream as src
 browser.runtime.onMessage.addListener(
     (request, sender, sendResponse) => {
@@ -126,7 +129,10 @@ function addBlur() {
  * Adds check to the top of the video stream when necessary
  */
 function addCheck() {
+    
+    //creates image element
     let checkElement = document.createElement("div");
+    checkElement.id = "checkElement"; 
     var img = document.createElement("img");
 
     //gets image from an online source
@@ -168,10 +174,18 @@ function addCheck() {
  * Function removing both the check and the blur 
  */
 function removeBlur() {
-    fadeOut(divContainer); 
-    divContainer.innerHTML = "";
+    //let checkElement = document.getElementById("checkElement"); 
+    //let divContainer = document.getElementById("divContainer"); 
+    
+    
     newWebsiteDiv.style.filter = "none";
+    fadeOut(divContainer); 
+    //fadeOut(checkElement); 
     document.body.innerHTML = newWebsiteDiv.innerHTML;
+    
+    divContainer.style.opacity = 1; 
+    divContainer.innerHTML = "";
+    
 }
 
 function fadeIn(element) {
@@ -197,5 +211,5 @@ function fadeOut(element) {
         element.style.opacity = op;
         element.style.filter = 'alpha(opacity=' + op * 100 + ")";
         op -= op * 0.1;
-    }, 100);
+    }, 20);
 }
