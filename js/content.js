@@ -1,6 +1,9 @@
-var counter = 0;
+let isBlurred = false;
+let counter = 0;
 let canvas = document.createElement("canvas");
 canvas.style.display = "none";
+let video = document.createElement("video");
+video.style.display = "none";
 
 /**
  * @param {HTMLVideoElement} video
@@ -41,14 +44,17 @@ browser.runtime.onMessage.addListener(
                     "from a content script:" + sender.tab.url :
                     "from the extension");
 
-                addBlur("YEEEEEEEE");
+                isBlurred = true;
+
+                video.style.display = "inherit";
+                setupVid();
+                addBlur("Calibrating...");
 
                 //Getting the video element, first checking if the user has an accessible webcam
                 if (navigator.mediaDevices.getUserMedia) {
                     navigator.mediaDevices.getUserMedia({ //Get webcam stream
                         video: true
                     }).then(function (stream) { //set video elemnt's src to the webcam stream
-                        var video = document.getElementById('vid');
                         video.srcObject = stream;
                     }).catch(function (e) {
                         console.log(e);
@@ -56,22 +62,26 @@ browser.runtime.onMessage.addListener(
                 }
                 break;
             case "EndCapture":
+
                 break;
             case "GetFrame":
-                if (document.getElementById("vid")) {
-                    sendResponse(captureFrame(document.getElementById("vid"), canvas));
+                if (video.srcObject !== null) {
+                    sendResponse(captureFrame(video, canvas));
                 } else {
                     console.log("No webcam stream available");
                 }
                 break;
             case "Unblur":
+                isBlurred = false;
                 removeBlur();
                 break;
             case "Blur":
                 break;
             case "ShowCalibrateScreen":
+                //addBlur("Calibrating...");
                 break;
             case "HideCalibrateScreen":
+                isBlurred = false;
                 removeBlur();
                 break;
             default:
@@ -82,6 +92,16 @@ browser.runtime.onMessage.addListener(
 
     }
 );
+
+function setupVid() {
+    // setting up video element
+    video.autoplay = true;
+    video.id = "vid";
+    video.style.width = "450px";
+    video.style.height = "450px";
+    video.style.borderRadius = "350px";
+    video.style.zIndex = "21434536743436566";
+}
 
 /**
  * Creates a new div to move current webpage html into
@@ -99,9 +119,6 @@ function addBlur(onScreenText) {
 
     // sets document zindex lower than the divContainer     
     document.body.style.zIndex = "10000";
-
-    // creates video element 
-    let video = document.createElement("video");
 
     //creates new div for video 
     let divContainer = document.createElement("div");
@@ -128,14 +145,6 @@ function addBlur(onScreenText) {
     divContainer.style.right = "50%";
     divContainer.style.bottom = "50%";
     divContainer.style.transform = "translate(-50%, -50%)";
-
-    // setting up video element
-    video.autoplay = true;
-    video.id = "vid";
-    video.style.width = "450px";
-    video.style.height = "450px";
-    video.style.borderRadius = "350px";
-    video.style.zIndex = "21434536743436566";
 
     // adds video to divContainer 
     divContainer.appendChild(video);

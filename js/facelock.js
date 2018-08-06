@@ -44,7 +44,7 @@ function facelockMessageListener(message, sender, sendResponse) {
 
                     // If no id is calibrated and we arn't currently calibrating, tell the tab to show the calibration screen.
                     if (m_CalibratedId === null && !m_IsCalibrating) {
-                        browser.tabs.sendMessage(tab.id, { type: 'ShowCalibrateScreen' });
+                        //browser.tabs.sendMessage(tab.id, { type: 'ShowCalibrateScreen' });
                         m_IsCalibrating = true;
                     }
 
