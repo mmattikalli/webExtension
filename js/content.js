@@ -108,14 +108,14 @@ function addBlur() {
     let para = document.createElement("h1");
     para.id = "para";
     para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
-    para.style.fontWeight = "light"; 
+    para.style.fontWeight = "light";
     para.style.fontSize = "40px";
     para.style.textAlign = "center";
     para.innerHTML = "Calibrating...";
     divContainer.appendChild(para);
 
     // video attached to divContainer, attached to webpage
-    fadeIn(divContainer); 
+    fadeIn(divContainer);
     document.body.appendChild(divContainer);
 
     // blurs only the background text 
@@ -158,27 +158,27 @@ function addCheck() {
     checkElement.style.bottom = "50%";
     checkElement.style.transform = "translate(-50%, -50%)";
 
-    fadeIn(checkElement); 
-    document.body.appendChild(checkElement);
-    
+    if (checkElement) {
+        fadeIn(checkElement);
+        document.body.appendChild(checkElement);
+    }
 }
 
 /**
  * Function removing both the check and the blur 
  */
 function removeBlur() {
-    let paragraph = document.getElementById("para"); 
-    fadeOut(paragraph.innerHTML);  
-    divContainer.innerHTML = ""; 
+    fadeOut(divContainer); 
+    divContainer.innerHTML = "";
     newWebsiteDiv.style.filter = "none";
     document.body.innerHTML = newWebsiteDiv.innerHTML;
 }
 
 function fadeIn(element) {
-    var op = 0.1;  // initial opacity
+    var op = 0.1; // initial opacity
     //element.style.display = 'block';
     var timer = setInterval(function () {
-        if (op >= 1){
+        if (op >= 1) {
             clearInterval(timer);
         }
         element.style.opacity = op;
@@ -188,11 +188,11 @@ function fadeIn(element) {
 }
 
 function fadeOut(element) {
-    var op = 1;  // initial opacity
+    var op = 1; // initial opacity
     var timer = setInterval(function () {
-        if (op <= 0.1){
+        if (op <= 0.1) {
             clearInterval(timer);
-            element.style.display = 'none';
+            //element.style.display = 'none';
         }
         element.style.opacity = op;
         element.style.filter = 'alpha(opacity=' + op * 100 + ")";
