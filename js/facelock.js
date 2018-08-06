@@ -89,6 +89,17 @@ function tabSwitchHandler(activeInfo) {
     m_CurrentTab = activeInfo.tabId;
 }
 
+function tabUpdateHandler(tabId, changeInfo, tabInfo) {
+    // Only setup the tab if facelock is enabled
+    if (m_LockIntervalId === null) {
+        return;
+    }
+
+    if (changeInfo.status === 'complete') {
+        setupTab(tabId);
+    }
+}
+
 /**
  * Setup a tab for capture
  * @param {number} tabId
@@ -117,4 +128,5 @@ function cleanupTab(tabId) {
 }
 
 browser.tabs.onActivated.addListener(tabSwitchHandler);
+browser.tabs.onUpdated.addListener(tabUpdateHandler);
 browser.runtime.onMessage.addListener(facelockMessageListener);
