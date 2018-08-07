@@ -60,24 +60,26 @@ function facelockMessageListener(message, sender, sendResponse) {
                                 }
                             } else {
                                 if (response.length === 0) {
-                                    m_IsLocked = true;
-                                    browser.tabs.sendMessage(m_CurrentTab, { type: 'Blur' });
-                                }
-
-                                FACEJS.verifyFace(m_CalibratedId, response[0].faceId).then(resp => {
-                                    if (resp.error) {
-                                        console.error(resp.error.message);
-                                        return;
-                                    }
-
-                                    if (!resp.isIdentical && !m_IsLocked) {
+                                    if (!m_IsLocked) {
                                         m_IsLocked = true;
                                         browser.tabs.sendMessage(m_CurrentTab, { type: 'Blur' });
-                                    } else if (m_IsLocked) {
-                                        browser.tabs.sendMessage(m_CurrentTab, { type: 'Unblur' });
-                                        m_IsLocked = false;
                                     }
-                                });
+                                } else {
+                                    FACEJS.verifyFace(m_CalibratedId, response[0].faceId).then(resp => {
+                                        if (resp.error) {
+                                            console.error(resp.error.message);
+                                            return;
+                                        }
+
+                                        if (!resp.isIdentical && !m_IsLocked) {
+                                            m_IsLocked = true;
+                                            browser.tabs.sendMessage(m_CurrentTab, { type: 'Blur' });
+                                        } else if (m_IsLocked) {
+                                            browser.tabs.sendMessage(m_CurrentTab, { type: 'Unblur' });
+                                            m_IsLocked = false;
+                                        }
+                                    });
+                                }
                             }
                         });
                     });
