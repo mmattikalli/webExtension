@@ -1,7 +1,7 @@
 // div for website html
 let newWebsiteDiv = document.createElement("div");
 // container for video element + text 
-let divContainer = document.createElement("div"); 
+let divContainer = document.createElement("div");
 
 
 // canvas elements 
@@ -14,9 +14,11 @@ let video = document.createElement("video"); //Pre-load the video
 // creates text element
 let para = document.createElement("h1");
 
-// creates counter
-let counter = 0; 
+// creates checkmark element container (div)
+let checkElement = document.createElement("div");
 
+// creates checkmark element 
+var img = document.createElement("img");
 let m_Stream = null;
 
 /**
@@ -43,7 +45,7 @@ function captureFrame(video, canvas) {
 //Listener that appends a video element with webcam stream as src
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
     console.log(request.type);
-    
+
     switch (request.type) {
         case 'StartCapture':
             console.log(sender.tab ?
@@ -170,9 +172,9 @@ function addBlur(onScreenText) {
 
     // formats text to put on screen with video element
     para.id = "para";
-    para.style.all = "initial"; 
+    para.style.all = "initial";
     para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
-    para.style.color = "black"; 
+    para.style.color = "black";
     para.style.fontWeight = "light";
     para.style.fontSize = "40px";
     para.style.textAlign = "center";
@@ -191,15 +193,15 @@ function addBlur(onScreenText) {
  * Adds check to the top of the video stream when necessary
  */
 function addCheckmark() {
-    
+
     //creates image element
-    let checkElement = document.createElement("div");
-    checkElement.id = "checkElement"; 
-    var img = document.createElement("img");
+    
+    checkElement.id = "checkElement";
+    
 
     //gets image from an online source
     img.src = "https://cdn3.iconfinder.com/data/icons/sympletts-free-sampler/128/circle-check-512.png";
-    
+
     //sets image dimensions to smaller than the video
     img.style.width = "350px";
     img.style.height = "350px";
@@ -236,9 +238,18 @@ function addCheckmark() {
  * Function removing both the check and the blur
  */
 function removeBlur() {
-    newWebsiteDiv.style.filter = "none";
-    document.body.removeChild(divContainer); 
-    document.body.innerHTML = newWebsiteDiv.innerHTML;
+    // fades out all three elements on webpage
+    fadeOut(checkElement); 
+    fadeOut(para); 
+    fadeOut(divContainer);
+    // resets the website after all the fading has occurred 
+    setTimeout(() => {
+        console.log("gettingtotimeout"); 
+        newWebsiteDiv.style.filter = "none";
+        document.body.removeChild(divContainer);
+        document.body.innerHTML = newWebsiteDiv.innerHTML;
+    }, 2000);
+
 }
 
 function fadeIn(element) {
@@ -263,7 +274,7 @@ function fadeOut(element) {
         }
         element.style.opacity = op;
         element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+        // slowly reduces opacity 
         op -= op * 0.1;
     }, 20);
 }
- 
