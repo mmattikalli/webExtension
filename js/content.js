@@ -163,6 +163,7 @@ function addBlur(onScreenText) {
     let para = document.createElement("h1");
     para.id = "para";
     para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    para.style.color = "black"; 
     para.style.fontWeight = "light";
     para.style.fontSize = "40px";
     para.style.textAlign = "center";
@@ -226,15 +227,14 @@ function addCheck() {
  * Function removing both the check and the blur
  */
 function removeBlur() {
-    //let checkElement = document.getElementById("checkElement"); 
-    //let divContainer = document.getElementById("divContainer"); 
+    let checkElement = document.getElementById("checkElement"); 
+    let divContainer = document.getElementById("divContainer");
     
     
-    newWebsiteDiv.style.filter = "none";
     fadeOut(divContainer); 
     //fadeOut(checkElement); 
     document.body.innerHTML = newWebsiteDiv.innerHTML;
-    
+    newWebsiteDiv.style.filter = "none";
     divContainer.style.opacity = 1; 
     divContainer.innerHTML = "";
     
