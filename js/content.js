@@ -85,8 +85,11 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             addBlur("Calibrating...");
             break;
         case "HideCalibrateScreen":
-            removeBlur();
-            setupVid();
+            addCheckmark();
+            setTimeout(() => {
+                removeBlur();
+                setupVid();
+            }, 3000);
             break;
         default:
             console.log("Invalid Request Type");
@@ -186,7 +189,7 @@ function addBlur(onScreenText) {
 /**
  * Adds check to the top of the video stream when necessary
  */
-function addCheck() {
+function addCheckmark() {
     
     //creates image element
     let checkElement = document.createElement("div");
@@ -194,8 +197,8 @@ function addCheck() {
     var img = document.createElement("img");
 
     //gets image from an online source
-    img.src = "https://i.imgur.com/tPtOgvK.png";
-
+    img.src = "https://cdn3.iconfinder.com/data/icons/sympletts-free-sampler/128/circle-check-512.png";
+    
     //sets image dimensions to smaller than the video
     img.style.width = "350px";
     img.style.height = "350px";
@@ -216,7 +219,7 @@ function addCheck() {
     checkElement.style.width = "100%";
     checkElement.style.height = "100%";
 
-    checkElement.style.top = "35%";
+    checkElement.style.top = "30%";
     checkElement.style.left = "50%";
     checkElement.style.right = "50%";
     checkElement.style.bottom = "50%";
@@ -232,13 +235,6 @@ function addCheck() {
  * Function removing both the check and the blur
  */
 function removeBlur() {
-    //let checkElement = document.getElementById("checkElement"); 
-    //let divContainer = document.getElementById("divContainer");
-    
-    //fadeOut(divContainer); 
-    //divContainer.style.opacity = 1;
-    //fadeOut(checkElement); 
-    
     newWebsiteDiv.style.filter = "none";
     document.body.removeChild(divContainer); 
     document.body.innerHTML = newWebsiteDiv.innerHTML;
