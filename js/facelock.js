@@ -74,7 +74,7 @@ function facelockMessageListener(message, sender, sendResponse) {
                                         if (!resp.isIdentical && !m_IsLocked) {
                                             m_IsLocked = true;
                                             browser.tabs.sendMessage(m_CurrentTab, { type: 'Blur' });
-                                        } else if (m_IsLocked) {
+                                        } else if (resp.isIdentical && m_IsLocked) {
                                             browser.tabs.sendMessage(m_CurrentTab, { type: 'Unblur' });
                                             m_IsLocked = false;
                                         }
