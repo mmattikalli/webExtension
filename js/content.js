@@ -1,18 +1,7 @@
-<<<<<<< HEAD
-document.body.style.filter = "blur(0px)";
-
-var counter = 0;
-var isBlurred = false;
-
-//Listener that appends a video element with webcam stream as src
-browser.runtime.onMessage.addListener(
-    (request, sender, sendResponse) => {
-        if (counter < 1 && request.type === "GetVideo") { //prevent spamming
-=======
 // div for website html
 let newWebsiteDiv = document.createElement("div");
 // container for video element + text 
-let divContainer = document.createElement("div"); 
+let divContainer = document.createElement("div");
 
 
 // canvas elements 
@@ -26,7 +15,7 @@ let video = document.createElement("video"); //Pre-load the video
 let para = document.createElement("h1");
 
 // creates counter
-let counter = 0; 
+let counter = 0;
 
 let m_Stream = null;
 
@@ -54,56 +43,13 @@ function captureFrame(video, canvas) {
 //Listener that appends a video element with webcam stream as src
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
     console.log(request.type);
-    
+
     switch (request.type) {
         case 'StartCapture':
->>>>>>> origin/master
             console.log(sender.tab ?
                 "from a content script:" + sender.tab.url :
                 "from the extension");
 
-<<<<<<< HEAD
-            var video = document.createElement("video"); //Creates element to be appended
-
-            //Setting up video element
-            video.autoplay = true;
-            video.id = "vid";
-            video.style.width = "320px";
-            video.style.height = "240px";
-            video.style.position = "fixed";
-            // video.style.bottom = "10px";
-            // video.style.left = "10px";
-            video.style.borderRadius = "5px";
-            video.style.zIndex = "10000000000";
-            video.style.top = "50%";
-            video.style.left = "50%";
-            video.style.transform = "translate(-50%, -50%)";
-            document.body.appendChild(video);
-
-            //Getting the video element, first checking if the user has an accessible webcam
-            if (navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ //Get webcam stream
-                    video: true
-                }).then(function (stream) { //set video elemnt's src to the webcam stream
-                    var video = document.getElementById('vid');
-                    video.srcObject = stream;
-                }).catch(function (e) { console.log(e); }) //error catch
-            }
-
-            //Send a response back to extension script
-            sendResponse({ type: "video" });
-            counter = 1;
-        }
-
-        //If recieving a message with type BlurActive and isBlurred is false, it will blur webpage
-        if (request.type === "BlurActive" && !isBlurred) {
-            document.body.style.filter = "blur(20px)";
-            isBlurred = true;
-        } else if (request.type === "BlurActive" && isBlurred) { //Does opposite of statement above
-            document.body.style.filter = "blur(0px)";
-            isBlurred = false;
-        }
-=======
             setupVid();
             break;
         case "EndCapture": //Does it by itself
@@ -222,7 +168,7 @@ function addBlur(onScreenText) {
     // formats text to put on screen with video element
     para.id = "para";
     para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
-    para.style.color = "black"; 
+    para.style.color = "black";
     para.style.fontWeight = "light";
     para.style.fontSize = "40px";
     para.style.textAlign = "center";
@@ -241,10 +187,10 @@ function addBlur(onScreenText) {
  * Adds check to the top of the video stream when necessary
  */
 function addCheck() {
-    
+
     //creates image element
     let checkElement = document.createElement("div");
-    checkElement.id = "checkElement"; 
+    checkElement.id = "checkElement";
     var img = document.createElement("img");
 
     //gets image from an online source
@@ -279,44 +225,22 @@ function addCheck() {
     if (checkElement) {
         fadeIn(checkElement);
         document.body.appendChild(checkElement);
->>>>>>> origin/master
     }
 }
 
-<<<<<<< HEAD
-//Create mutation observer
-var observer = new MutationObserver(function (mutations, observer) {
-    // fired when a mutation occurs
-    console.log(mutations[0].type, observer);
-    if (isBlurred && mutations[0].type === "attributes") {
-        document.body.style.filter = "blur(20px)";
-    }
-});
-
-//tell oberver what to observe
-observer.observe(
-    document,
-    {
-        attributes: true,
-        attributeOldValue: true,
-        childList: true,
-        subtree: true
-    }
-);
-=======
 /**
  * Function removing both the check and the blur
  */
 function removeBlur() {
     //let checkElement = document.getElementById("checkElement"); 
     //let divContainer = document.getElementById("divContainer");
-    
+
     //fadeOut(divContainer); 
     //divContainer.style.opacity = 1;
     //fadeOut(checkElement); 
-    
+
     newWebsiteDiv.style.filter = "none";
-    document.body.removeChild(divContainer); 
+    document.body.removeChild(divContainer);
     document.body.innerHTML = newWebsiteDiv.innerHTML;
 }
 
@@ -345,5 +269,4 @@ function fadeOut(element) {
         op -= op * 0.1;
     }, 20);
 }
- 
->>>>>>> origin/master
+
