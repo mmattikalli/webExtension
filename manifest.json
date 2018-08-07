@@ -30,9 +30,7 @@
     }
   ],
   "background": {
-    "scripts": [
-      "js/background.js"
-    ],
+    "page": "html/background.html",
     "persistent": true
   }
 }
