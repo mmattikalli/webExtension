@@ -235,10 +235,6 @@ function addCheckmark() {
  * Function removing both the check and the blur
  */
 function removeBlur() {
-    //fadeOut(divContainer); 
-    //divContainer.style.opacity = 1;
-    //fadeOut(checkElement); 
-    
     newWebsiteDiv.style.filter = "none";
     document.body.removeChild(divContainer); 
     document.body.innerHTML = newWebsiteDiv.innerHTML;
