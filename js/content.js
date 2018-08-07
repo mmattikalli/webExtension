@@ -11,7 +11,11 @@ canvas.style.display = "none";
 // preload the video
 let video = document.createElement("video"); //Pre-load the video
 
+// creates text element
+let para = document.createElement("h1");
 
+// creates counter
+let counter = 0; 
 
 let m_Stream = null;
 
@@ -39,6 +43,7 @@ function captureFrame(video, canvas) {
 //Listener that appends a video element with webcam stream as src
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
     console.log(request.type);
+    
     switch (request.type) {
         case 'StartCapture':
             console.log(sender.tab ?
@@ -50,7 +55,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         case "EndCapture": //Does it by itself
             document.body.removeChild(video);
             break;
-        case "GetFrame":
+        case 'GetFrame':
             if (video.srcObject !== null) {
                 sendResponse(captureFrame(video, canvas));
             } else {
@@ -62,10 +67,10 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             setupVid();
             break;
         case "Blur":
-            addBlur('Locked');
+            addBlur("Locked");
             navigator.mediaDevices.getUserMedia({ //Get webcam stream
                 video: true
-            }).then(function (stream) { //set video elemnt's src to the webcam stream
+            }).then(function (stream) { //set video element's src to the webcam stream
                 m_Stream = stream;
                 video.srcObject = stream;
                 let vidTrack = stream.getVideoTracks()[0];
@@ -159,8 +164,7 @@ function addBlur(onScreenText) {
     // adds video to divContainer
     divContainer.appendChild(video);
 
-    // creates text to put on screen with video element
-    let para = document.createElement("h1");
+    // formats text to put on screen with video element
     para.id = "para";
     para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
     para.style.color = "black"; 
@@ -171,7 +175,7 @@ function addBlur(onScreenText) {
     divContainer.appendChild(para);
 
     // video attached to divContainer, attached to webpage
-    fadeIn(divContainer);
+    //fadeIn(divContainer);
     document.body.appendChild(divContainer);
 
     // blurs only the background text
@@ -227,17 +231,16 @@ function addCheck() {
  * Function removing both the check and the blur
  */
 function removeBlur() {
-    let checkElement = document.getElementById("checkElement"); 
-    let divContainer = document.getElementById("divContainer");
+    //let checkElement = document.getElementById("checkElement"); 
+    //let divContainer = document.getElementById("divContainer");
     
-    
-    fadeOut(divContainer); 
+    //fadeOut(divContainer); 
+    //divContainer.style.opacity = 1;
     //fadeOut(checkElement); 
-    document.body.innerHTML = newWebsiteDiv.innerHTML;
-    newWebsiteDiv.style.filter = "none";
-    divContainer.style.opacity = 1; 
-    divContainer.innerHTML = "";
     
+    newWebsiteDiv.style.filter = "none";
+    document.body.removeChild(divContainer); 
+    document.body.innerHTML = newWebsiteDiv.innerHTML;
 }
 
 function fadeIn(element) {
