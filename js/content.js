@@ -55,6 +55,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             break;
         case "Blur":
             addBlur('Locked');
+            video.style.display = "inherit";
             navigator.mediaDevices.getUserMedia({ //Get webcam stream
                 video: true
             }).then(function (stream) { //set video elemnt's src to the webcam stream
