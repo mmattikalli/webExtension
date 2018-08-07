@@ -238,9 +238,11 @@ function addCheckmark() {
  * Function removing both the check and the blur
  */
 function removeBlur() {
+    // fades out all three elements on webpage
     fadeOut(checkElement); 
     fadeOut(para); 
     fadeOut(divContainer);
+    // resets the website after all the fading has occurred 
     setTimeout(() => {
         console.log("gettingtotimeout"); 
         newWebsiteDiv.style.filter = "none";
@@ -272,6 +274,7 @@ function fadeOut(element) {
         }
         element.style.opacity = op;
         element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+        // slowly reduces opacity 
         op -= op * 0.1;
     }, 20);
 }
