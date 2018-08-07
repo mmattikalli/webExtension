@@ -82,7 +82,6 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             break;
         case "ShowCalibrateScreen":
             document.body.removeChild(video);
-            video.style.display = "inherit";
             addBlur("Calibrating...");
             break;
         case "HideCalibrateScreen":
@@ -125,6 +124,7 @@ function setupVid() {
  * Blurs the current webpage
  */
 function addBlur(onScreenText) {
+    video.remove();
     // move all of website html into a div
 
     let websiteBody = document.body.innerHTML;
@@ -162,6 +162,7 @@ function addBlur(onScreenText) {
     divContainer.style.transform = "translate(-50%, -50%)";
 
     // adds video to divContainer
+    video.style.display = "inherit";
     divContainer.appendChild(video);
 
     // formats text to put on screen with video element
