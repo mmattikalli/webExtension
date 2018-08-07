@@ -170,6 +170,7 @@ function addBlur(onScreenText) {
 
     // formats text to put on screen with video element
     para.id = "para";
+    para.style.all = "initial"; 
     para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
     para.style.color = "black"; 
     para.style.fontWeight = "light";
