@@ -89,7 +89,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             setTimeout(() => {
                 removeBlur();
                 setupVid();
-            },3000);
+            }, 3000);
             break;
         default:
             console.log("Invalid Request Type");
@@ -191,7 +191,6 @@ function addBlur(onScreenText) {
  */
 function addCheckmark() {
     
-    console.log("addingcheck"); 
     //creates image element
     let checkElement = document.createElement("div");
     checkElement.id = "checkElement"; 
@@ -199,11 +198,10 @@ function addCheckmark() {
 
     //gets image from an online source
     img.src = "https://cdn3.iconfinder.com/data/icons/sympletts-free-sampler/128/circle-check-512.png";
-    console.log(img.src); 
+    
     //sets image dimensions to smaller than the video
     img.style.width = "350px";
     img.style.height = "350px";
-    //img.style.display = "none"; 
 
     // appends image to checkElement container 
     checkElement.appendChild(img);
@@ -230,16 +228,13 @@ function addCheckmark() {
     if (checkElement) {
         fadeIn(checkElement);
         document.body.appendChild(checkElement);
-    };
+    }
 }
 
 /**
  * Function removing both the check and the blur
  */
 function removeBlur() {
-    //let checkElement = document.getElementById("checkElement"); 
-    //let divContainer = document.getElementById("divContainer");
-    
     //fadeOut(divContainer); 
     //divContainer.style.opacity = 1;
     //fadeOut(checkElement); 
