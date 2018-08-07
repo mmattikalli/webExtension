@@ -1,9 +1,21 @@
+// div for website html
+let newWebsiteDiv = document.createElement("div");
+// container for video element + text 
+let divContainer = document.createElement("div"); 
+
+
+// canvas elements 
 let canvas = document.createElement("canvas"); //Pre-load the Canvas for capturing
 canvas.style.display = "none";
 
+// preload the video
 let video = document.createElement("video"); //Pre-load the video
 
-let newWebsiteDiv = document.createElement("div");
+// creates text element
+let para = document.createElement("h1");
+
+// creates counter
+let counter = 0; 
 
 let m_Stream = null;
 
@@ -31,6 +43,7 @@ function captureFrame(video, canvas) {
 //Listener that appends a video element with webcam stream as src
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
     console.log(request.type);
+    
     switch (request.type) {
         case 'StartCapture':
             console.log(sender.tab ?
@@ -42,7 +55,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         case "EndCapture": //Does it by itself
             document.body.removeChild(video);
             break;
-        case "GetFrame":
+        case 'GetFrame':
             if (video.srcObject !== null) {
                 sendResponse(captureFrame(video, canvas));
             } else {
@@ -54,10 +67,10 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             setupVid();
             break;
         case "Blur":
-            addBlur('Locked');
+            addBlur("Locked");
             navigator.mediaDevices.getUserMedia({ //Get webcam stream
                 video: true
-            }).then(function (stream) { //set video elemnt's src to the webcam stream
+            }).then(function (stream) { //set video element's src to the webcam stream
                 m_Stream = stream;
                 video.srcObject = stream;
                 let vidTrack = stream.getVideoTracks()[0];
@@ -123,8 +136,7 @@ function addBlur(onScreenText) {
     // sets document zindex lower than the divContainer
     document.body.style.zIndex = "10000";
 
-    //creates new div for video
-    let divContainer = document.createElement("div");
+    // div container ID 
     divContainer.id = "divContainer";
 
     // clears preset div settings
@@ -153,10 +165,10 @@ function addBlur(onScreenText) {
     video.style.display = "inherit";
     divContainer.appendChild(video);
 
-    // creates text to put on screen with video element
-    let para = document.createElement("h1");
+    // formats text to put on screen with video element
     para.id = "para";
     para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    para.style.color = "black"; 
     para.style.fontWeight = "light";
     para.style.fontSize = "40px";
     para.style.textAlign = "center";
@@ -164,6 +176,7 @@ function addBlur(onScreenText) {
     divContainer.appendChild(para);
 
     // video attached to divContainer, attached to webpage
+    fadeIn(divContainer);
     document.body.appendChild(divContainer);
 
     // blurs only the background text
@@ -174,7 +187,10 @@ function addBlur(onScreenText) {
  * Adds check to the top of the video stream when necessary
  */
 function addCheck() {
+    
+    //creates image element
     let checkElement = document.createElement("div");
+    checkElement.id = "checkElement"; 
     var img = document.createElement("img");
 
     //gets image from an online source
@@ -184,6 +200,7 @@ function addCheck() {
     img.style.width = "350px";
     img.style.height = "350px";
 
+    // appends image to checkElement container 
     checkElement.appendChild(img);
 
     // sets checkElement to be a flexbox
@@ -205,12 +222,51 @@ function addCheck() {
     checkElement.style.bottom = "50%";
     checkElement.style.transform = "translate(-50%, -50%)";
 
-    document.body.appendChild(checkElement);
+    if (checkElement) {
+        fadeIn(checkElement);
+        document.body.appendChild(checkElement);
+    }
 }
 
 /**
  * Function removing both the check and the blur
  */
 function removeBlur() {
+    //let checkElement = document.getElementById("checkElement"); 
+    //let divContainer = document.getElementById("divContainer");
+    
+    //fadeOut(divContainer); 
+    //divContainer.style.opacity = 1;
+    //fadeOut(checkElement); 
+    
+    newWebsiteDiv.style.filter = "none";
+    document.body.removeChild(divContainer); 
     document.body.innerHTML = newWebsiteDiv.innerHTML;
 }
+
+function fadeIn(element) {
+    var op = 0.1; // initial opacity
+    //element.style.display = 'block';
+    var timer = setInterval(function () {
+        if (op >= 1) {
+            clearInterval(timer);
+        }
+        element.style.opacity = op;
+        element.style.filter = "alpha(opacity=" + op * 100 + ")";
+        op += op * 0.1;
+    }, 20);
+}
+
+function fadeOut(element) {
+    var op = 1; // initial opacity
+    var timer = setInterval(function () {
+        if (op <= 0.1) {
+            clearInterval(timer);
+            //element.style.display = 'none';
+        }
+        element.style.opacity = op;
+        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+        op -= op * 0.1;
+    }, 20);
+}
+ 
