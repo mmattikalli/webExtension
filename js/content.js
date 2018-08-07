@@ -53,7 +53,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             setupVid();
             break;
         case "EndCapture": //Does it by itself
-            document.body.removeChild(video);
+            video.remove();
             break;
         case 'GetFrame':
             if (video.srcObject !== null) {
