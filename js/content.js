@@ -63,6 +63,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             }
             break;
         case "Unblur":
+            
             removeBlur();
             setupVid();
             break;
@@ -85,6 +86,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             addBlur("Calibrating...");
             break;
         case "HideCalibrateScreen":
+            addCheck(); 
             removeBlur();
             setupVid();
             break;
@@ -194,7 +196,7 @@ function addCheck() {
     var img = document.createElement("img");
 
     //gets image from an online source
-    img.src = "https://i.imgur.com/tPtOgvK.png";
+    img.src = "https://cdn3.iconfinder.com/data/icons/sympletts-free-sampler/128/circle-check-512.png";
 
     //sets image dimensions to smaller than the video
     img.style.width = "350px";
