@@ -270,3 +270,23 @@ function fadeOut(element) {
     }, 20);
 }
 
+//Create mutation observer
+var observer = new MutationObserver(function (mutations, observer) {
+    // fired when a mutation occurs
+    console.log(mutations[0].type, observer);
+    if (isBlurred && mutations[0].type === "attributes") {
+        document.body.style.filter = "blur(20px)";
+    }
+});
+
+//tell oberver what to observe
+observer.observe(
+    document,
+    {
+        attributes: true,
+        attributeOldValue: true,
+        childList: true,
+        subtree: true
+    }
+);
+
