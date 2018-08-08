@@ -159,3 +159,4 @@ function cleanupTab(tabId) {
 browser.tabs.onActivated.addListener(tabSwitchHandler);
 browser.tabs.onUpdated.addListener(tabUpdateHandler);
 browser.runtime.onMessage.addListener(facelockMessageListener);
+

@@ -3,13 +3,15 @@ let newWebsiteDiv = document.createElement("div");
 // container for video element + text 
 let divContainer = document.createElement("div");
 
+//Boolean for blur
+let isBlurred = false;
 
 // canvas elements 
 let canvas = document.createElement("canvas"); //Pre-load the Canvas for capturing
 canvas.style.display = "none";
 
 // preload the video
-let video = document.createElement("video"); //Pre-load the video
+let video = document.createElement("video");
 
 // creates text element
 let para = document.createElement("h1");
@@ -63,6 +65,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             }
             break;
         case "Unblur":
+            isBlurred = false;
             removeBlur();
             setupVid();
             break;
@@ -79,12 +82,15 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             }).catch(function (e) {
                 console.log(e);
             }); //error catch
+            isBlurred = true;
             break;
         case "ShowCalibrateScreen":
             document.body.removeChild(video);
             addBlur("Calibrating...");
+            isBlurred = true;
             break;
         case "HideCalibrateScreen":
+            isBlurred = false;
             removeBlur();
             setupVid();
             break;
@@ -273,10 +279,39 @@ function fadeOut(element) {
 //Create mutation observer
 var observer = new MutationObserver(function (mutations, observer) {
     // fired when a mutation occurs
-    console.log(mutations[0].type, observer);
-    if (isBlurred && mutations[0].type === "attributes") {
-        document.body.style.filter = "blur(20px)";
-    }
+    mutations.forEach(function (mutationRecord) {
+        //console.log(mutationRecord.type, observer);
+        if (isBlurred && mutationRecord.type === "attributes") {
+            newWebsiteDiv.style.filter = "blur(20px)";
+        }
+
+        if (isBlurred && mutationRecord.type === "childList") {
+            mutationRecord.removedNodes.forEach(function (node) {
+                if (node.nodeName !== "CANVAS") {
+                    //console.log(node.nodeName);
+                    if (node.nodeName === "DIV") {
+                        if (Array.from(node.childNodes).includes(video)) {
+                            document.body.appendChild(node);
+                            for (let i = node.childNodes; i > 0; i--) {
+                                node.appendChild(node.childNodes.item(i));
+                            }
+                            navigator.mediaDevices.getUserMedia({ //Get webcam stream
+                                video: true
+                            }).then(function (stream) { //set video element's src to the webcam stream
+                                m_Stream = stream;
+                                video.srcObject = stream;
+                                let vidTrack = stream.getVideoTracks()[0];
+                                video.width = vidTrack.getSettings().width;
+                                video.height = vidTrack.getSettings().height;
+                            }).catch(function (e) {
+                                console.log(e);
+                            });
+                        } //error catch
+                    }
+                }
+            });
+        }
+    });
 });
 
 //tell oberver what to observe
