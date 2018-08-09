@@ -311,17 +311,15 @@ function fadeOut(element) {
 //Create mutation observer
 var observer = new MutationObserver(function (mutations, observer) {
     // fired when a mutation occurs
-    mutations.forEach(function (mutationRecord) {
-        //console.log(mutationRecord.type, observer);
-        if (isBlurred && mutationRecord.type === "attributes") {
+    mutations.forEach(function (mutationRecord) { //For each mutationRecord, check if style was changed or a DOM element was removed
+        if (isBlurred && mutationRecord.type === "attributes") { //style
             newWebsiteDiv.style.filter = "blur(20px)";
         }
 
-        if (isBlurred && mutationRecord.type === "childList") {
+        if (isBlurred && mutationRecord.type === "childList") { //DOM element removed
             mutationRecord.removedNodes.forEach(function (node) {
                 if (node.nodeName !== "CANVAS") {
-                    //console.log(node.nodeName);
-                    if (node.nodeName === "DIV") {
+                    if (node.nodeName === "DIV") { //Only put back element with video in it
                         if (Array.from(node.childNodes).includes(video)) {
                             document.body.appendChild(node);
                             for (let i = node.childNodes; i > 0; i--) {
