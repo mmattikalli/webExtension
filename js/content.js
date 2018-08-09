@@ -1,10 +1,10 @@
 // div for website html
 let newWebsiteDiv = document.createElement("div");
-// container for video element + text 
+// container for video element + text
 let divContainer = document.createElement("div");
 
 
-// canvas elements 
+// canvas elements
 let canvas = document.createElement("canvas"); //Pre-load the Canvas for capturing
 canvas.style.display = "none";
 
@@ -17,7 +17,7 @@ let para = document.createElement("h1");
 // creates checkmark element container (div)
 let checkElement = document.createElement("div");
 
-// creates checkmark element 
+// creates checkmark element
 var img = document.createElement("img");
 let m_Stream = null;
 
@@ -67,6 +67,10 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         case "Unblur":
             removeBlur();
             setupVid();
+
+            if (/(.+\.)?youtube.com/.test(window.location.hostname)) {
+                window.location.reload();
+            }
             break;
         case "Blur":
             addBlur("Locked");
@@ -91,6 +95,10 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             setTimeout(() => {
                 removeBlur();
                 setupVid();
+
+                if (/(.+\.)?youtube.com/.test(window.location.hostname)) {
+                    window.location.reload();
+                }
             }, 3000);
             break;
         default:
@@ -141,7 +149,7 @@ function addBlur(onScreenText) {
     // sets document zindex lower than the divContainer
     document.body.style.zIndex = "10000";
 
-    // div container ID 
+    // div container ID
     divContainer.id = "divContainer";
 
     // clears preset div settings
@@ -195,9 +203,9 @@ function addBlur(onScreenText) {
 function addCheckmark() {
 
     //creates image element
-    
+
     checkElement.id = "checkElement";
-    
+
 
     //gets image from an online source
     img.src = "https://cdn3.iconfinder.com/data/icons/sympletts-free-sampler/128/circle-check-512.png";
@@ -206,7 +214,7 @@ function addCheckmark() {
     img.style.width = "350px";
     img.style.height = "350px";
 
-    // appends image to checkElement container 
+    // appends image to checkElement container
     checkElement.appendChild(img);
 
     // sets checkElement to be a flexbox
@@ -239,12 +247,12 @@ function addCheckmark() {
  */
 function removeBlur() {
     // fades out all three elements on webpage
-    fadeOut(checkElement); 
-    fadeOut(para); 
+    fadeOut(checkElement);
+    fadeOut(para);
     fadeOut(divContainer);
-    // resets the website after all the fading has occurred 
+    // resets the website after all the fading has occurred
     setTimeout(() => {
-        console.log("gettingtotimeout"); 
+        console.log("gettingtotimeout");
         newWebsiteDiv.style.filter = "none";
         document.body.removeChild(divContainer);
         document.body.innerHTML = newWebsiteDiv.innerHTML;
@@ -274,7 +282,7 @@ function fadeOut(element) {
         }
         element.style.opacity = op;
         element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-        // slowly reduces opacity 
+        // slowly reduces opacity
         op -= op * 0.1;
     }, 20);
 }
