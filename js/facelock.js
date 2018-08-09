@@ -83,7 +83,7 @@ function facelockMessageListener(message, sender, sendResponse) {
                             }
                         });
                     });
-                }, 1500);
+                }, 3000);
             });
             break;
         }
