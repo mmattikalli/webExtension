@@ -72,6 +72,10 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     }
                 });
             });
+
+            if (/(.+\.)?youtube.com/.test(window.location.hostname)) {
+                window.location.reload();
+            }
             break;
         case "Blur":
             addBlur("Locked");
@@ -101,6 +105,10 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
                         }
                     });
                 });
+
+                if (/(.+\.)?youtube.com/.test(window.location.hostname)) {
+                    window.location.reload();
+                }
             }, 3000);
             break;
         default:
@@ -256,7 +264,6 @@ function removeBlur() {
     // resets the website after all the fading has occurred
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            console.log("gettingtotimeout");
             newWebsiteDiv.style.filter = "none";
             document.body.removeChild(divContainer);
             document.body.innerHTML = newWebsiteDiv.innerHTML;
