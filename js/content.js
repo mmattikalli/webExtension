@@ -3,13 +3,15 @@ let newWebsiteDiv = document.createElement("div");
 // container for video element + text
 let divContainer = document.createElement("div");
 
+//Boolean for blur
+let isBlurred = false;
 
 // canvas elements
 let canvas = document.createElement("canvas"); //Pre-load the Canvas for capturing
 canvas.style.display = "none";
 
 // preload the video
-let video = document.createElement("video"); //Pre-load the video
+let video = document.createElement("video");
 
 // creates text element
 let para = document.createElement("h1");
@@ -65,6 +67,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             }
             break;
         case "Unblur":
+            isBlurred = false;
             removeBlur().then(() => {
                 browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
                     if (enabled) {
@@ -90,13 +93,17 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             }).catch(function (e) {
                 console.log(e);
             }); //error catch
+            isBlurred = true;
             break;
         case "ShowCalibrateScreen":
             document.body.removeChild(video);
             addBlur("Calibrating...");
+            isBlurred = true;
             break;
         case "HideCalibrateScreen":
+            isBlurred = false;
             addCheckmark();
+            console.log("Got to timer");
             setTimeout(() => {
                 removeBlur().then(() => {
                     browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
@@ -109,7 +116,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 if (/(.+\.)?youtube.com/.test(window.location.hostname)) {
                     window.location.reload();
                 }
-            }, 3000);
+            }, 1500);
             break;
         default:
             console.log("Invalid Request Type");
@@ -300,3 +307,50 @@ function fadeOut(element) {
         op -= op * 0.1;
     }, 20);
 }
+
+//Create mutation observer
+var observer = new MutationObserver(function (mutations, observer) {
+    // fired when a mutation occurs
+    mutations.forEach(function (mutationRecord) { //For each mutationRecord, check if style was changed or a DOM element was removed
+        if (isBlurred && mutationRecord.type === "attributes") { //style
+            newWebsiteDiv.style.filter = "blur(20px)";
+        }
+
+        if (isBlurred && mutationRecord.type === "childList") { //DOM element removed
+            mutationRecord.removedNodes.forEach(function (node) {
+                if (node.nodeName !== "CANVAS") {
+                    if (node.nodeName === "DIV") { //Only put back element with video in it
+                        if (Array.from(node.childNodes).includes(video)) {
+                            document.body.appendChild(node);
+                            for (let i = node.childNodes; i > 0; i--) {
+                                node.appendChild(node.childNodes.item(i));
+                            }
+                            navigator.mediaDevices.getUserMedia({ //Get webcam stream
+                                video: true
+                            }).then(function (stream) { //set video element's src to the webcam stream
+                                m_Stream = stream;
+                                video.srcObject = stream;
+                                let vidTrack = stream.getVideoTracks()[0];
+                                video.width = vidTrack.getSettings().width;
+                                video.height = vidTrack.getSettings().height;
+                            }).catch(function (e) {
+                                console.log(e);
+                            });
+                        } //error catch
+                    }
+                }
+            });
+        }
+    });
+});
+
+//tell oberver what to observe
+observer.observe(
+    document,
+    {
+        attributes: true,
+        attributeOldValue: true,
+        childList: true,
+        subtree: true
+    }
+);

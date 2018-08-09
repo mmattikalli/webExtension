@@ -4,7 +4,7 @@
 /**
  * @type {FaceJS}
  */
-const FACEJS = new FaceJS(AZURE_KEYS.keys[1], AZURE_KEYS.region);
+const FACEJS = new FaceJS(AZURE_KEYS.keys[0], AZURE_KEYS.region);
 
 /**
  * The face id of the calibrated face. Null if no face has been calibrated.
@@ -83,7 +83,7 @@ function facelockMessageListener(message, sender, sendResponse) {
                             }
                         });
                     });
-                }, 10000);
+                }, 3000);
             });
             break;
         }
@@ -159,3 +159,4 @@ function cleanupTab(tabId) {
 browser.tabs.onActivated.addListener(tabSwitchHandler);
 browser.tabs.onUpdated.addListener(tabUpdateHandler);
 browser.runtime.onMessage.addListener(facelockMessageListener);
+
