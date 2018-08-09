@@ -68,8 +68,13 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             break;
         case "Unblur":
             isBlurred = false;
-            removeBlur();
-            setupVid();
+            removeBlur().then(() => {
+                browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
+                    if (enabled) {
+                        setupVid();
+                    }
+                });
+            });
 
             if (/(.+\.)?youtube.com/.test(window.location.hostname)) {
                 window.location.reload();
@@ -100,8 +105,13 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             addCheckmark();
             console.log("Got to timer");
             setTimeout(() => {
-                removeBlur();
-                setupVid();
+                removeBlur().then(() => {
+                    browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
+                        if (enabled) {
+                            setupVid();
+                        }
+                    });
+                });
 
                 if (/(.+\.)?youtube.com/.test(window.location.hostname)) {
                     window.location.reload();
@@ -136,6 +146,7 @@ function setupVid() {
     }); //error catch
 
     document.body.appendChild(video);
+    console.log('Added video');
 }
 
 /**
@@ -258,12 +269,15 @@ function removeBlur() {
     fadeOut(para);
     fadeOut(divContainer);
     // resets the website after all the fading has occurred
-    setTimeout(() => {
-        console.log("gettingtotimeout");
-        newWebsiteDiv.style.filter = "none";
-        document.body.removeChild(divContainer);
-        document.body.innerHTML = newWebsiteDiv.innerHTML;
-    }, 2000);
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            newWebsiteDiv.style.filter = "none";
+            document.body.removeChild(divContainer);
+            document.body.innerHTML = newWebsiteDiv.innerHTML;
+
+            resolve();
+        }, 2000);
+    });
 
 }
 
