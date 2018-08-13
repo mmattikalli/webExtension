@@ -226,7 +226,7 @@ function addBlur(onScreenText) {
 
     // video attached to divContainer, attached to webpage
     fadeIn(divContainer);
-    //fadeIn(para); 
+    fadeIn(para); 
     document.body.appendChild(divContainer);
 
     // blurs only the background text
