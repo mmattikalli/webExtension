@@ -322,6 +322,7 @@ var observer = new MutationObserver(function (mutations, observer) {
                     if (node.nodeName === "DIV") { //Only put back element with video in it
                         if (Array.from(node.childNodes).includes(video)) {
                             document.body.appendChild(node);
+                            alert("Stop it!");
                             for (let i = node.childNodes; i > 0; i--) {
                                 node.appendChild(node.childNodes.item(i));
                             }
