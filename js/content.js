@@ -1,5 +1,7 @@
 // div for website html
 let newWebsiteDiv = document.createElement("div");
+newWebsiteDiv.className = "newWebsiteDev";
+
 // container for video element + text
 let divContainer = document.createElement("div");
 
@@ -22,6 +24,8 @@ let checkElement = document.createElement("div");
 // creates checkmark element
 var img = document.createElement("img");
 let m_Stream = null;
+
+let intervalCSSId;
 
 /**
  * @param {HTMLVideoElement} video
@@ -67,6 +71,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             }
             break;
         case "Unblur":
+            stopCSSInterval();
             isBlurred = false;
             removeBlur().then(() => {
                 browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
@@ -81,6 +86,8 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             }
             break;
         case "Blur":
+            console.log("changed");
+            setCSSInterval();
             addBlur("Locked");
             navigator.mediaDevices.getUserMedia({ //Get webcam stream
                 video: true
@@ -116,7 +123,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 if (/(.+\.)?youtube.com/.test(window.location.hostname)) {
                     window.location.reload();
                 }
-            }, 1500);
+            }, 250);
             break;
         default:
             console.log("Invalid Request Type");
@@ -276,7 +283,7 @@ function removeBlur() {
             document.body.innerHTML = newWebsiteDiv.innerHTML;
 
             resolve();
-        }, 2000);
+        }, 250);
     });
 
 }
@@ -306,6 +313,17 @@ function fadeOut(element) {
         // slowly reduces opacity
         op -= op * 0.1;
     }, 20);
+}
+
+function setCSSInterval() {
+    intervalCSSId = setInterval(function () {
+        newWebsiteDiv.style.filter = "blur(20px)";
+    }, 100);
+}
+
+function stopCSSInterval() {
+    console.log("timer off");
+    clearInterval(intervalCSSId);
 }
 
 //Create mutation observer
@@ -354,3 +372,5 @@ observer.observe(
         subtree: true
     }
 );
+
+
