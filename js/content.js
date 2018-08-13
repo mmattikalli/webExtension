@@ -74,7 +74,9 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             stopCSSInterval();
             isBlurred = false;
             removeBlur().then(() => {
-                browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
+                browser.runtime.sendMessage({
+                    type: 'IsLockEnabled'
+                }, enabled => {
                     if (enabled) {
                         setupVid();
                     }
@@ -109,15 +111,20 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         case "HideCalibrateScreen":
             isBlurred = false;
             addCheckmark();
+
+            // timeout allows checkmark to load 
             setTimeout(() => {
                 removeBlur().then(() => {
-                    browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
+                    browser.runtime.sendMessage({
+                        type: 'IsLockEnabled'
+                    }, enabled => {
                         if (enabled) {
                             setupVid();
                         }
                     });
                 });
 
+                // handles youtube case
                 if (/(.+\.)?youtube.com/.test(window.location.hostname)) {
                     window.location.reload();
                 }
@@ -269,47 +276,49 @@ function addCheckmark() {
  */
 function removeBlur() {
     // fades out all three elements on webpage
-    fadeOut(checkElement);
-    fadeOut(para);
-    fadeOut(divContainer);
-    // resets the website after all the fading has occurred
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            newWebsiteDiv.style.filter = "none";
-            document.body.removeChild(divContainer);
-            document.body.innerHTML = newWebsiteDiv.innerHTML;
 
-            resolve();
-        }, 2000);
+    return Promise.all([fadeOut(checkElement),
+        fadeOut(para),
+        fadeOut(divContainer)
+    ]).then(() => {
+        newWebsiteDiv.style.filter = "none";
+        document.body.removeChild(divContainer);
+        document.body.innerHTML = newWebsiteDiv.innerHTML;
     });
 
 }
 
 function fadeIn(element) {
     var op = 0.1; // initial opacity
-    //element.style.display = 'block';
-    var timer = setInterval(function () {
-        if (op >= 1) {
-            clearInterval(timer);
-        }
-        element.style.opacity = op;
-        element.style.filter = "alpha(opacity=" + op * 100 + ")";
-        op += op * 0.1;
-    }, 20);
+
+    return new Promise((resolve, reject) => {
+        var timer = setInterval(function () {
+            if (op >= 1) {
+                clearInterval(timer);
+                resolve(); 
+            }
+            element.style.opacity = op;
+            element.style.filter = "alpha(opacity=" + op * 100 + ")";
+            op += op * 0.1;
+        }, 20);
+    }); 
 }
 
 function fadeOut(element) {
     var op = 1; // initial opacity
-    var timer = setInterval(function () {
-        if (op <= 0.1) {
-            clearInterval(timer);
-            //element.style.display = 'none';
-        }
-        element.style.opacity = op;
-        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-        // slowly reduces opacity
-        op -= op * 0.1;
-    }, 20);
+
+    return new Promise((resolve, reject) => {
+        var timer = setInterval(function () {
+            if (op <= 0.1) {
+                clearInterval(timer);
+                resolve(); 
+            }
+            element.style.opacity = op;
+            element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+            // slowly reduces opacity
+            op -= op * 0.1;
+        }, 20);
+    }); 
 }
 
 function setCSSInterval() {
@@ -360,13 +369,10 @@ var observer = new MutationObserver(function (mutations, observer) {
 
 //tell oberver what to observe
 observer.observe(
-    document,
-    {
+    document, {
         attributes: true,
         attributeOldValue: true,
         childList: true,
         subtree: true
     }
 );
-
-
