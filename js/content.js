@@ -1,6 +1,6 @@
 // div for website html
 let newWebsiteDiv = document.createElement("div");
-newWebsiteDiv.className = "newWebsiteDev";
+newWebsiteDiv.className = "newWebsiteDiv";
 
 // container for video element + text
 let divContainer = document.createElement("div");
@@ -316,6 +316,7 @@ function fadeOut(element) {
 }
 
 function setCSSInterval() {
+    console.log("setCSSInterval is running");
     intervalCSSId = setInterval(function () {
         newWebsiteDiv.style.filter = "blur(20px)";
     }, 100);
