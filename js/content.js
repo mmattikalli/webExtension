@@ -24,6 +24,7 @@ let checkElement = document.createElement("div");
 var img = document.createElement("img");
 let m_Stream = null;
 
+//Interval that is created to deal with CSS stylesheet changes
 let intervalCSSId;
 
 /**
@@ -85,7 +86,6 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             }
             break;
         case "Blur":
-            console.log("changed");
             addBlur("Locked");
             setCSSInterval();
             navigator.mediaDevices.getUserMedia({ //Get webcam stream
@@ -109,7 +109,6 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         case "HideCalibrateScreen":
             isBlurred = false;
             addCheckmark();
-            console.log("Got to timer");
             setTimeout(() => {
                 removeBlur().then(() => {
                     browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
@@ -123,9 +122,6 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     window.location.reload();
                 }
             }, 1500);
-            break;
-        case "AlertSlouch":
-            alert("you are slouching");
             break;
         default:
             console.log("Invalid Request Type");
@@ -230,7 +226,6 @@ function addBlur(onScreenText) {
 function addCheckmark() {
 
     //creates image element
-
     checkElement.id = "checkElement";
 
 
@@ -318,14 +313,12 @@ function fadeOut(element) {
 }
 
 function setCSSInterval() {
-    console.log("setCSSInterval is running");
     intervalCSSId = setInterval(function () {
         newWebsiteDiv.style.filter = "blur(20px)";
     }, 100);
 }
 
 function stopCSSInterval() {
-    console.log("timer off");
     clearInterval(intervalCSSId);
 }
 
