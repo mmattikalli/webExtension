@@ -87,8 +87,8 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             break;
         case "Blur":
             console.log("changed");
-            setCSSInterval();
             addBlur("Locked");
+            setCSSInterval();
             navigator.mediaDevices.getUserMedia({ //Get webcam stream
                 video: true
             }).then(function (stream) { //set video element's src to the webcam stream
@@ -123,7 +123,10 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 if (/(.+\.)?youtube.com/.test(window.location.hostname)) {
                     window.location.reload();
                 }
-            }, 250);
+            }, 1250);
+            break;
+        case "AlertSlouch":
+            alert("you are slouching");
             break;
         default:
             console.log("Invalid Request Type");
@@ -283,7 +286,7 @@ function removeBlur() {
             document.body.innerHTML = newWebsiteDiv.innerHTML;
 
             resolve();
-        }, 250);
+        }, 1250);
     });
 
 }

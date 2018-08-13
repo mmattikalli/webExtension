@@ -52,6 +52,13 @@ function facelockMessageListener(message, sender, sendResponse) {
                                 return;
                             }
 
+                            // console.log(JSON.stringify(response[0].faceRectangle));
+                            // if (response[0].faceRectangle !== null) {
+                            //     if (response[0].faceRectangle.width > 300 || response[0].faceRectangle.height > 300) {
+                            //         browser.tabs.sendMessage(m_CurrentTab, { type: 'AlertSlouch' });
+                            //     }
+                            // }
+
                             if (m_CalibratedId === null) {
                                 // If not calibrated, use this faceId to calibrate.
                                 if (response.length > 0) {
@@ -83,7 +90,7 @@ function facelockMessageListener(message, sender, sendResponse) {
                             }
                         });
                     });
-                }, 3000);
+                }, 5000);
             });
             break;
         }
