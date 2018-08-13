@@ -203,6 +203,7 @@ function addBlur(onScreenText) {
     divContainer.style.right = "50%";
     divContainer.style.bottom = "50%";
     divContainer.style.transform = "translate(-50%, -50%)";
+    divContainer.style.lineHeight = "200%"; 
 
     // adds video to divContainer
     video.style.display = "inherit";
@@ -210,10 +211,14 @@ function addBlur(onScreenText) {
 
     // formats text to put on screen with video element
     para.id = "para";
-    para.style.all = "initial";
+
+    // style.all = "initial" not supported
+
+    para.style.all = "unset";
+    para.style.fontStyle = "normal"; 
+    para.style.fontWeight = "normal"; 
     para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
     para.style.color = "black";
-    para.style.fontWeight = "light";
     para.style.fontSize = "40px";
     para.style.textAlign = "center";
     para.innerHTML = onScreenText;
@@ -221,6 +226,7 @@ function addBlur(onScreenText) {
 
     // video attached to divContainer, attached to webpage
     fadeIn(divContainer);
+    fadeIn(para); 
     document.body.appendChild(divContainer);
 
     // blurs only the background text
@@ -234,7 +240,6 @@ function addCheckmark() {
 
     //creates image element
     checkElement.id = "checkElement";
-
 
     //gets image from an online source
     img.src = "https://cdn3.iconfinder.com/data/icons/sympletts-free-sampler/128/circle-check-512.png";
