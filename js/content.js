@@ -1,6 +1,5 @@
 // div for website html
 let newWebsiteDiv = document.createElement("div");
-newWebsiteDiv.className = "newWebsiteDiv";
 
 // container for video element + text
 let divContainer = document.createElement("div");
@@ -123,7 +122,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 if (/(.+\.)?youtube.com/.test(window.location.hostname)) {
                     window.location.reload();
                 }
-            }, 1250);
+            }, 1500);
             break;
         case "AlertSlouch":
             alert("you are slouching");
@@ -286,7 +285,7 @@ function removeBlur() {
             document.body.innerHTML = newWebsiteDiv.innerHTML;
 
             resolve();
-        }, 1250);
+        }, 2000);
     });
 
 }
