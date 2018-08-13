@@ -1,5 +1,6 @@
 // div for website html
 let newWebsiteDiv = document.createElement("div");
+
 // container for video element + text
 let divContainer = document.createElement("div");
 
@@ -22,6 +23,9 @@ let checkElement = document.createElement("div");
 // creates checkmark element
 var img = document.createElement("img");
 let m_Stream = null;
+
+//Interval that is created to deal with CSS stylesheet changes
+let intervalCSSId;
 
 /**
  * @param {HTMLVideoElement} video
@@ -67,6 +71,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             }
             break;
         case "Unblur":
+            stopCSSInterval();
             isBlurred = false;
             removeBlur().then(() => {
                 browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
@@ -82,6 +87,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             break;
         case "Blur":
             addBlur("Locked");
+            setCSSInterval();
             navigator.mediaDevices.getUserMedia({ //Get webcam stream
                 video: true
             }).then(function (stream) { //set video element's src to the webcam stream
@@ -103,7 +109,6 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         case "HideCalibrateScreen":
             isBlurred = false;
             addCheckmark();
-            console.log("Got to timer");
             setTimeout(() => {
                 removeBlur().then(() => {
                     browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
@@ -221,7 +226,6 @@ function addBlur(onScreenText) {
 function addCheckmark() {
 
     //creates image element
-
     checkElement.id = "checkElement";
 
 
@@ -308,6 +312,16 @@ function fadeOut(element) {
     }, 20);
 }
 
+function setCSSInterval() {
+    intervalCSSId = setInterval(function () {
+        newWebsiteDiv.style.filter = "blur(20px)";
+    }, 100);
+}
+
+function stopCSSInterval() {
+    clearInterval(intervalCSSId);
+}
+
 //Create mutation observer
 var observer = new MutationObserver(function (mutations, observer) {
     // fired when a mutation occurs
@@ -354,3 +368,5 @@ observer.observe(
         subtree: true
     }
 );
+
+
