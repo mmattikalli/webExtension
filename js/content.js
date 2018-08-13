@@ -83,7 +83,12 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 });
             });
 
-            if (/(.+\.)?youtube.com/.test(window.location.hostname)) {
+            if (/(.+\.)?youtube\.com/.test(window.location.hostname)) {
+                window.location.reload();
+            } else if (/(.+\.)?mail\.google\.com/.test(window.location.hostname)) {
+                window.location.reload();
+            } else if (/(.+\.)?google\.com/.test(window.location.hostname)) {
+                console.log("on google maps");
                 window.location.reload();
             }
             break;
@@ -278,8 +283,8 @@ function removeBlur() {
     // fades out all three elements on webpage
 
     return Promise.all([fadeOut(checkElement),
-        fadeOut(para),
-        fadeOut(divContainer)
+    fadeOut(para),
+    fadeOut(divContainer)
     ]).then(() => {
         newWebsiteDiv.style.filter = "none";
         document.body.removeChild(divContainer);
@@ -295,13 +300,13 @@ function fadeIn(element) {
         var timer = setInterval(function () {
             if (op >= 1) {
                 clearInterval(timer);
-                resolve(); 
+                resolve();
             }
             element.style.opacity = op;
             element.style.filter = "alpha(opacity=" + op * 100 + ")";
             op += op * 0.1;
         }, 20);
-    }); 
+    });
 }
 
 function fadeOut(element) {
@@ -311,14 +316,14 @@ function fadeOut(element) {
         var timer = setInterval(function () {
             if (op <= 0.1) {
                 clearInterval(timer);
-                resolve(); 
+                resolve();
             }
             element.style.opacity = op;
             element.style.filter = 'alpha(opacity=' + op * 100 + ")";
             // slowly reduces opacity
             op -= op * 0.1;
         }, 20);
-    }); 
+    });
 }
 
 function setCSSInterval() {
