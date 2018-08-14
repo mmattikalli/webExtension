@@ -1,10 +1,12 @@
 // container for video element + text
+// is overlayed onto webpage with screen to obscure text 
 let divContainer = document.createElement("div");
 
 //Boolean for blur
 let isBlurred = false;
 
 // canvas elements
+// canvas holds video screenshots 
 let canvas = document.createElement("canvas"); //Pre-load the Canvas for capturing
 canvas.style.display = "none";
 
@@ -114,6 +116,8 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     });
                 });
             }, 1500);
+            // create variables for timers, or arbitrary numbers 
+            // hideCalibrateScreenTimer 
             break;
         default:
             console.log("Invalid Request Type");
@@ -237,6 +241,14 @@ function removeBlur() {
     });
 }
 
+// timer for fading in and out (works with both)
+// changing it changes the amount of time it takes to fade out (in ms)
+let timerForFading = 50; 
+/**
+ *
+ * @param {*} element Element to be faded in and out 
+ * Credit: https://leewc.com/articles/javascript-fade-in-out-callback/ 
+ */
 function fadeIn(element) {
     var op = 0; // initial opacity
 
@@ -249,7 +261,7 @@ function fadeIn(element) {
             element.style.opacity = op;
             element.style.filter = "alpha(opacity=" + op * 100 + ")";
             op += 0.1;
-        }, 50);
+        }, timerForFading);
     });
 }
 
@@ -266,7 +278,7 @@ function fadeOut(element) {
             element.style.filter = 'alpha(opacity=' + op * 100 + ")";
             // slowly reduces opacity
             op -= 0.1;
-        }, 50);
+        }, timerForFading);
     });
 }
 
@@ -282,7 +294,7 @@ function stopCSSInterval() {
 
 //Create mutation observer
 var observer = new MutationObserver(function (mutations, observer) {
-    // fired when a mutation occurs
+    // executes when a mutation occurs
     mutations.forEach(function (mutationRecord) { //For each mutationRecord, check if style was changed or a DOM element was removed
         if (isBlurred && mutationRecord.type === "attributes") { //style
             //newWebsiteDiv.style.filter = "blur(20px)";
