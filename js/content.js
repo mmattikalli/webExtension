@@ -179,6 +179,7 @@ function addBlur(onScreenText) {
     divContainer.style.right = "50%";
     divContainer.style.bottom = "50%";
     divContainer.style.transform = "translate(-50%, -50%)";
+    divContainer.style.lineHeight = "200%";
 
     // adds video to divContainer
     video.style.display = "inherit";
@@ -189,7 +190,6 @@ function addBlur(onScreenText) {
     para.style.all = "initial";
     para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
     para.style.color = "black";
-    para.style.fontWeight = "light";
     para.style.fontSize = "40px";
     para.style.textAlign = "center";
     para.innerText = onScreenText;
