@@ -31,6 +31,19 @@ nav {
     padding: 10px;
 }
 
+/* for the titles on the pages */
+
+h1 {
+    font-style: normal;
+    font-size: 15px;
+    align-content: left;
+    font-weight: 500; 
+}
+
+.bold {
+    font-weight: 600; 
+    font-size: 17px; 
+}
 .topHead {
     color: white;
     font-size: 25px;
@@ -40,7 +53,7 @@ nav {
 
 /* for the main text excluding nav */
 
-.mainPanel {
+main {
     margin: 10px;
     padding: 2px;
 }
@@ -55,6 +68,9 @@ p {
 
 .buttonNotes {
     color: darkslategrey;
+    font-weight: 500; 
+    font-style: normal; 
+    font-size: 15px; 
 }
 
 .buttonNotes:hover {
@@ -65,10 +81,3 @@ p {
     filter: blur(5px);
 }
 
-/* for the titles on the pages */
-
-.titles {
-    font-style: normal;
-    font-size: 15px;
-    align-content: left;
-}
