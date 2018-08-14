@@ -1,6 +1,3 @@
-// div for website html
-let newWebsiteDiv = document.createElement("div");
-
 // container for video element + text
 let divContainer = document.createElement("div");
 
@@ -13,9 +10,6 @@ canvas.style.display = "none";
 
 // preload the video
 let video = document.createElement("video");
-
-// creates text element
-let para = document.createElement("h1");
 
 // creates checkmark element container (div)
 let checkElement = document.createElement("div");
@@ -82,10 +76,6 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     }
                 });
             });
-
-            if (/(.+\.)?youtube.com/.test(window.location.hostname)) {
-                window.location.reload();
-            }
             break;
         case "Blur":
             addBlur("Locked");
@@ -112,7 +102,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             isBlurred = false;
             addCheckmark();
 
-            // timeout allows checkmark to load 
+            // timeout allows checkmark to load
             setTimeout(() => {
                 removeBlur().then(() => {
                     browser.runtime.sendMessage({
@@ -123,11 +113,6 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
                         }
                     });
                 });
-
-                // handles youtube case
-                if (/(.+\.)?youtube.com/.test(window.location.hostname)) {
-                    window.location.reload();
-                }
             }, 1500);
             break;
         default:
@@ -142,7 +127,6 @@ function setupVid() {
     video.style.width = "450px";
     video.style.height = "450px";
     video.style.borderRadius = "350px";
-    video.style.zIndex = "1000000001";
 
     //Getting the video element, first checking if the user has an accessible webcam
     navigator.mediaDevices.getUserMedia({ //Get webcam stream
@@ -168,17 +152,8 @@ function setupVid() {
  */
 function addBlur(onScreenText) {
     video.remove();
-    // move all of website html into a div
 
-    let websiteBody = document.body.innerHTML;
-    document.body.innerHTML = "";
-
-    document.body.appendChild(newWebsiteDiv);
-    newWebsiteDiv.innerHTML = websiteBody;
-
-    // sets document zindex lower than the divContainer
-    document.body.style.zIndex = "10000";
-
+    divContainer = document.createElement('div');
     // div container ID
     divContainer.id = "divContainer";
 
@@ -197,50 +172,40 @@ function addBlur(onScreenText) {
     divContainer.style.zIndex = "100000000";
     divContainer.style.width = "100%";
     divContainer.style.height = "100%";
+    divContainer.style.backgroundColor = 'white';
 
-    divContainer.style.top = "35%";
+    divContainer.style.top = "50%";
     divContainer.style.left = "50%";
     divContainer.style.right = "50%";
     divContainer.style.bottom = "50%";
     divContainer.style.transform = "translate(-50%, -50%)";
-    divContainer.style.lineHeight = "200%"; 
+    divContainer.style.lineHeight = "200%";
 
     // adds video to divContainer
     video.style.display = "inherit";
     divContainer.appendChild(video);
 
     // formats text to put on screen with video element
-    para.id = "para";
-
-    // style.all = "initial" not supported
-
-    para.style.all = "unset";
-    para.style.fontStyle = "normal"; 
-    para.style.fontWeight = "normal"; 
+    let para = document.createElement('h1');
+    para.style.all = "initial";
     para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
     para.style.color = "black";
     para.style.fontSize = "40px";
     para.style.textAlign = "center";
-    para.innerHTML = onScreenText;
+    para.innerText = onScreenText;
+
     divContainer.appendChild(para);
 
     // video attached to divContainer, attached to webpage
-    fadeIn(divContainer);
-    fadeIn(para); 
     document.body.appendChild(divContainer);
-
-    // blurs only the background text
-    newWebsiteDiv.style.filter = "blur(20px)";
+    fadeIn(divContainer);
 }
 
 /**
  * Adds check to the top of the video stream when necessary
  */
 function addCheckmark() {
-
-    //creates image element
-    checkElement.id = "checkElement";
-
+    let img = document.createElement('img');
     //gets image from an online source
     img.src = "https://cdn3.iconfinder.com/data/icons/sympletts-free-sampler/128/circle-check-512.png";
 
@@ -248,31 +213,17 @@ function addCheckmark() {
     img.style.width = "350px";
     img.style.height = "350px";
 
-    // appends image to checkElement container
-    checkElement.appendChild(img);
+    img.style.position = "fixed";
 
-    // sets checkElement to be a flexbox
-    checkElement.style.display = "flex";
+    img.style.top = "50%";
+    img.style.left = "50%";
+    img.style.right = "50%";
+    img.style.bottom = "50%";
+    img.style.transform = "translate(-50%, -50%)";
 
-    // formatting elements within the checkElement div
-    checkElement.style.alignItems = "center";
-    checkElement.style.justifyContent = "center";
-    checkElement.style.flexDirection = "column";
-
-    checkElement.style.position = "fixed";
-    checkElement.style.zIndex = "1000000002";
-    checkElement.style.width = "100%";
-    checkElement.style.height = "100%";
-
-    checkElement.style.top = "30%";
-    checkElement.style.left = "50%";
-    checkElement.style.right = "50%";
-    checkElement.style.bottom = "50%";
-    checkElement.style.transform = "translate(-50%, -50%)";
-
-    if (checkElement) {
-        fadeIn(checkElement);
-        document.body.appendChild(checkElement);
+    if (divContainer) {
+        divContainer.appendChild(img);
+        fadeIn(img);
     }
 }
 
@@ -280,33 +231,26 @@ function addCheckmark() {
  * Function removing both the check and the blur
  */
 function removeBlur() {
-    // fades out all three elements on webpage
-
-    return Promise.all([fadeOut(checkElement),
-        fadeOut(para),
-        fadeOut(divContainer)
-    ]).then(() => {
-        newWebsiteDiv.style.filter = "none";
-        document.body.removeChild(divContainer);
-        document.body.innerHTML = newWebsiteDiv.innerHTML;
+    return fadeOut(divContainer).then(() => {
+        divContainer.remove();
+        divContainer = null;
     });
-
 }
 
 function fadeIn(element) {
-    var op = 0.1; // initial opacity
+    var op = 0; // initial opacity
 
     return new Promise((resolve, reject) => {
         var timer = setInterval(function () {
             if (op >= 1) {
                 clearInterval(timer);
-                resolve(); 
+                resolve();
             }
             element.style.opacity = op;
             element.style.filter = "alpha(opacity=" + op * 100 + ")";
-            op += op * 0.1;
-        }, 20);
-    }); 
+            op += 0.1;
+        }, 50);
+    });
 }
 
 function fadeOut(element) {
@@ -314,22 +258,22 @@ function fadeOut(element) {
 
     return new Promise((resolve, reject) => {
         var timer = setInterval(function () {
-            if (op <= 0.1) {
+            if (op <= 0.0) {
                 clearInterval(timer);
-                resolve(); 
+                resolve();
             }
             element.style.opacity = op;
             element.style.filter = 'alpha(opacity=' + op * 100 + ")";
             // slowly reduces opacity
-            op -= op * 0.1;
-        }, 20);
-    }); 
+            op -= 0.1;
+        }, 50);
+    });
 }
 
 function setCSSInterval() {
-    intervalCSSId = setInterval(function () {
-        newWebsiteDiv.style.filter = "blur(20px)";
-    }, 100);
+    // intervalCSSId = setInterval(function () {
+    //     newWebsiteDiv.style.filter = "blur(20px)";
+    // }, 100);
 }
 
 function stopCSSInterval() {
@@ -341,7 +285,7 @@ var observer = new MutationObserver(function (mutations, observer) {
     // fired when a mutation occurs
     mutations.forEach(function (mutationRecord) { //For each mutationRecord, check if style was changed or a DOM element was removed
         if (isBlurred && mutationRecord.type === "attributes") { //style
-            newWebsiteDiv.style.filter = "blur(20px)";
+            //newWebsiteDiv.style.filter = "blur(20px)";
         }
 
         if (isBlurred && mutationRecord.type === "childList") { //DOM element removed
