@@ -243,7 +243,13 @@ function removeBlur() {
 
 // timer for fading in and out (works with both)
 // changing it changes the amount of time it takes to fade out (in ms)
-let timerForFading = 50; 
+const TIMER_FADE_LOOP = 50; 
+// creates variable for how much the image is faded in/out to
+// is 100% since image should disappear or appear completely
+const FADE_PERCENT = 100; 
+// changes the "smoothness" of the fade 
+// smaller means fades in smaller intervals
+const FADE_INTERVAL = 0.1; 
 /**
  *
  * @param {*} element Element to be faded in and out 
@@ -259,9 +265,10 @@ function fadeIn(element) {
                 resolve();
             }
             element.style.opacity = op;
-            element.style.filter = "alpha(opacity=" + op * 100 + ")";
-            op += 0.1;
-        }, timerForFading);
+            element.style.filter = "alpha(opacity=" + op * FADE_PERCENT + ")";
+            // slowly increases opacity (linear)
+            op += FADE_INTERVAL;
+        }, TIMER_FADE_LOOP); 
     });
 }
 
@@ -275,10 +282,10 @@ function fadeOut(element) {
                 resolve();
             }
             element.style.opacity = op;
-            element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-            // slowly reduces opacity
-            op -= 0.1;
-        }, timerForFading);
+            element.style.filter = 'alpha(opacity=' + op * FADE_PERCENT + ")";
+            // slowly reduces opacity (linear)
+            op -= FADE_INTERVAL;
+        }, TIMER_FADE_LOOP);
     });
 }
 
