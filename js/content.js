@@ -271,9 +271,9 @@ function fadeOut(element) {
 }
 
 function setCSSInterval() {
-    intervalCSSId = setInterval(function () {
-        newWebsiteDiv.style.filter = "blur(20px)";
-    }, 100);
+    // intervalCSSId = setInterval(function () {
+    //     newWebsiteDiv.style.filter = "blur(20px)";
+    // }, 100);
 }
 
 function stopCSSInterval() {
@@ -285,7 +285,7 @@ var observer = new MutationObserver(function (mutations, observer) {
     // fired when a mutation occurs
     mutations.forEach(function (mutationRecord) { //For each mutationRecord, check if style was changed or a DOM element was removed
         if (isBlurred && mutationRecord.type === "attributes") { //style
-            newWebsiteDiv.style.filter = "blur(20px)";
+            //newWebsiteDiv.style.filter = "blur(20px)";
         }
 
         if (isBlurred && mutationRecord.type === "childList") { //DOM element removed
@@ -316,12 +316,12 @@ var observer = new MutationObserver(function (mutations, observer) {
     });
 });
 
-// //tell oberver what to observe
-// observer.observe(
-//     document, {
-//         attributes: true,
-//         attributeOldValue: true,
-//         childList: true,
-//         subtree: true
-//     }
-// );
+//tell oberver what to observe
+observer.observe(
+    document, {
+        attributes: true,
+        attributeOldValue: true,
+        childList: true,
+        subtree: true
+    }
+);
