@@ -1,3 +1,7 @@
+/*
+    Modifying webpage content variables 
+*/ 
+
 // container for video element + text
 // is overlayed onto webpage with screen to obscure text 
 let divContainer = document.createElement("div");
