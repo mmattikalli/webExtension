@@ -13,7 +13,6 @@ const SLOUCHDETECT_CALLBACK = {
             }
 
             if (detectResp.length > 0) {
-                console.log(JSON.stringify(detectResp[0].faceRectangle));
                 if (detectResp[0].faceRectangle !== null && (detectResp[0].faceRectangle.height > 250 || detectResp[0].faceRectangle.width > 250)) {
                     browser.tabs.sendMessage(tab, { type: 'AlertSlouch' });
                 }
