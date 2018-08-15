@@ -136,7 +136,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 function setupVid() {
-    // setting up video element
+    // sets up video element
     video.autoplay = true;
     video.style.display = "none";
     video.style.width = "450px";
@@ -157,7 +157,6 @@ function setupVid() {
     }); //error catch
 
     document.body.appendChild(video);
-    console.log('Added video'); 
 }
 
 /**
