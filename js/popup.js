@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 browser.runtime.sendMessage({ type: 'DisableSlouch' });
             } else {
                 browser.runtime.sendMessage({ type: 'EnableSlouch' });
+                alert('You have enabled Slouch Detection!'); 
             }
         });
     });

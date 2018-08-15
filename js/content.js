@@ -23,10 +23,6 @@ let m_Stream = null;
 //Interval that is created to deal with CSS stylesheet changes
 let intervalCSSId;
 
-
-/*
-    FADING 
-*/
 // timer for fading in and out (works with both)
 // changing it changes the amount of time it takes to fade out (in ms)
 const FADE_TIMER_LOOP = 50;
@@ -140,7 +136,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 function setupVid() {
-    // setting up video element
+    // sets up video element
     video.autoplay = true;
     video.style.display = "none";
     video.style.width = "450px";
@@ -161,7 +157,6 @@ function setupVid() {
     }); //error catch
 
     document.body.appendChild(video);
-    console.log('Added video');
 }
 
 /**
@@ -209,6 +204,9 @@ function addBlur(onScreenText) {
     para.style.all = "initial";
     para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
     para.style.color = "black";
+    para.style.backgroundColor = "white"; 
+    para.style.fontWeight = "normal"; 
+    para.style.textShadow = "none"; 
     para.style.fontSize = "40px";
     para.style.textAlign = "center";
     para.innerText = onScreenText;
