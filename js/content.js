@@ -115,6 +115,9 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 });
             }, 1500);
             break;
+        case "AlertSlouch":
+            alert("yu slouch");
+            break;
         default:
             console.log("Invalid Request Type");
     }
