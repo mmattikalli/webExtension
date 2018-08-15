@@ -29,11 +29,11 @@ let intervalCSSId;
 */
 // timer for fading in and out (works with both)
 // changing it changes the amount of time it takes to fade out (in ms)
-const FADE_TIMER_LOOP = 50; 
+const FADE_TIMER_LOOP = 50;
 
 // changes the "smoothness" of the fade 
 // smaller means fades in smaller intervals
-const FADE_INTERVAL = 0.1; 
+const FADE_INTERVAL = 0.1;
 
 /**
  * @param {HTMLVideoElement} video
@@ -132,7 +132,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             // hideCalibrateScreenTimer 
             break;
         case "AlertSlouch":
-            alert("yu slouch");
+            alert("You are slouching");
             break;
         default:
             console.log("Invalid Request Type");
@@ -275,7 +275,7 @@ function fadeIn(element) {
             element.style.filter = "alpha(opacity=" + op * 100 + ")";
             // slowly increases opacity (linear)
             op += FADE_INTERVAL;
-        }, FADE_TIMER_LOOP); 
+        }, FADE_TIMER_LOOP);
     });
 }
 
