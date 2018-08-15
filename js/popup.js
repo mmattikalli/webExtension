@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     slouchCheckbox.addEventListener('click', () => {
         browser.runtime.sendMessage({ type: 'IsSlouchEnabled' }, enabled => {
-            console.log(enabled);
             if (enabled) {
                 browser.runtime.sendMessage({ type: 'DisableSlouch' });
             } else {
