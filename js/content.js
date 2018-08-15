@@ -1,7 +1,3 @@
-/*
-    Modifying webpage content variables 
-*/ 
-
 // container for video element + text
 // is overlayed onto webpage with screen to obscure text 
 let divContainer = document.createElement("div");
@@ -27,10 +23,6 @@ let m_Stream = null;
 //Interval that is created to deal with CSS stylesheet changes
 let intervalCSSId;
 
-
-/*
-    FADING 
-*/
 // timer for fading in and out (works with both)
 // changing it changes the amount of time it takes to fade out (in ms)
 const FADE_TIMER_LOOP = 50;
@@ -165,7 +157,7 @@ function setupVid() {
     }); //error catch
 
     document.body.appendChild(video);
-    console.log('Added video');
+    console.log('Added video'); 
 }
 
 /**
