@@ -14,6 +14,63 @@ let m_CalibratedId = null;
 let m_IsCalibrated = false;
 let m_IsLocked = false;
 
+class FaceLockCallback {
+    constructor() {
+        this.faceJs = new FaceJS(AZURE_KEYS.keys[0], AZURE_KEYS.region);
+        this.calibratedId = null;
+        this.isLocked = false;
+    }
+
+    onCalibration(frame, tab, faceInfo) {
+        this.calibratedId = faceInfo.faceId;
+    }
+
+    onFrame(frame, tab, detectedFaces) {
+        if (detectedFaces.length > 0) {
+            let verifyPromises = detectedFaces.map(face => {
+                return this.faceJs.verifyFace(this.calibratedId, face.faceId);
+            });
+
+            Promise.all(verifyPromises).then(verifyResults => {
+                let foundMatch = false;
+
+                for (result in verifyResults) {
+                    if (result.isIdentical) {
+                        foundMatch = true;
+                        break;
+                    }
+                }
+
+                if (foundMatch && this.isLocked) {
+                    this.isLocked = false;
+                    browser.tabs.sendMessage(tab, { type: 'Unblur' });
+                } else if (!foundMatch && !this.isLocked) {
+                    this.isLocked = true;
+                    browser.tabs.sendMessage(tab, { type: 'Blur' });
+                }
+            });
+        } else {
+            // No faces were detected
+            this.locked = true;
+            browser.tabs.sendMessage(tab, { type: 'Blur' });
+        }
+    }
+
+    onTabActivated(tab) {
+        if (this.isLocked) {
+            // If the browser is locked, show the lock screen
+            browser.tabs.sendMessage(tab, { type: 'Blur' });
+        }
+    }
+
+    onTabDeactivated(tab) {
+        if (this.isLocked) {
+            // If the browser is locked, hide the lock screen
+            browser.tabs.sendMessage(tab, { type: 'Unblur' });
+        }
+    }
+}
+
 const FACELOCK_CALLBACK = {
     onFrame: (frame, tab) => {
         FACEJS.detectFaces(frame).then(detectResp => {
@@ -76,6 +133,7 @@ const FACELOCK_CALLBACK = {
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     switch (message.type) {
         case 'EnableLock': {
+            m_IsCalibrated = false;
             m_CalibratedId = null;
             m_IsLocked = false;
             m_CameraController.addListener(FACELOCK_CALLBACK);
