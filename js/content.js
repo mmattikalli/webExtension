@@ -209,6 +209,9 @@ function addBlur(onScreenText) {
     para.style.all = "initial";
     para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
     para.style.color = "black";
+    para.style.backgroundColor = "white"; 
+    para.style.fontWeight = "normal"; 
+    para.style.textShadow = "none"; 
     para.style.fontSize = "40px";
     para.style.textAlign = "center";
     para.innerText = onScreenText;
