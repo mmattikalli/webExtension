@@ -1,10 +1,12 @@
 // container for video element + text
+// is overlayed onto webpage with screen to obscure text 
 let divContainer = document.createElement("div");
 
 //Boolean for blur
 let isBlurred = false;
 
 // canvas elements
+// canvas holds video screenshots 
 let canvas = document.createElement("canvas"); //Pre-load the Canvas for capturing
 canvas.style.display = "none";
 
@@ -20,6 +22,18 @@ let m_Stream = null;
 
 //Interval that is created to deal with CSS stylesheet changes
 let intervalCSSId;
+
+
+/*
+    FADING 
+*/
+// timer for fading in and out (works with both)
+// changing it changes the amount of time it takes to fade out (in ms)
+const FADE_TIMER_LOOP = 50; 
+
+// changes the "smoothness" of the fade 
+// smaller means fades in smaller intervals
+const FADE_INTERVAL = 0.1; 
 
 /**
  * @param {HTMLVideoElement} video
@@ -114,6 +128,8 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     });
                 });
             }, 1500);
+            // create variables for timers, or arbitrary numbers 
+            // hideCalibrateScreenTimer 
             break;
         default:
             console.log("Invalid Request Type");
@@ -237,6 +253,11 @@ function removeBlur() {
     });
 }
 
+/**
+ *
+ * @param {*} element Element to be faded in and out 
+ * Credit: https://leewc.com/articles/javascript-fade-in-out-callback/ 
+ */
 function fadeIn(element) {
     var op = 0; // initial opacity
 
@@ -247,9 +268,11 @@ function fadeIn(element) {
                 resolve();
             }
             element.style.opacity = op;
+            // multiplied by 100 (percentage)
             element.style.filter = "alpha(opacity=" + op * 100 + ")";
-            op += 0.1;
-        }, 50);
+            // slowly increases opacity (linear)
+            op += FADE_INTERVAL;
+        }, FADE_TIMER_LOOP); 
     });
 }
 
@@ -263,10 +286,11 @@ function fadeOut(element) {
                 resolve();
             }
             element.style.opacity = op;
+            // multiplied by 100 (percentage)
             element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-            // slowly reduces opacity
-            op -= 0.1;
-        }, 50);
+            // slowly reduces opacity (linear)
+            op -= FADE_INTERVAL;
+        }, FADE_TIMER_LOOP);
     });
 }
 
@@ -282,7 +306,7 @@ function stopCSSInterval() {
 
 //Create mutation observer
 var observer = new MutationObserver(function (mutations, observer) {
-    // fired when a mutation occurs
+    // executes when a mutation occurs
     mutations.forEach(function (mutationRecord) { //For each mutationRecord, check if style was changed or a DOM element was removed
         if (isBlurred && mutationRecord.type === "attributes") { //style
             //newWebsiteDiv.style.filter = "blur(20px)";
