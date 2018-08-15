@@ -33,11 +33,11 @@ let intervalCSSId;
 */
 // timer for fading in and out (works with both)
 // changing it changes the amount of time it takes to fade out (in ms)
-const FADE_TIMER_LOOP = 50; 
+const FADE_TIMER_LOOP = 50;
 
 // changes the "smoothness" of the fade 
 // smaller means fades in smaller intervals
-const FADE_INTERVAL = 0.1; 
+const FADE_INTERVAL = 0.1;
 
 /**
  * @param {HTMLVideoElement} video
@@ -134,6 +134,9 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             }, 1500);
             // create variables for timers, or arbitrary numbers 
             // hideCalibrateScreenTimer 
+            break;
+        case "AlertSlouch":
+            alert("You are slouching");
             break;
         default:
             console.log("Invalid Request Type");
@@ -276,7 +279,7 @@ function fadeIn(element) {
             element.style.filter = "alpha(opacity=" + op * 100 + ")";
             // slowly increases opacity (linear)
             op += FADE_INTERVAL;
-        }, FADE_TIMER_LOOP); 
+        }, FADE_TIMER_LOOP);
     });
 }
 
@@ -299,9 +302,9 @@ function fadeOut(element) {
 }
 
 function setCSSInterval() {
-    // intervalCSSId = setInterval(function () {
-    //     newWebsiteDiv.style.filter = "blur(20px)";
-    // }, 100);
+    intervalCSSId = setInterval(function () {
+        divContainer.style.backgroundColor = "white";
+    }, 100);
 }
 
 function stopCSSInterval() {
@@ -313,7 +316,7 @@ var observer = new MutationObserver(function (mutations, observer) {
     // executes when a mutation occurs
     mutations.forEach(function (mutationRecord) { //For each mutationRecord, check if style was changed or a DOM element was removed
         if (isBlurred && mutationRecord.type === "attributes") { //style
-            //newWebsiteDiv.style.filter = "blur(20px)";
+            divContainer.style.backgroundColor = "white";
         }
 
         if (isBlurred && mutationRecord.type === "childList") { //DOM element removed
