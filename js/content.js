@@ -305,6 +305,32 @@ function stopCSSInterval() {
     clearInterval(intervalCSSId);
 }
 
+function calibrationAnimation()
+{
+    // creates spinner element
+    let spinner = document.createElement("div"); 
+    spinner.id = "spinner"; 
+
+    // format for spinner + animations with css 
+    spinner.style.width = "75px"; 
+    spinner.style.height = "75px"; 
+    spinner.style.margin = "0"; 
+    spinner.style.background = "transparent"; 
+    spinner.style.borderTop = "4px solid #03A9F4"; 
+    spinner.style.borderRight = "4px solid transparent"; 
+    spinner.style.borderRadius = "50%"; 
+    spinner.style.webkitAnimation = "1s spin linear infinite"; 
+    spinner.style.animation = "1s spin linear infinite"; 
+
+    var sheet = (function() {
+        var style = document.createElement("style"); 
+        style.appendChild(document.createTextNode(""))
+        document.head.appendChild(style); 
+    })
+
+    
+}
+
 //Create mutation observer
 var observer = new MutationObserver(function (mutations, observer) {
     // executes when a mutation occurs
