@@ -16,9 +16,6 @@ let video = document.createElement("video");
 // creates checkmark element container (div)
 let checkElement = document.createElement("div");
 
-// creates spinner
-let spinnerDiv = document.createElement("div");
-
 // creates checkmark element
 var img = document.createElement("img");
 let m_Stream = null;
@@ -109,14 +106,12 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         case "ShowCalibrateScreen":
             document.body.removeChild(video);
             addBlur("Calibrating...");
-            setTimeout(() => {
-                addSpinnerAnimation(); 
-            }, 2000); 
+            addSpinnerAnimation();
             isBlurred = true;
             break;
         case "HideCalibrateScreen":
             isBlurred = false;
-            removeSpinnerAnimation(); 
+            removeSpinnerAnimation();
             addCheckmark();
 
             // timeout allows checkmark to load
@@ -200,7 +195,7 @@ function addBlur(onScreenText) {
     divContainer.style.bottom = "50%";
     divContainer.style.transform = "translate(-50%, -50%)";
     divContainer.style.lineHeight = "200%";
-    
+
     // adds video to divContainer
     video.style.display = "inherit";
     divContainer.appendChild(video);
@@ -311,10 +306,14 @@ function stopCSSInterval() {
 }
 
 function addSpinnerAnimation() {
-    
+
+    console.log("stuffyinweifahwef"); 
+    // creates spinner
+    let spinnerDiv = document.createElement("div");
+
     spinnerDiv.class = "spinner";
     spinnerDiv.id = "spinnerDiv";
- 
+
     spinnerDiv.style.position = "fixed";
 
     spinnerDiv.style.top = "32%";
@@ -331,10 +330,10 @@ function addSpinnerAnimation() {
     spinnerDiv.style.borderRight = "4px solid transparent";
     spinnerDiv.style.borderRadius = "50%";
     spinnerDiv.style.animation = "2s spin linear infinite";
-    spinnerDiv.style.zIndex = "10000000003"; 
+    spinnerDiv.style.zIndex = "10000000003";
 
     let cssAnimation = document.createElement('style');
-    cssAnimation.id = "cssAnimation"; 
+    cssAnimation.id = "cssAnimation";
     cssAnimation.type = 'text/css';
 
     let keyframeCSS = document.createTextNode('@keyframes spin {' +
@@ -348,15 +347,15 @@ function addSpinnerAnimation() {
     cssAnimation.appendChild(keyframeCSS);
     document.getElementsByTagName('head')[0].appendChild(cssAnimation);
 
-    divContainer.appendChild(spinnerDiv); 
+    divContainer.appendChild(spinnerDiv);
 }
 
 
 function removeSpinnerAnimation() {
     let appendedSpinner = document.getElementById('spinnerDiv');
     divContainer.removeChild(appendedSpinner);
-    let styleTag = document.getElementsById("cssAnimation"); 
-    document.removeChild(styleTag); 
+    let styleTag = document.getElementsById("cssAnimation");
+    document.removeChild(styleTag);
 }
 
 
