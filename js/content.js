@@ -16,6 +16,9 @@ let video = document.createElement("video");
 // creates checkmark element container (div)
 let checkElement = document.createElement("div");
 
+// creates spinner
+let spinnerDiv = document.createElement("div");
+
 // creates checkmark element
 var img = document.createElement("img");
 let m_Stream = null;
@@ -106,11 +109,14 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         case "ShowCalibrateScreen":
             document.body.removeChild(video);
             addBlur("Calibrating...");
+            setTimeout(() => {
+                spinnerAnimation(); 
+            }, 2000); 
             isBlurred = true;
-            //spinnerAnimation();
             break;
         case "HideCalibrateScreen":
             isBlurred = false;
+            removeSpinnerAnimation(); 
             addCheckmark();
 
             // timeout allows checkmark to load
@@ -168,7 +174,6 @@ function setupVid() {
 function addBlur(onScreenText) {
     video.remove();
 
-    divContainer = document.createElement('div');
     // div container ID
     divContainer.id = "divContainer";
 
@@ -195,7 +200,7 @@ function addBlur(onScreenText) {
     divContainer.style.bottom = "50%";
     divContainer.style.transform = "translate(-50%, -50%)";
     divContainer.style.lineHeight = "200%";
-    d
+    
     // adds video to divContainer
     video.style.display = "inherit";
     divContainer.appendChild(video);
@@ -223,6 +228,7 @@ function addBlur(onScreenText) {
  * Adds check to the top of the video stream when necessary
  */
 function addCheckmark() {
+    console.log("hi"); 
     let img = document.createElement('img');
     //gets image from an online source
     img.src = "https://cdn3.iconfinder.com/data/icons/sympletts-free-sampler/128/circle-check-512.png";
@@ -241,7 +247,7 @@ function addCheckmark() {
 
     if (divContainer) {
         divContainer.appendChild(img);
-        fadeIn(img);
+        //fadeIn(img);
     }
 }
 
@@ -307,21 +313,27 @@ function stopCSSInterval() {
 }
 
 function spinnerAnimation() {
-    let spinnerDiv = document.createElement("div");
+    
     spinnerDiv.class = "spinner";
-    spinnerDiv.id = "spinner";
-    // adds spinner element to body 
-    document.body.appendChild(spinnerDiv);
+    spinnerDiv.id = "spinnerDiv";
+ 
+    spinnerDiv.style.position = "fixed";
 
-    spinnerDiv.style.width = "175px";
-    spinnerDiv.style.height = "175px";
+    spinnerDiv.style.top = "32%";
+    spinnerDiv.style.left = "40%";
+    spinnerDiv.style.right = "50%";
+    spinnerDiv.style.bottom = "50%";
+    spinnerDiv.style.transform = "translate(-50%, -50%)";
+
+    spinnerDiv.style.width = "300px";
+    spinnerDiv.style.height = "300px";
     spinnerDiv.style.margin = "0";
     spinnerDiv.style.background = "transparent";
     spinnerDiv.style.borderTop = "4px solid #03A9F4";
     spinnerDiv.style.borderRight = "4px solid transparent";
     spinnerDiv.style.borderRadius = "50%";
-    spinnerDiv.style.animation = "1s spin linear infinite";
-    spinnerDiv.style.zIndex = "100000003"; 
+    spinnerDiv.style.animation = "2s spin linear infinite";
+    spinnerDiv.style.zIndex = "10000000003"; 
 
     var cssAnimation = document.createElement('style');
     cssAnimation.type = 'text/css';
@@ -330,19 +342,20 @@ function spinnerAnimation() {
         'from { transform: rotate(0deg) } ' +
         'to { transform: rotate(360deg) }' + '}');
 
-
     if (keyframeCSS !== null) {
         console.log(keyframeCSS);
     }
 
     cssAnimation.appendChild(keyframeCSS);
     document.getElementsByTagName('head')[0].appendChild(cssAnimation);
+
+    divContainer.appendChild(spinnerDiv); 
 }
 
 
 function removeSpinnerAnimation() {
-    let appendedSpinner = document.getElementById('spinner');
-    document.removeChild(appendedSpinner);
+    let appendedSpinner = document.getElementById('spinnerDiv');
+    divContainer.removeChild(appendedSpinner);
 }
 
 
