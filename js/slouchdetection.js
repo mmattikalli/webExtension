@@ -6,8 +6,20 @@ class SlouchDetectEventHandler extends CameraControllerEventHandler {
     onFrame(frame, tab, faces) {
         if (faces.length > 0) {
             console.log(JSON.stringify(faces));
-            if (slouchDetect(faces)) {
-                browser.tabs.sendMessage(tab, { type: 'AlertSlouch' });
+            if (slouchDetect(faces) === 1) {
+                browser.tabs.sendMessage(tab, {
+                    type: 'ZoomScreen',
+                    new: { //Get center of face in frame
+                        width: faces[0].faceRectangle.width,
+                        height: faces[0].faceRectangle.height
+                    },
+                    old: {
+                        width: m_CameraController.calibrateInfo.face.faceRectangle.width,
+                        height: m_CameraController.calibrateInfo.face.faceRectangle.height
+                    }
+                });
+            } else if (slouchDetect(faces) === 2) {
+                browser.tabs.sendMessage(tab, { type: 'AlertSlouch' })
             }
         }
     }
@@ -50,12 +62,12 @@ function slouchDetect(faces) {
     }
 
     if (faces[0].faceRectangle !== null) {
-        if (faces[0].faceRectangle.height > 250 || faces[0].faceRectangle.width > 250) {
+        if (faces[0].faceRectangle.height > 190 || faces[0].faceRectangle.width > 190) {
             console.log("big face");
-            return true;
+            return 1;
         } else if (faceCenter.y - calibratedFaceCenter.y > 30) {
             console.log("bad back");
-            return true;
+            return 2;
         }
     }
     return false;

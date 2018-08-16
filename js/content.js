@@ -31,6 +31,8 @@ const FADE_TIMER_LOOP = 50;
 // smaller means fades in smaller intervals
 const FADE_INTERVAL = 0.1;
 
+let pastNum = null;
+
 /**
  * @param {HTMLVideoElement} video
  * @param {HTMLCanvasElement} canvas
@@ -129,6 +131,13 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             break;
         case "AlertSlouch":
             alert("You are slouching");
+            break;
+        case "ZoomScreen":
+            alert("scoot back");
+            if (((video.width - request.old.width) / (video.width - request.new.width)) > pastNum || pastNum === null) {
+                pastNum = ((video.width - request.old.width) / (video.width - request.new.width));
+                document.body.style.zoom = 100 * ((video.width - request.old.width) / (video.width - request.new.width)) + "%";
+            }
             break;
         default:
             console.log("Invalid Request Type");
