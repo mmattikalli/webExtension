@@ -2,23 +2,12 @@
 /// <reference path="cameracontroller.js" />
 /// <reference path="face.js" />
 
-const FACEJS = new FaceJS(AZURE_KEYS.keys[0], AZURE_KEYS.region);
-
-/**
- * The face id of the calibrated face. Null if no face has been calibrated.
- *
- * @type {?string}
- */
-let m_CalibratedId = null;
-
-let m_IsCalibrated = false;
-let m_IsLocked = false;
-
-class FaceLockCallback {
+class FaceLockEventHandler extends CameraControllerEventHandler {
     constructor() {
+        super();
         this.faceJs = new FaceJS(AZURE_KEYS.keys[0], AZURE_KEYS.region);
         this.calibratedId = null;
-        this.isLocked = false;
+        this.locked = false;
     }
 
     onCalibration(frame, tab, faceInfo) {
@@ -26,125 +15,70 @@ class FaceLockCallback {
     }
 
     onFrame(frame, tab, detectedFaces) {
-        if (detectedFaces.length > 0) {
-            let verifyPromises = detectedFaces.map(face => {
-                return this.faceJs.verifyFace(this.calibratedId, face.faceId);
-            });
-
-            Promise.all(verifyPromises).then(verifyResults => {
-                let foundMatch = false;
-
-                for (result in verifyResults) {
-                    if (result.isIdentical) {
-                        foundMatch = true;
-                        break;
-                    }
+        let verifyPromises = detectedFaces.map(face => {
+            return this.faceJs.verifyFace(this.calibratedId, face.faceId).then(response => {
+                if (response.error) {
+                    console.error(response.error);
                 }
 
-                if (foundMatch && this.isLocked) {
-                    this.isLocked = false;
-                    browser.tabs.sendMessage(tab, { type: 'Unblur' });
-                } else if (!foundMatch && !this.isLocked) {
-                    this.isLocked = true;
-                    browser.tabs.sendMessage(tab, { type: 'Blur' });
+                return response;
+            });
+        });
+
+        Promise.all(verifyPromises).then(verifyResults => {
+            let foundMatch = false;
+
+            verifyResults.forEach(result => {
+                if (result.isIdentical) {
+                    foundMatch = true;
                 }
             });
-        } else {
-            // No faces were detected
-            this.locked = true;
-            browser.tabs.sendMessage(tab, { type: 'Blur' });
-        }
+
+            if (foundMatch && this.locked) {
+                this.locked = false;
+                browser.tabs.sendMessage(tab, { type: 'Unblur' });
+            } else if (!foundMatch && !this.locked) {
+                this.locked = true;
+                browser.tabs.sendMessage(tab, { type: 'Blur' });
+            }
+        });
     }
 
     onTabActivated(tab) {
-        if (this.isLocked) {
+        if (this.locked) {
             // If the browser is locked, show the lock screen
             browser.tabs.sendMessage(tab, { type: 'Blur' });
         }
     }
 
     onTabDeactivated(tab) {
-        if (this.isLocked) {
+        if (this.locked) {
             // If the browser is locked, hide the lock screen
             browser.tabs.sendMessage(tab, { type: 'Unblur' });
         }
     }
 }
 
-const FACELOCK_CALLBACK = {
-    onFrame: (frame, tab) => {
-        FACEJS.detectFaces(frame).then(detectResp => {
-            if (detectResp.error) {
-                console.error(detectResp.error.message);
-                return;
-            }
-
-            if (!m_IsCalibrated) {
-                if (detectResp.length > 0) {
-                    m_CalibratedId = detectResp[0].faceId;
-                    m_IsCalibrated = true;
-                    browser.tabs.sendMessage(tab, { type: 'HideCalibrateScreen' });
-                }
-            } else {
-                if (detectResp.length === 0) {
-                    if (!m_IsLocked) {
-                        m_IsLocked = true;
-                        browser.tabs.sendMessage(tab, { type: 'Blur' });
-                    }
-                } else {
-                    FACEJS.verifyFace(m_CalibratedId, detectResp[0].faceId).then(resp => {
-                        if (resp.error) {
-                            console.error(resp.error.message);
-                            return;
-                        }
-
-                        if (!resp.isIdentical && !m_IsLocked) {
-                            m_IsLocked = true;
-                            browser.tabs.sendMessage(tab, { type: 'Blur' });
-                        } else if (resp.isIdentical && m_IsLocked) {
-                            browser.tabs.sendMessage(tab, { type: 'Unblur' });
-                            m_IsLocked = false;
-                        }
-                    });
-                }
-            }
-        });
-    },
-    onTabActivated: tab => {
-        if (!m_IsCalibrated) {
-            // If we need to calibrate, show the calibration screen.
-            browser.tabs.sendMessage(tab, { type: 'ShowCalibrateScreen' });
-        } else if (m_IsLocked) {
-            // If the browser is currently locked, blur the tab.
-            browser.tabs.sendMessage(tab, { type: 'Blur' });
-        }
-    },
-    onTabDeactivated: tab => {
-        if (!m_IsCalibrated) {
-            // If we were calibrating, hide the calibration screen.
-            browser.tabs.sendMessage(tab, { type: 'HideCalibrateScreen' });
-        } else if (m_IsLocked) {
-            // If we were locked, hide the lock screen.
-            browser.tabs.sendMessage(tab, { type: 'Unblur' });
-        }
-    }
-};
+let g_FaceLockEventHandler = null;
 
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     switch (message.type) {
         case 'EnableLock': {
-            m_IsCalibrated = false;
-            m_CalibratedId = null;
-            m_IsLocked = false;
-            m_CameraController.addListener(FACELOCK_CALLBACK);
+            if (g_FaceLockEventHandler === null) {
+                g_FaceLockEventHandler = new FaceLockEventHandler();
+                m_CameraController.addEventHandler(g_FaceLockEventHandler);
+            }
             break;
         }
         case 'DisableLock': {
-            m_CameraController.removeListener(FACELOCK_CALLBACK);
+            if (g_FaceLockEventHandler !== null) {
+                m_CameraController.removeEventHandler(g_FaceLockEventHandler);
+                g_FaceLockEventHandler = null;
+            }
             break;
         }
         case 'IsLockEnabled': {
-            sendResponse(m_CameraController.getListeners().has(FACELOCK_CALLBACK));
+            sendResponse(g_FaceLockEventHandler !== null);
             break;
         }
     }
