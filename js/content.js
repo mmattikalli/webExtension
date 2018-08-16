@@ -107,6 +107,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             document.body.removeChild(video);
             addBlur("Calibrating...");
             isBlurred = true;
+            //spinnerAnimation();
             break;
         case "HideCalibrateScreen":
             isBlurred = false;
@@ -194,7 +195,7 @@ function addBlur(onScreenText) {
     divContainer.style.bottom = "50%";
     divContainer.style.transform = "translate(-50%, -50%)";
     divContainer.style.lineHeight = "200%";
-
+    d
     // adds video to divContainer
     video.style.display = "inherit";
     divContainer.appendChild(video);
@@ -204,9 +205,9 @@ function addBlur(onScreenText) {
     para.style.all = "initial";
     para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
     para.style.color = "black";
-    para.style.backgroundColor = "white"; 
-    para.style.fontWeight = "normal"; 
-    para.style.textShadow = "none"; 
+    para.style.backgroundColor = "white";
+    para.style.fontWeight = "normal";
+    para.style.textShadow = "none";
     para.style.fontSize = "40px";
     para.style.textAlign = "center";
     para.innerText = onScreenText;
@@ -229,7 +230,7 @@ function addCheckmark() {
     //sets image dimensions to smaller than the video
     img.style.width = "350px";
     img.style.height = "350px";
-
+    img.style.zIndex = "100000001";
     img.style.position = "fixed";
 
     img.style.top = "50%";
@@ -305,40 +306,54 @@ function stopCSSInterval() {
     clearInterval(intervalCSSId);
 }
 
-function calibrationAnimation()
-{
-    // creates spinner element
-    let spinner = document.createElement("div"); 
-    spinner.id = "spinner"; 
+function spinnerAnimation() {
+    let spinnerDiv = document.createElement("div");
+    spinnerDiv.class = "spinner";
+    spinnerDiv.id = "spinner";
+    // adds spinner element to body 
+    document.body.appendChild(spinnerDiv);
 
-    // format for spinner + animations with css 
-    spinner.style.width = "75px"; 
-    spinner.style.height = "75px"; 
-    spinner.style.margin = "0"; 
-    spinner.style.background = "transparent"; 
-    spinner.style.borderTop = "4px solid #03A9F4"; 
-    spinner.style.borderRight = "4px solid transparent"; 
-    spinner.style.borderRadius = "50%"; 
-    spinner.style.webkitAnimation = "1s spin linear infinite"; 
-    spinner.style.animation = "1s spin linear infinite"; 
+    spinnerDiv.style.width = "175px";
+    spinnerDiv.style.height = "175px";
+    spinnerDiv.style.margin = "0";
+    spinnerDiv.style.background = "transparent";
+    spinnerDiv.style.borderTop = "4px solid #03A9F4";
+    spinnerDiv.style.borderRight = "4px solid transparent";
+    spinnerDiv.style.borderRadius = "50%";
+    spinnerDiv.style.animation = "1s spin linear infinite";
+    spinnerDiv.style.zIndex = "100000003"; 
 
-    var sheet = (function() {
-        var style = document.createElement("style"); 
-        style.appendChild(document.createTextNode(""))
-        document.head.appendChild(style); 
-    })
+    var cssAnimation = document.createElement('style');
+    cssAnimation.type = 'text/css';
 
-    
+    var keyframeCSS = document.createTextNode('@keyframes spin {' +
+        'from { transform: rotate(0deg) } ' +
+        'to { transform: rotate(360deg) }' + '}');
+
+
+    if (keyframeCSS !== null) {
+        console.log(keyframeCSS);
+    }
+
+    cssAnimation.appendChild(keyframeCSS);
+    document.getElementsByTagName('head')[0].appendChild(cssAnimation);
 }
 
-//Create mutation observer
+
+function removeSpinnerAnimation() {
+    let appendedSpinner = document.getElementById('spinner');
+    document.removeChild(appendedSpinner);
+}
+
+
+// mutation observer for security
 var observer = new MutationObserver(function (mutations, observer) {
     // executes when a mutation occurs
-    mutations.forEach(function (mutationRecord) { //For each mutationRecord, check if style was changed or a DOM element was removed
+    //For each mutationRecord, check if style was changed or a DOM element was removed
+    mutations.forEach(function (mutationRecord) {
         if (isBlurred && mutationRecord.type === "attributes") { //style
             divContainer.style.backgroundColor = "white";
         }
-
         if (isBlurred && mutationRecord.type === "childList") { //DOM element removed
             mutationRecord.removedNodes.forEach(function (node) {
                 if (node.nodeName !== "CANVAS") {
