@@ -110,7 +110,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             document.body.removeChild(video);
             addBlur("Calibrating...");
             setTimeout(() => {
-                spinnerAnimation(); 
+                addSpinnerAnimation(); 
             }, 2000); 
             isBlurred = true;
             break;
@@ -228,7 +228,6 @@ function addBlur(onScreenText) {
  * Adds check to the top of the video stream when necessary
  */
 function addCheckmark() {
-    console.log("hi"); 
     let img = document.createElement('img');
     //gets image from an online source
     img.src = "https://cdn3.iconfinder.com/data/icons/sympletts-free-sampler/128/circle-check-512.png";
@@ -247,7 +246,6 @@ function addCheckmark() {
 
     if (divContainer) {
         divContainer.appendChild(img);
-        //fadeIn(img);
     }
 }
 
@@ -312,7 +310,7 @@ function stopCSSInterval() {
     clearInterval(intervalCSSId);
 }
 
-function spinnerAnimation() {
+function addSpinnerAnimation() {
     
     spinnerDiv.class = "spinner";
     spinnerDiv.id = "spinnerDiv";
@@ -335,10 +333,11 @@ function spinnerAnimation() {
     spinnerDiv.style.animation = "2s spin linear infinite";
     spinnerDiv.style.zIndex = "10000000003"; 
 
-    var cssAnimation = document.createElement('style');
+    let cssAnimation = document.createElement('style');
+    cssAnimation.id = "cssAnimation"; 
     cssAnimation.type = 'text/css';
 
-    var keyframeCSS = document.createTextNode('@keyframes spin {' +
+    let keyframeCSS = document.createTextNode('@keyframes spin {' +
         'from { transform: rotate(0deg) } ' +
         'to { transform: rotate(360deg) }' + '}');
 
@@ -356,6 +355,8 @@ function spinnerAnimation() {
 function removeSpinnerAnimation() {
     let appendedSpinner = document.getElementById('spinnerDiv');
     divContainer.removeChild(appendedSpinner);
+    let styleTag = document.getElementsById("cssAnimation"); 
+    document.removeChild(styleTag); 
 }
 
 
