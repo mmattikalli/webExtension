@@ -1,44 +1,93 @@
+/// <reference path="apiKeys.js" />
+/// <reference path="face.js" />
+
 const CAMERA_UPDATE_TIME = 3000;
 
+class CameraControllerEventHandler {
+    /**
+     * @param {Uint8Array} frame
+     * @param {number} tab
+     * @param {object} face
+     */
+    onCalibration(frame, tab, face) {}
+
+    /**
+     * @param {Uint8Array} frame
+     * @param {number} tab
+     * @param {object[]} faces
+     */
+    onFrame(frame, tab, faces) {}
+
+    /**
+     * @param {number} tab
+     */
+    onTabActivated(tab) {}
+
+    /**
+     * @param {number} tab
+     */
+    onTabDeactivated(tab) {}
+}
 class CameraController {
     constructor() {
-        this.callbackList = new Set();
         this.activeTab = null;
+        this.handlerList = new Set();
+        this.calibrateInfo = null;
+        this.calibrating = false;
 
         browser.tabs.query({active: true}, tabs => {
             this.activeTab = tabs[0].id;
         });
     }
 
-    addListener(callback) {
-        // Verify callback has functions 'onTabActivated', 'onTabDeactivated',
-        // and 'onFrame'
+    /**
+     * @param {CameraControllerHandler} handler
+     */
+    addEventHandler(handler) {
+        this.handlerList.add(handler);
 
-        this.callbackList.add(callback);
-
-        if (this.callbackList.size === 1 && this.activeTab) {
+        if (this.handlerList.size === 1 && this.activeTab) {
             browser.tabs.sendMessage(this.activeTab, { type: 'StartCapture' });
         }
 
-        callback.onTabActivated(this.activeTab);
-    }
+        if (this.activeTab) {
+            handler.onTabActivated(this.activeTab);
+        }
 
-    removeListener(callback) {
-        callback.onTabDeactivated(this.activeTab);
+        if (this.activeTab) {
+            if (!this.calibrateInfo) {
+                // We don't have a calibrated face so ask the user to calibrate
 
-        this.callbackList.delete(callback);
-
-        if (this.callbackList.size === 0 && this.activeTab) {
-            browser.tabs.sendMessage(this.activeTab, { type: 'EndCapture' });
+                if (!this.calibrating) {
+                    this.calibrating = true;
+                    browser.tabs.sendMessage(this.activeTab, { type: 'ShowCalibrateScreen' });
+                }
+            } else {
+                handler.onCalibration(this.calibrateInfo.frame, this.activeTab, this.calibrateInfo.face);
+            }
         }
     }
 
-    hasListeners() {
-        return this.callbackList.size > 0;
+    /**
+     * @param {CameraControllerEventHandler} handler
+     */
+    removeEventHandler(handler) {
+        if (this.handlerList.delete(handler) && this.activeTab) {
+            handler.onTabDeactivated(this.activeTab);
+        }
+
+        if (this.handlerList.size === 0 && this.activeTab) {
+            browser.tabs.sendMessage(this.activeTab, { type: 'EndCapture' });
+            this.calibratedFace = null;
+        }
     }
 
-    getListeners() {
-        return this.callbackList;
+    hasEventHandlers() {
+        return this.handlerList.size > 0;
+    }
+
+    getEventHandlers() {
+        return this.handlerList;
     }
 
     changeActiveTab(newTab) {
@@ -54,26 +103,26 @@ class CameraController {
     }
 
     cleanupTab(tabId) {
-        if (!this.hasListeners()) {
+        if (!this.hasEventHandlers()) {
             return;
         }
 
-        this.callbackList.forEach(callback => {
-            callback.onTabDeactivated(tabId);
+        this.handlerList.forEach(handler => {
+            handler.onTabDeactivated(tabId);
         });
 
         browser.tabs.sendMessage(tabId, { type: 'EndCapture' });
     }
 
     setupTab(tabId) {
-        if (!this.hasListeners()) {
+        if (!this.hasEventHandlers()) {
             return;
         }
 
         browser.tabs.sendMessage(tabId, { type: 'StartCapture' });
 
-        this.callbackList.forEach(callback => {
-            callback.onTabActivated(tabId);
+        this.handlerList.forEach(handler => {
+            handler.onTabActivated(tabId);
         });
     }
 
@@ -84,8 +133,8 @@ class CameraController {
 
 let m_CameraController = new CameraController();
 
-setInterval(() => {
-    if (m_CameraController.getActiveTab() && m_CameraController.hasListeners()) {
+setInterval(faceJs => {
+    if (m_CameraController.getActiveTab() && m_CameraController.hasEventHandlers()) {
         browser.tabs.sendMessage(m_CameraController.getActiveTab(), { type: 'GetFrame' }, frame => {
             let bytes = atob(frame);
             let buffer = new ArrayBuffer(bytes.length);
@@ -95,12 +144,32 @@ setInterval(() => {
                 byteArr[i] = bytes.charCodeAt(i);
             }
 
-            m_CameraController.getListeners().forEach(callback => {
-                callback.onFrame(byteArr, m_CameraController.getActiveTab());
+            faceJs.detectFaces(byteArr, true, true).then(response => {
+                if (response.error) {
+                    console.error(response.error);
+                }
+
+                return response;
+            }).then(faces => {
+                if (m_CameraController.calibrating) {
+                    if (faces.length > 0) {
+                        m_CameraController.calibrating = false;
+                        m_CameraController.calibrateInfo = { face: faces[0], frame: byteArr };
+                        m_CameraController.getEventHandlers().forEach(handler => {
+                            handler.onCalibration(byteArr, m_CameraController.getActiveTab(), faces[0]);
+                        });
+
+                        browser.tabs.sendMessage(m_CameraController.activeTab, { type: 'HideCalibrateScreen' });
+                    }
+                } else {
+                    m_CameraController.getEventHandlers().forEach(handler => {
+                        handler.onFrame(byteArr, m_CameraController.getActiveTab(), faces);
+                    });
+                }
             });
         });
     }
-}, CAMERA_UPDATE_TIME);
+}, CAMERA_UPDATE_TIME, new FaceJS(AZURE_KEYS.keys[0], AZURE_KEYS.region));
 
 browser.tabs.onActivated.addListener(activeTabInfo => {
     m_CameraController.changeActiveTab(activeTabInfo.tabId);
