@@ -204,9 +204,9 @@ function addBlur(onScreenText) {
     para.style.all = "initial";
     para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
     para.style.color = "black";
-    para.style.backgroundColor = "white"; 
-    para.style.fontWeight = "normal"; 
-    para.style.textShadow = "none"; 
+    para.style.backgroundColor = "white";
+    para.style.fontWeight = "normal";
+    para.style.textShadow = "none";
     para.style.fontSize = "40px";
     para.style.textAlign = "center";
     para.innerText = onScreenText;
@@ -310,7 +310,29 @@ var observer = new MutationObserver(function (mutations, observer) {
     // executes when a mutation occurs
     mutations.forEach(function (mutationRecord) { //For each mutationRecord, check if style was changed or a DOM element was removed
         if (isBlurred && mutationRecord.type === "attributes") { //style
-            divContainer.style.backgroundColor = "white";
+            //divContainer.style.backgroundColor = "white";
+            divContainer.style.clear = "both";
+
+            // sets divContainer to be a flexbox
+            divContainer.style.display = "flex";
+
+            // formatting elements within the divContainer
+            divContainer.style.alignItems = "center";
+            divContainer.style.justifyContent = "center";
+            divContainer.style.flexDirection = "column";
+
+            divContainer.style.position = "fixed";
+            divContainer.style.zIndex = "100000000";
+            divContainer.style.width = "100%";
+            divContainer.style.height = "100%";
+            divContainer.style.backgroundColor = 'white';
+
+            divContainer.style.top = "50%";
+            divContainer.style.left = "50%";
+            divContainer.style.right = "50%";
+            divContainer.style.bottom = "50%";
+            divContainer.style.transform = "translate(-50%, -50%)";
+            divContainer.style.lineHeight = "200%";
         }
 
         if (isBlurred && mutationRecord.type === "childList") { //DOM element removed
