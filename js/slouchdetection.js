@@ -2,41 +2,36 @@
 /// <reference path="cameracontroller.js" />
 /// <reference path="face.js" />
 
-// const FACEJS = new FaceJS(AZURE_KEYS.keys[0], AZURE_KEYS.region);
-
-const SLOUCHDETECT_CALLBACK = {
-    onFrame: (frame, tab) => {
-        FACEJS.detectFaces(frame).then(detectResp => {
-            if (detectResp.error) {
-                console.error(detectResp.error.message);
-                return;
+class SlouchDetectEventHandler extends CameraControllerEventHandler {
+    onFrame(frame, tab, faces) {
+        if (faces.length > 0) {
+            if (faces[0].faceRectangle !== null && (faces[0].faceRectangle.height > 250 || faces[0].faceRectangle.width > 250)) {
+                browser.tabs.sendMessage(tab, { type: 'AlertSlouch' });
             }
-
-            if (detectResp.length > 0) {
-                if (detectResp[0].faceRectangle !== null && (detectResp[0].faceRectangle.height > 250 || detectResp[0].faceRectangle.width > 250)) {
-                    browser.tabs.sendMessage(tab, { type: 'AlertSlouch' });
-                }
-            }
-        });
-    },
-    onTabActivated: tab => {
-    },
-    onTabDeactivated: tab => {
+        }
     }
-};
+}
+
+let g_SlouchDetectionEventHandler = null;
 
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     switch (message.type) {
         case 'EnableSlouch': {
-            m_CameraController.addListener(SLOUCHDETECT_CALLBACK);
+            if (g_SlouchDetectionEventHandler === null) {
+                g_SlouchDetectionEventHandler = new SlouchDetectEventHandler();
+                m_CameraController.addEventHandler(g_SlouchDetectionEventHandler);
+            }
             break;
         }
         case 'DisableSlouch': {
-            m_CameraController.removeListener(SLOUCHDETECT_CALLBACK);
+            if (g_SlouchDetectionEventHandler !== null) {
+                m_CameraController.removeEventHandler(g_SlouchDetectionEventHandler);
+                g_SlouchDetectionEventHandler = null;
+            }
             break;
         }
         case 'IsSlouchEnabled': {
-            sendResponse(m_CameraController.getListeners().has(SLOUCHDETECT_CALLBACK));
+            sendResponse(g_SlouchDetectionEventHandler !== null);
             break;
         }
     }
