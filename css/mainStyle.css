@@ -73,6 +73,7 @@ button {
 
 button:hover {
     background-color:#d7d7d7;
+    transition-duration: 0.4s; 
 }
     
 button:active{
@@ -184,6 +185,7 @@ p {
 
 .slider:hover {
     background-color:#d7d7d7;
+    transition-duration: 0.4s; 
 }
 .slider:before {
     position: absolute;

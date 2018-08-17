@@ -1,12 +1,12 @@
 // container for video element + text
-// is overlayed onto webpage with screen to obscure text 
+// is overlayed onto webpage with screen to obscure text
 let divContainer = document.createElement("div");
 
 //Boolean for blur
 let isBlurred = false;
 
 // canvas elements
-// canvas holds video screenshots 
+// canvas holds video screenshots
 let canvas = document.createElement("canvas"); //Pre-load the Canvas for capturing
 canvas.style.display = "none";
 
@@ -27,7 +27,7 @@ let intervalCSSId;
 // changing it changes the amount of time it takes to fade out (in ms)
 const FADE_TIMER_LOOP = 50;
 
-// changes the "smoothness" of the fade 
+// changes the "smoothness" of the fade
 // smaller means fades in smaller intervals
 const FADE_INTERVAL = 0.1;
 
@@ -130,8 +130,8 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     });
                 });
             }, 1500);
-            // create variables for timers, or arbitrary numbers 
-            // hideCalibrateScreenTimer 
+            // create variables for timers, or arbitrary numbers
+            // hideCalibrateScreenTimer
             break;
         case "AlertSlouch":
             alert("You are slouching");
@@ -235,7 +235,7 @@ function addBlur(onScreenText) {
 function addCheckmark() {
     let img = document.createElement('img');
     //gets image from an online source
-    img.src = "https://cdn3.iconfinder.com/data/icons/sympletts-free-sampler/128/circle-check-512.png";
+    img.src = "https://github.com/mmattikalli/webExtension/blob/master/images/windowsCheck.png?raw=true";
 
     //sets image dimensions to smaller than the video
     img.style.width = "350px";
@@ -266,8 +266,8 @@ function removeBlur() {
 
 /**
  *
- * @param {*} element Element to be faded in and out 
- * Credit: https://leewc.com/articles/javascript-fade-in-out-callback/ 
+ * @param {*} element Element to be faded in and out
+ * Credit: https://leewc.com/articles/javascript-fade-in-out-callback/
  */
 function fadeIn(element) {
     var op = 0; // initial opacity
@@ -344,14 +344,14 @@ function addSpinnerAnimation() {
     cssAnimation.id = "cssAnimation";
     cssAnimation.type = 'text/css';
 
-    // adds keyframe as a string 
+    // adds keyframe as a string
     let keyframeCSS = document.createTextNode('@keyframes spin {' +
         'from { transform: rotate(0deg) } ' +
         'to { transform: rotate(360deg) }' + '}');
 
     cssAnimation.appendChild(keyframeCSS);
     // adds style and spinner to divContainer
-    divContainer.appendChild(cssAnimation); 
+    divContainer.appendChild(cssAnimation);
     divContainer.appendChild(spinnerDiv);
 }
 
