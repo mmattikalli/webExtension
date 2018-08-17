@@ -126,6 +126,14 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     }, enabled => {
                         if (enabled) {
                             setupVid();
+                        } else {
+                            browser.runtime.sendMessage({
+                                type: 'IsSlouchEnabled'
+                            }, enabled => {
+                                if (enabled) {
+                                    setupVid();
+                                }
+                            });
                         }
                     });
                 });
