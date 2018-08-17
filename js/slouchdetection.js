@@ -13,21 +13,26 @@ const SLOUCH_ATTRIBUTES = {
 class SlouchDetectEventHandler extends CameraControllerEventHandler {
     onFrame(frame, tab, faces) {
         if (faces.length > 0) {
-            if (slouchDetect(faces) === 0) {
-                browser.tabs.sendMessage(tab, {
-                    //Tells content script to execute script that zooms webpage in proportionally to how much closer user gets
-                    type: 'ZoomScreen',
-                    new: { //Get dimensions of face in frame
-                        width: faces[0].faceRectangle.width,
-                        height: faces[0].faceRectangle.height
-                    },
-                    old: {
-                        width: m_CameraController.calibrateInfo.face.faceRectangle.width,
-                        height: m_CameraController.calibrateInfo.face.faceRectangle.height
-                    }
-                });
-            } else if (slouchDetect(faces) === 1) {
-                browser.tabs.sendMessage(tab, { type: 'AlertSlouch' })
+            switch (slouchDetect(faces)) {
+                case SLOUCH_ATTRIBUTES.FORWARD_LEANING_SLOUCH:
+                    browser.tabs.sendMessage(tab, {
+                        //Tells content script to execute script that zooms webpage in proportionally to how much closer user gets
+                        type: 'ZoomScreen',
+                        new: { //Get dimensions of face in frame
+                            width: faces[0].faceRectangle.width,
+                            height: faces[0].faceRectangle.height
+                        },
+                        old: {
+                            width: m_CameraController.calibrateInfo.face.faceRectangle.width,
+                            height: m_CameraController.calibrateInfo.face.faceRectangle.height
+                        }
+                    });
+                    break;
+                case SLOUCH_ATTRIBUTES.SLOUCH_DOWN:
+                    browser.tabs.sendMessage(tab, { type: 'AlertSlouch' });
+                    break;
+                default:
+                    break;
             }
         }
     }
