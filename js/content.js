@@ -106,10 +106,12 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         case "ShowCalibrateScreen":
             document.body.removeChild(video);
             addBlur("Calibrating...");
+            addSpinnerAnimation();
             isBlurred = true;
             break;
         case "HideCalibrateScreen":
             isBlurred = false;
+            removeSpinnerAnimation();
             addCheckmark();
 
             // timeout allows checkmark to load
@@ -167,10 +169,7 @@ function setupVid() {
 function addBlur(onScreenText) {
     video.remove();
 
-    divContainer = document.createElement('div');
-    // div container ID
-    divContainer.id = "divContainer";
-
+    divContainer = document.createElement("div");
     // clears preset div settings
     divContainer.style.clear = "both";
 
@@ -204,9 +203,9 @@ function addBlur(onScreenText) {
     para.style.all = "initial";
     para.style.fontFamily = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
     para.style.color = "black";
-    para.style.backgroundColor = "white"; 
-    para.style.fontWeight = "normal"; 
-    para.style.textShadow = "none"; 
+    para.style.backgroundColor = "white";
+    para.style.fontWeight = "normal";
+    para.style.textShadow = "none";
     para.style.fontSize = "40px";
     para.style.textAlign = "center";
     para.innerText = onScreenText;
@@ -229,7 +228,7 @@ function addCheckmark() {
     //sets image dimensions to smaller than the video
     img.style.width = "350px";
     img.style.height = "350px";
-
+    img.style.zIndex = "100000001";
     img.style.position = "fixed";
 
     img.style.top = "50%";
@@ -240,7 +239,6 @@ function addCheckmark() {
 
     if (divContainer) {
         divContainer.appendChild(img);
-        fadeIn(img);
     }
 }
 
@@ -305,14 +303,61 @@ function stopCSSInterval() {
     clearInterval(intervalCSSId);
 }
 
-//Create mutation observer
+function addSpinnerAnimation() {
+    // creates spinner
+    let spinnerDiv = document.createElement("div");
+
+    spinnerDiv.class = "spinner";
+    spinnerDiv.id = "spinnerDiv";
+
+    spinnerDiv.style.position = "fixed";
+
+    spinnerDiv.style.top = "32%";
+    spinnerDiv.style.left = "40%";
+    spinnerDiv.style.right = "50%";
+    spinnerDiv.style.bottom = "50%";
+    spinnerDiv.style.transform = "translate(-50%, -50%)";
+
+    spinnerDiv.style.width = "300px";
+    spinnerDiv.style.height = "300px";
+    spinnerDiv.style.margin = "0";
+    spinnerDiv.style.background = "transparent";
+    spinnerDiv.style.borderTop = "4px solid #03A9F4";
+    spinnerDiv.style.borderRight = "4px solid transparent";
+    spinnerDiv.style.borderRadius = "50%";
+    spinnerDiv.style.animation = "2s spin linear infinite";
+    spinnerDiv.style.zIndex = "10000000003";
+
+    let cssAnimation = document.createElement('style');
+    cssAnimation.id = "cssAnimation";
+    cssAnimation.type = 'text/css';
+
+    // adds keyframe as a string 
+    let keyframeCSS = document.createTextNode('@keyframes spin {' +
+        'from { transform: rotate(0deg) } ' +
+        'to { transform: rotate(360deg) }' + '}');
+
+    cssAnimation.appendChild(keyframeCSS);
+    // adds style and spinner to divContainer
+    divContainer.appendChild(cssAnimation); 
+    divContainer.appendChild(spinnerDiv);
+}
+
+
+function removeSpinnerAnimation() {
+    let appendedSpinner = document.getElementById('spinnerDiv');
+    divContainer.removeChild(appendedSpinner);
+}
+
+
+// mutation observer for security
 var observer = new MutationObserver(function (mutations, observer) {
     // executes when a mutation occurs
-    mutations.forEach(function (mutationRecord) { //For each mutationRecord, check if style was changed or a DOM element was removed
+    //For each mutationRecord, check if style was changed or a DOM element was removed
+    mutations.forEach(function (mutationRecord) {
         if (isBlurred && mutationRecord.type === "attributes") { //style
             divContainer.style.backgroundColor = "white";
         }
-
         if (isBlurred && mutationRecord.type === "childList") { //DOM element removed
             mutationRecord.removedNodes.forEach(function (node) {
                 if (node.nodeName !== "CANVAS") {
