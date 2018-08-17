@@ -169,9 +169,7 @@ function setupVid() {
 function addBlur(onScreenText) {
     video.remove();
 
-    // div container ID
-    divContainer.id = "divContainer";
-
+    divContainer = document.createElement("div");
     // clears preset div settings
     divContainer.style.clear = "both";
 
@@ -343,7 +341,8 @@ function addSpinnerAnimation() {
     }
 
     cssAnimation.appendChild(keyframeCSS);
-    document.getElementsByTagName('head')[0].appendChild(cssAnimation);
+    divContainer.appendChild(cssAnimation); 
+    //document.getElementsByTagName('head')[0].appendChild(cssAnimation);
 
     divContainer.appendChild(spinnerDiv);
 }
@@ -352,8 +351,8 @@ function addSpinnerAnimation() {
 function removeSpinnerAnimation() {
     let appendedSpinner = document.getElementById('spinnerDiv');
     divContainer.removeChild(appendedSpinner);
-    let styleTag = document.getElementsById("cssAnimation");
-    document.removeChild(styleTag);
+    // let styleTag = document.getElementsById("cssAnimation");
+    // document.removeChild(styleTag);
 }
 
 
