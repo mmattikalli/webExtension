@@ -118,13 +118,12 @@ p {
 
 .gridContainer {
     display: grid; 
-    grid-column-gap: 20px; 
+    grid-column-gap: 5px; 
     grid-row-gap: 5px; 
 }
 
 .gridItem {
     display: flex; 
-    justify-content: center;
     align-items: center; 
 }
 
@@ -133,12 +132,14 @@ p {
     grid-column-end: 5; 
     grid-row-start: 1; 
     grid-row-end: 1; 
+    justify-content: center;
 }
 #item2 {
     grid-column-start: 1; 
     grid-column-end: 3; 
     grid-row-start: 2; 
     grid-row-end: 2; 
+    justify-content: flex-end;  
 }
 
 #item3 {
@@ -146,6 +147,7 @@ p {
     grid-column-end: 5; 
     grid-row-start: 2; 
     grid-row-end: 2; 
+    justify-content: flex-start;
 }
 
 /*
