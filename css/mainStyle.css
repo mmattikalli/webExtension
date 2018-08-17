@@ -18,23 +18,23 @@ body {
     margin: 0px;
     width: 390px;
     box-sizing: border-box;
-    overflow-x: hidden; 
-    overflow-y: visible; 
+    overflow-x: hidden;
+    overflow-y: visible;
     align-content: center;
     justify-content: center;
-    display: flex; 
+    display: flex;
 }
 
 nav {
-    display: flex; 
+    display: flex;
     background-color: #0078D7;
     width: 100%;
     height: 80px;
     margin: 0px;
     padding: 10px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    align-items: center; 
-    justify-content: center; 
+    align-items: center;
+    justify-content: center;
     color: white;
     font-size: 25px;
     text-align: center;
@@ -42,73 +42,94 @@ nav {
 }
 
 /* for the titles on the pages */
+
 h1 {
     font-style: normal;
     font-size: 15px;
     align-content: center;
-    text-align: left; 
-    font-weight: 500; 
-    font-weight: 600; 
-    font-size: 17px; 
+    text-align: center;
+    font-weight: 600;
+    font-size: 17px;
 }
 
 h2 {
     font-style: normal;
     font-size: 15px;
     align-content: center;
-    font-weight: 500; 
+    font-weight: 500;
 }
 
-/* calibrate button */
-button {
-    border-radius: 12px; 
-    font-size: 15px; 
-    background-color: white; 
-    width: 88%; 
-    align-items: center;
-    box-shadow: none; 
-    outline: none; 
-    border: none; 
+h6 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 160%;
 }
 
-button:hover {
-    background-color:#d7d7d7;
-    transition-duration: 0.4s; 
+p {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 160%
 }
-    
-button:active{
-    background-color: #0078D7; 
-    color: white; 
+
+.extra {
+    color: darkslategray;
 }
+
+/*
+    INFO PAGE 
+*/
 
 /* for the main text excluding nav */
+
 main {
     margin: 10px;
     padding: 2px;
 }
 
 .info {
-    line-height: 160%; 
-    height: 110px; 
-    overflow: visible;  
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 160%;
+    height: 110px;
+    overflow: visible;
 }
 
-p {
-    flex-direction: row;
+/* for section headers */
+
+.item {
+    text-align: center; 
+    font-weight: 700; 
 }
 
-.paragraphHeader{
-    font-size: 18px; 
+/* calibrate button */
+
+button {
+    border-radius: 12px;
+    font-size: 15px;
+    background-color: white;
+    width: 88%;
+    align-items: center;
+    box-shadow: none;
+    outline: none;
+    border: none;
 }
 
+button:hover {
+    background-color: #d7d7d7;
+    transition-duration: 0.4s;
+}
+
+button:active {
+    background-color: #0078D7;
+    color: white;
+}
+
+/* links */
 
 a {
-    padding: 7px; 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    padding: 7px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: darkslategrey;
-    font-weight: 500; 
-    font-style: normal; 
-    font-size: 15px; 
+    font-weight: 500;
+    font-style: normal;
+    font-size: 15px;
 }
 
 a:hover {
@@ -119,38 +140,128 @@ a:hover {
     filter: blur(5px);
 }
 
+/* creating a grid for popup elements */
+
 .gridContainer {
-    display: grid; 
-    grid-column-gap: 5px; 
-    grid-row-gap: 5px; 
+    display: grid;
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
 }
 
 .gridItem {
-    display: flex; 
-    align-items: center; 
+    display: flex;
 }
 
 #item1 {
-    grid-column-start: 1; 
-    grid-column-end: 5; 
-    grid-row-start: 1; 
-    grid-row-end: 1; 
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 3;
+    grid-row-end: 3;
+    align-content: center;
     justify-content: center;
 }
+
 #item2 {
-    grid-column-start: 1; 
-    grid-column-end: 3; 
-    grid-row-start: 2; 
-    grid-row-end: 2; 
-    justify-content: flex-end;  
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 1;
 }
 
 #item3 {
-    grid-column-start: 3; 
-    grid-column-end: 5; 
-    grid-row-start: 2; 
-    grid-row-end: 2; 
-    justify-content: flex-start;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 2;
+}
+
+#item3Extended {
+    grid-column-start: 3;
+    grid-column-end: 5;
+    grid-row-start: 2;
+    grid-row-end: 2;
+}
+
+/*
+    RADIO BUTTON FOR SLOUCH DETECTION 
+*/
+
+/* Customize the label (the container) */
+
+.container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default radio button */
+
+.container input {
+    position: absolute;
+    opacity: 0;
+}
+
+/* Create a custom radio button */
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 30px;
+    width: 30px;
+    background-color: #eee;
+    border-radius: 50%;
+}
+
+/* make the checkbox appear on the regular screen */
+
+.container input~.checkmark {
+    background-color: white;
+}
+
+/* On mouse-over, add a grey background color */
+
+.container:hover input~.checkmark {
+    background-color: #d7d7d7;
+    transition-duration: 0.4s;
+}
+
+/* When the radio button is checked, add a blue background */
+
+.container input:checked~.checkmark {
+    background-color: white;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+
+.container input:checked~.checkmark:after {
+    display: block;
+}
+
+/* Style the indicator (dot/circle) */
+
+.container .checkmark:after {
+    top: 7.5px;
+    left: 7.5px;
+    width: 21px;
+    height: 21px;
+    border-radius: 50%;
+    background: #0078D7;
 }
 
 /*
@@ -158,6 +269,7 @@ a:hover {
 */
 
 /* The switch - the box around the slider */
+
 .switch {
     position: relative;
     display: inline-block;
@@ -167,11 +279,13 @@ a:hover {
 }
 
 /* Hide default HTML checkbox */
+
 .switch input {
     display: none;
 }
 
 /* The slider */
+
 .slider {
     position: absolute;
     cursor: pointer;
@@ -186,9 +300,10 @@ a:hover {
 }
 
 .slider:hover {
-    background-color:#d7d7d7;
-    transition-duration: 0.4s; 
+    background-color: #d7d7d7;
+    transition-duration: 0.4s;
 }
+
 .slider:before {
     position: absolute;
     content: "";
@@ -201,41 +316,42 @@ a:hover {
     transition: .4s;
 }
 
-.slider{
+.slider {
     background-color: white;
 }
 
-.slider:before{
+.slider:before {
     background-color: #0078D7;
 }
 
-input:checked + .slider {
-    background-color:#0078D7;
+input:checked+.slider {
+    background-color: #0078D7;
 }
 
-input:checked + .slider:before{
-    background-color: white; 
-
+input:checked+.slider:before {
+    background-color: white;
 }
 
 /* all sliders coloring - switches to blue background on the next page  */
-.slider.back{
-    background-color:#0078D7;
+
+.slider.back {
+    background-color: #0078D7;
 }
 
-.slider.back:before{
+.slider.back:before {
     background-color: white;
 }
 
-input:checked + .slider.back {
+input:checked+.slider.back {
     background-color: white;
 }
 
-input:checked + .slider.back:before{
-    background-color:#0078D7;
-  }
+input:checked+.slider.back:before {
+    background-color: #0078D7;
+}
 
 /* moves slider */
+
 input:checked+.slider:before {
     -webkit-transform: translateX(38px);
     -ms-transform: translateX(38px);
@@ -243,6 +359,7 @@ input:checked+.slider:before {
 }
 
 /* rounds slider elements */
+
 .slider.round {
     border-radius: 45px;
 }
