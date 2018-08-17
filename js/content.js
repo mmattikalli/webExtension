@@ -332,18 +332,14 @@ function addSpinnerAnimation() {
     cssAnimation.id = "cssAnimation";
     cssAnimation.type = 'text/css';
 
+    // adds keyframe as a string 
     let keyframeCSS = document.createTextNode('@keyframes spin {' +
         'from { transform: rotate(0deg) } ' +
         'to { transform: rotate(360deg) }' + '}');
 
-    if (keyframeCSS !== null) {
-        console.log(keyframeCSS);
-    }
-
     cssAnimation.appendChild(keyframeCSS);
+    // adds style and spinner to divContainer
     divContainer.appendChild(cssAnimation); 
-    //document.getElementsByTagName('head')[0].appendChild(cssAnimation);
-
     divContainer.appendChild(spinnerDiv);
 }
 
@@ -351,8 +347,6 @@ function addSpinnerAnimation() {
 function removeSpinnerAnimation() {
     let appendedSpinner = document.getElementById('spinnerDiv');
     divContainer.removeChild(appendedSpinner);
-    // let styleTag = document.getElementsById("cssAnimation");
-    // document.removeChild(styleTag);
 }
 
 
