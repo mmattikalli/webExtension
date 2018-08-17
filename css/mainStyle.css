@@ -56,7 +56,27 @@ h2 {
     align-content: left;
     font-weight: 500; 
 }
+
+/* calibrate button */
+button {
+    border-radius: 12px; 
+    font-size: 15px; 
+    background-color: white; 
+    width: 88%; 
+    align-items: center;
+    box-shadow: none; 
+    outline: none; 
+    border: none; 
+}
+
+button:hover {
+    background-color:#d7d7d7;
+}
     
+button:active{
+    background-color: #0078D7; 
+    color: white; 
+}
 
 /* for the main text excluding nav */
 main {
@@ -78,14 +98,15 @@ p {
     font-size: 18px; 
 }
 
-.buttonNotes {
+
+.infoPageFeatures {
     color: darkslategrey;
     font-weight: 500; 
     font-style: normal; 
     font-size: 15px; 
 }
 
-.buttonNotes:hover {
+.infoPageFeatures:hover {
     color: black;
 }
 
