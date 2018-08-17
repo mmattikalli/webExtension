@@ -102,7 +102,7 @@ p {
 }
 
 
-.linksToPages {
+a {
     padding: 7px; 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
     color: darkslategrey;
@@ -111,7 +111,7 @@ p {
     font-size: 15px; 
 }
 
-.linksToPages:hover {
+a:hover {
     color: black;
 }
 
