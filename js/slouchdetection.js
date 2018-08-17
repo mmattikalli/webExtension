@@ -4,6 +4,11 @@
 
 const LOWERED_FACE_DISTANCE = 30;
 const TOO_BIG_FACE_SIZE = 200;
+const SLOUCHOPTIONS = {
+    "forwardLeaningSlouch": 1,
+    "slouchDown": 2,
+    "none": false
+};
 
 class SlouchDetectEventHandler extends CameraControllerEventHandler {
     onFrame(frame, tab, faces) {
@@ -65,12 +70,12 @@ function slouchDetect(faces) {
     }
 
     if (faces[0].faceRectangle.height > TOO_BIG_FACE_SIZE || faces[0].faceRectangle.width > TOO_BIG_FACE_SIZE) {
-        console.log("big face");
-        return 1; //If face size increases, indicating a user leaning in/slouching forward
+        console.log("forwardLeaningSlouch");
+        return SLOUCHOPTIONS.forwardLeaningSlouch; //If face size increases, indicating a user leaning in/slouching forward
     } else if (faceCenter.y - calibratedFaceCenter.y > LOWERED_FACE_DISTANCE) {
-        console.log("bad back");
-        return 2; //If center of face is lowered, indicatinga hunch in the user's back
+        console.log("slouchDown");
+        return SLOUCHOPTIONS.slouchDown; //If center of face is lowered, indicating a hunch in the user's back
     }
-
-    return false; //If neither of the above conditions are satisfied
+    console.log("none");
+    return SLOUCHOPTIONS.none; //If neither of the above conditions are satisfied
 }
