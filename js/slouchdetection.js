@@ -3,6 +3,7 @@
 /// <reference path="face.js" />
 
 const LOWERED_FACE_DISTANCE = 30;
+const TOO_BIG_FACE_SIZE = 200;
 
 class SlouchDetectEventHandler extends CameraControllerEventHandler {
     onFrame(frame, tab, faces) {
@@ -11,7 +12,7 @@ class SlouchDetectEventHandler extends CameraControllerEventHandler {
                 browser.tabs.sendMessage(tab, {
                     //Tells content script to execute script that zooms webpage in proportionally to how much closer user gets
                     type: 'ZoomScreen',
-                    new: { //Get center of face in frame
+                    new: { //Get dimensions of face in frame
                         width: faces[0].faceRectangle.width,
                         height: faces[0].faceRectangle.height
                     },
@@ -63,14 +64,13 @@ function slouchDetect(faces) {
         y: faces[0].faceRectangle.top + ((faces[0].faceRectangle.height) / 2),
     }
 
-    if (faces[0].faceRectangle !== null) {
-        if (faces[0].faceRectangle.height > 190 || faces[0].faceRectangle.width > 190) { //190s will become the calibrated face height and width
-            console.log("big face");
-            return 1; //If face size increases, indicating a user leaning in/slouching forward
-        } else if (faceCenter.y - calibratedFaceCenter.y > LOWERED_FACE_DISTANCE) {
-            console.log("bad back");
-            return 2; //If center of face is lowered, indicatinga hunch in the user's back
-        }
+    if (faces[0].faceRectangle.height > TOO_BIG_FACE_SIZE || faces[0].faceRectangle.width > TOO_BIG_FACE_SIZE) {
+        console.log("big face");
+        return 1; //If face size increases, indicating a user leaning in/slouching forward
+    } else if (faceCenter.y - calibratedFaceCenter.y > LOWERED_FACE_DISTANCE) {
+        console.log("bad back");
+        return 2; //If center of face is lowered, indicatinga hunch in the user's back
     }
+
     return false; //If neither of the above conditions are satisfied
 }

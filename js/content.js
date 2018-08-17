@@ -322,7 +322,7 @@ var observer = new MutationObserver(function (mutations, observer) {
     // executes when a mutation occurs
     mutations.forEach(function (mutationRecord) { //For each mutationRecord, check if style was changed or a DOM element was removed
         if (isBlurred && mutationRecord.type === "attributes") { //style
-            //divContainer.style.backgroundColor = "white";
+            // clears preset div settings
             divContainer.style.clear = "both";
 
             // sets divContainer to be a flexbox
