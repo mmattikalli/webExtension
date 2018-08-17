@@ -126,6 +126,14 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     }, enabled => {
                         if (enabled) {
                             setupVid();
+                        } else {
+                            browser.runtime.sendMessage({
+                                type: 'IsSlouchEnabled'
+                            }, enabled => {
+                                if (enabled) {
+                                    setupVid();
+                                }
+                            });
                         }
                     });
                 });
@@ -351,7 +359,7 @@ function addSpinnerAnimation() {
 
     cssAnimation.appendChild(keyframeCSS);
     // adds style and spinner to divContainer
-    divContainer.appendChild(cssAnimation); 
+    divContainer.appendChild(cssAnimation);
     divContainer.appendChild(spinnerDiv);
 }
 
