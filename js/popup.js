@@ -45,7 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     setInterval(() => {
-        console.log('test');
         browser.runtime.sendMessage({ type: 'IsLocked' }, locked => {
             faceCheckbox.disabled = locked;
         });
