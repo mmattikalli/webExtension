@@ -379,7 +379,7 @@ var observer = new MutationObserver(function (mutations, observer) {
     mutations.forEach(function (mutationRecord) {
         if (isBlurred && mutationRecord.type === "attributes") { //style
             // clears preset div settings
-            //divContainer.style.clear = "both";
+            divContainer.style.clear = "both";
 
             // sets divContainer to be a flexbox
             divContainer.style.display = "flex";
