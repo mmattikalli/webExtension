@@ -19,29 +19,31 @@
                 Toggle to Enable Features
             </h1>
         </section>
-        <section>
-            <h2>
-                FaceID Security
-            </h2>
-            <!--command to create a toggle bar-->
-            <label class="switch" id="faceSwitch">
-                <input type="checkbox" />
-                <span class="slider round"></span>
-            </label>
-        </section>
-        <section>
-            <h2>
-                Slouch Detection
-            </h2>
-            <!-- to create a toggle bar-->
-            <label class="switch" id="slouchSwitch">
-                <input type="checkbox" />
-                <span class="slider round"></span>
-            </label>
-        </section>
-        <section>
-            <button id = "calibrate"> Calibrate All </button>
-        </section>
+        <div class="gridContainer">
+            <section class = "gridItem" id = "item1">
+                <button id="calibrate"> Calibrate All </button>
+            </section>
+            <section class="gridItem" id="item2">
+                <h2>
+                    FaceID Security
+                </h2>
+                <!--command to create a toggle bar-->
+                <label class="switch" id="faceSwitch">
+                    <input type="checkbox" />
+                    <span class="slider round"></span>
+                </label>
+            </section>
+            <section class="gridItem" id="item3">
+                <h2>
+                    Slouch Detection
+                </h2>
+                <!-- to create a toggle bar-->
+                <label class="switch" id="slouchSwitch">
+                    <input type="checkbox" />
+                    <span class="slider round"></span>
+                </label>
+            </section>
+        </div>
         <a href="./infoPage.html" class="infoPageFeatures">
             Learn More About Our Features
         </a>

@@ -22,6 +22,7 @@ body {
     overflow-y: visible;
     align-content: center;
     justify-content: center;
+    display: flex;
 }
 
 nav {
@@ -44,7 +45,8 @@ nav {
 h1 {
     font-style: normal;
     font-size: 15px;
-    align-content: left;
+    align-content: center;
+    text-align: left;
     font-weight: 500;
     font-weight: 600;
     font-size: 17px;
@@ -53,7 +55,7 @@ h1 {
 h2 {
     font-style: normal;
     font-size: 15px;
-    align-content: left;
+    align-content: center;
     font-weight: 500;
 }
 
@@ -71,6 +73,7 @@ button {
 
 button:hover {
     background-color:#d7d7d7;
+    transition-duration: 0.4s;
 }
 
 button:active{
@@ -114,8 +117,39 @@ p {
     filter: blur(5px);
 }
 
+.gridContainer {
+    display: grid;
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
+}
 
+.gridItem {
+    display: flex;
+    align-items: center;
+}
 
+#item1 {
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 1;
+    justify-content: center;
+}
+#item2 {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 2;
+    justify-content: flex-end;
+}
+
+#item3 {
+    grid-column-start: 3;
+    grid-column-end: 5;
+    grid-row-start: 2;
+    grid-row-end: 2;
+    justify-content: flex-start;
+}
 
 /*
     SLIDERS
@@ -151,6 +185,7 @@ p {
 
 .slider:hover {
     background-color:#d7d7d7;
+    transition-duration: 0.4s;
 }
 .slider:before {
     position: absolute;
