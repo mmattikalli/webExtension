@@ -70,12 +70,9 @@ function slouchDetect(faces) {
     }
 
     if (faces[0].faceRectangle.height > TOO_BIG_FACE_SIZE || faces[0].faceRectangle.width > TOO_BIG_FACE_SIZE) {
-        console.log("forwardLeaningSlouch");
         return SLOUCH_ATTRIBUTES.FORWARD_LEANING_SLOUCH; //If face size increases, indicating a user leaning in/slouching forward
     } else if (faceCenter.y - calibratedFaceCenter.y > LOWERED_FACE_DISTANCE) {
-        console.log("slouchDown");
         return SLOUCH_ATTRIBUTES.SLOUCH_DOWN; //If center of face is lowered, indicating a hunch in the user's back
     }
-    console.log("none");
     return SLOUCH_ATTRIBUTES.NONE; //If neither of the above conditions are satisfied
 }
