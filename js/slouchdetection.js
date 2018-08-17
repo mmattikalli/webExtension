@@ -4,16 +4,16 @@
 
 const LOWERED_FACE_DISTANCE = 30;
 const TOO_BIG_FACE_SIZE = 200;
-const SLOUCHOPTIONS = {
-    "forwardLeaningSlouch": 1,
-    "slouchDown": 2,
-    "none": false
+const SLOUCH_ATTRIBUTES = {
+    "FORWARD_LEANING_SLOUCH": 0,
+    "SLOUCH_DOWN": 1,
+    "NONE": 2
 };
 
 class SlouchDetectEventHandler extends CameraControllerEventHandler {
     onFrame(frame, tab, faces) {
         if (faces.length > 0) {
-            if (slouchDetect(faces) === 1) {
+            if (slouchDetect(faces) === 0) {
                 browser.tabs.sendMessage(tab, {
                     //Tells content script to execute script that zooms webpage in proportionally to how much closer user gets
                     type: 'ZoomScreen',
@@ -26,7 +26,7 @@ class SlouchDetectEventHandler extends CameraControllerEventHandler {
                         height: m_CameraController.calibrateInfo.face.faceRectangle.height
                     }
                 });
-            } else if (slouchDetect(faces) === 2) {
+            } else if (slouchDetect(faces) === 1) {
                 browser.tabs.sendMessage(tab, { type: 'AlertSlouch' })
             }
         }
@@ -71,11 +71,11 @@ function slouchDetect(faces) {
 
     if (faces[0].faceRectangle.height > TOO_BIG_FACE_SIZE || faces[0].faceRectangle.width > TOO_BIG_FACE_SIZE) {
         console.log("forwardLeaningSlouch");
-        return SLOUCHOPTIONS.forwardLeaningSlouch; //If face size increases, indicating a user leaning in/slouching forward
+        return SLOUCH_ATTRIBUTES.FORWARD_LEANING_SLOUCH; //If face size increases, indicating a user leaning in/slouching forward
     } else if (faceCenter.y - calibratedFaceCenter.y > LOWERED_FACE_DISTANCE) {
         console.log("slouchDown");
-        return SLOUCHOPTIONS.slouchDown; //If center of face is lowered, indicating a hunch in the user's back
+        return SLOUCH_ATTRIBUTES.SLOUCH_DOWN; //If center of face is lowered, indicating a hunch in the user's back
     }
     console.log("none");
-    return SLOUCHOPTIONS.none; //If neither of the above conditions are satisfied
+    return SLOUCH_ATTRIBUTES.NONE; //If neither of the above conditions are satisfied
 }
