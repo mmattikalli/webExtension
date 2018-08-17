@@ -30,8 +30,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 browser.runtime.sendMessage({ type: 'DisableSlouch' });
             } else {
                 browser.runtime.sendMessage({ type: 'EnableSlouch' });
-                alert('You have enabled Slouch Detection!'); 
+                alert('You have enabled Slouch Detection!');
             }
         });
+    });
+
+    // Calibrate button
+    document.getElementById('calibrate').addEventListener('click', () => {
+        browser.runtime.sendMessage({ type: 'Recalibrate' });
     });
 });
