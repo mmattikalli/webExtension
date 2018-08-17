@@ -8,6 +8,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Enable the switch if face lock is enabled.
     browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
         faceCheckbox.checked = enabled;
+
+        browser.runtime.sendMessage({ type: 'IsLocked' }, locked => {
+            faceCheckbox.disabled = locked;
+        });
     });
 
     browser.runtime.sendMessage({ type: 'IsSlouchEnabled' }, enabled => {
@@ -39,4 +43,10 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('calibrate').addEventListener('click', () => {
         browser.runtime.sendMessage({ type: 'Recalibrate' });
     });
+
+    setInterval(() => {
+        browser.runtime.sendMessage({ type: 'IsLocked' }, locked => {
+            faceCheckbox.disabled = locked;
+        });
+    }, 500);
 });

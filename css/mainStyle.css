@@ -73,6 +73,28 @@ p {
     color: darkslategray;
 }
 
+/* calibrate button */
+button {
+    border-radius: 12px;
+    font-size: 15px;
+    background-color: white;
+    width: 88%;
+    align-items: center;
+    box-shadow: none;
+    outline: none;
+    border: none;
+}
+
+button:hover {
+    background-color:#d7d7d7;
+    transition-duration: 0.4s;
+}
+
+button:active{
+    background-color: #0078D7;
+    color: white;
+}
+
 /*
     INFO PAGE 
 */
@@ -195,9 +217,6 @@ a:hover {
     margin-bottom: 12px;
     cursor: pointer;
     font-size: 22px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 }
 
@@ -265,7 +284,7 @@ a:hover {
 }
 
 /*
-    SLIDERS 
+    SLIDERS
 */
 
 /* The switch - the box around the slider */
@@ -328,12 +347,7 @@ input:checked+.slider {
     background-color: #0078D7;
 }
 
-input:checked+.slider:before {
-    background-color: white;
-}
-
 /* all sliders coloring - switches to blue background on the next page  */
-
 .slider.back {
     background-color: #0078D7;
 }
@@ -348,6 +362,14 @@ input:checked+.slider.back {
 
 input:checked+.slider.back:before {
     background-color: #0078D7;
+}
+
+input:checked + .slider:before{
+    background-color: white;
+}
+
+input:disabled + .slider {
+    background-color: grey;
 }
 
 /* moves slider */

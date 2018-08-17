@@ -59,6 +59,9 @@ class FaceLockEventHandler extends CameraControllerEventHandler {
     }
 }
 
+/**
+ * @type {FaceLockEventHandler}
+ */
 let g_FaceLockEventHandler = null;
 
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -81,5 +84,11 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
             sendResponse(g_FaceLockEventHandler !== null);
             break;
         }
+        case 'IsLocked':
+            if (g_FaceLockEventHandler !== null) {
+                sendResponse(g_FaceLockEventHandler.locked);
+            } else {
+                sendResponse(false);
+            }
     }
 });
