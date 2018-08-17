@@ -31,6 +31,10 @@ const FADE_TIMER_LOOP = 50;
 // smaller means fades in smaller intervals
 const FADE_INTERVAL = 0.1;
 
+//Stores the ratio of the previous frame's face and the video.width
+//Gets replaced when the ratio is increased, indicating user might need a more zoomed in screen
+let pastNum = null;
+
 /**
  * @param {HTMLVideoElement} video
  * @param {HTMLCanvasElement} canvas
@@ -131,6 +135,14 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             break;
         case "AlertSlouch":
             alert("You are slouching");
+            break;
+        case "ZoomScreen":
+            //If user is leaning forward to see the screen, zooming in will make it easier to see from a healthier position
+            alert("scoot back");
+            if (((video.width - request.old.width) / (video.width - request.new.width)) > pastNum || pastNum === null) {
+                pastNum = ((video.width - request.old.width) / (video.width - request.new.width));
+                document.body.style.zoom = 100 * ((video.width - request.old.width) / (video.width - request.new.width)) + "%";
+            }
             break;
         default:
             console.log("Invalid Request Type");
@@ -356,7 +368,29 @@ var observer = new MutationObserver(function (mutations, observer) {
     //For each mutationRecord, check if style was changed or a DOM element was removed
     mutations.forEach(function (mutationRecord) {
         if (isBlurred && mutationRecord.type === "attributes") { //style
-            divContainer.style.backgroundColor = "white";
+            // clears preset div settings
+            divContainer.style.clear = "both";
+
+            // sets divContainer to be a flexbox
+            divContainer.style.display = "flex";
+
+            // formatting elements within the divContainer
+            divContainer.style.alignItems = "center";
+            divContainer.style.justifyContent = "center";
+            divContainer.style.flexDirection = "column";
+
+            divContainer.style.position = "fixed";
+            divContainer.style.zIndex = "100000000";
+            divContainer.style.width = "100%";
+            divContainer.style.height = "100%";
+            divContainer.style.backgroundColor = 'white';
+
+            divContainer.style.top = "50%";
+            divContainer.style.left = "50%";
+            divContainer.style.right = "50%";
+            divContainer.style.bottom = "50%";
+            divContainer.style.transform = "translate(-50%, -50%)";
+            divContainer.style.lineHeight = "200%";
         }
         if (isBlurred && mutationRecord.type === "childList") { //DOM element removed
             mutationRecord.removedNodes.forEach(function (node) {

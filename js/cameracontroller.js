@@ -1,7 +1,7 @@
 /// <reference path="apiKeys.js" />
 /// <reference path="face.js" />
 
-const CAMERA_UPDATE_TIME = 3000;
+const CAMERA_UPDATE_TIME = 2000;
 
 class CameraControllerEventHandler {
     /**
@@ -9,24 +9,24 @@ class CameraControllerEventHandler {
      * @param {number} tab
      * @param {object} face
      */
-    onCalibration(frame, tab, face) {}
+    onCalibration(frame, tab, face) { }
 
     /**
      * @param {Uint8Array} frame
      * @param {number} tab
      * @param {object[]} faces
      */
-    onFrame(frame, tab, faces) {}
+    onFrame(frame, tab, faces) { }
 
     /**
      * @param {number} tab
      */
-    onTabActivated(tab) {}
+    onTabActivated(tab) { }
 
     /**
      * @param {number} tab
      */
-    onTabDeactivated(tab) {}
+    onTabDeactivated(tab) { }
 }
 class CameraController {
     constructor() {
@@ -35,7 +35,7 @@ class CameraController {
         this.calibrateInfo = null;
         this.calibrating = false;
 
-        browser.tabs.query({active: true}, tabs => {
+        browser.tabs.query({ active: true }, tabs => {
             this.activeTab = tabs[0].id;
         });
     }
