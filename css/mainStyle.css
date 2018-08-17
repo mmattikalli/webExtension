@@ -102,14 +102,16 @@ p {
 }
 
 
-.infoPageFeatures {
+a {
+    padding: 7px; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
     color: darkslategrey;
     font-weight: 500; 
     font-style: normal; 
     font-size: 15px; 
 }
 
-.infoPageFeatures:hover {
+a:hover {
     color: black;
 }
 
