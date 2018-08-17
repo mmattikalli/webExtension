@@ -306,8 +306,6 @@ function stopCSSInterval() {
 }
 
 function addSpinnerAnimation() {
-
-    console.log("stuffyinweifahwef"); 
     // creates spinner
     let spinnerDiv = document.createElement("div");
 
