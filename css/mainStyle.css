@@ -18,23 +18,23 @@ body {
     margin: 0px;
     width: 390px;
     box-sizing: border-box;
-    overflow-x: hidden; 
-    overflow-y: visible; 
+    overflow-x: hidden;
+    overflow-y: visible;
     align-content: center;
     justify-content: center;
-    display: flex; 
+    display: flex;
 }
 
 nav {
-    display: flex; 
+    display: flex;
     background-color: #0078D7;
     width: 100%;
     height: 80px;
     margin: 0px;
     padding: 10px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    align-items: center; 
-    justify-content: center; 
+    align-items: center;
+    justify-content: center;
     color: white;
     font-size: 25px;
     text-align: center;
@@ -46,39 +46,39 @@ h1 {
     font-style: normal;
     font-size: 15px;
     align-content: center;
-    text-align: left; 
-    font-weight: 500; 
-    font-weight: 600; 
-    font-size: 17px; 
+    text-align: left;
+    font-weight: 500;
+    font-weight: 600;
+    font-size: 17px;
 }
 
 h2 {
     font-style: normal;
     font-size: 15px;
     align-content: center;
-    font-weight: 500; 
+    font-weight: 500;
 }
 
 /* calibrate button */
 button {
-    border-radius: 12px; 
-    font-size: 15px; 
-    background-color: white; 
-    width: 88%; 
+    border-radius: 12px;
+    font-size: 15px;
+    background-color: white;
+    width: 88%;
     align-items: center;
-    box-shadow: none; 
-    outline: none; 
-    border: none; 
+    box-shadow: none;
+    outline: none;
+    border: none;
 }
 
 button:hover {
     background-color:#d7d7d7;
-    transition-duration: 0.4s; 
+    transition-duration: 0.4s;
 }
-    
+
 button:active{
-    background-color: #0078D7; 
-    color: white; 
+    background-color: #0078D7;
+    color: white;
 }
 
 /* for the main text excluding nav */
@@ -88,9 +88,9 @@ main {
 }
 
 .info {
-    line-height: 160%; 
-    height: 110px; 
-    overflow: visible;  
+    line-height: 160%;
+    height: 110px;
+    overflow: visible;
 }
 
 p {
@@ -98,7 +98,7 @@ p {
 }
 
 .paragraphHeader{
-    font-size: 18px; 
+    font-size: 18px;
 }
 
 
@@ -106,9 +106,9 @@ a {
     padding: 7px; 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
     color: darkslategrey;
-    font-weight: 500; 
-    font-style: normal; 
-    font-size: 15px; 
+    font-weight: 500;
+    font-style: normal;
+    font-size: 15px;
 }
 
 a:hover {
@@ -120,41 +120,41 @@ a:hover {
 }
 
 .gridContainer {
-    display: grid; 
-    grid-column-gap: 5px; 
-    grid-row-gap: 5px; 
+    display: grid;
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
 }
 
 .gridItem {
-    display: flex; 
-    align-items: center; 
+    display: flex;
+    align-items: center;
 }
 
 #item1 {
-    grid-column-start: 1; 
-    grid-column-end: 5; 
-    grid-row-start: 1; 
-    grid-row-end: 1; 
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 1;
     justify-content: center;
 }
 #item2 {
-    grid-column-start: 1; 
-    grid-column-end: 3; 
-    grid-row-start: 2; 
-    grid-row-end: 2; 
-    justify-content: flex-end;  
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 2;
+    justify-content: flex-end;
 }
 
 #item3 {
-    grid-column-start: 3; 
-    grid-column-end: 5; 
-    grid-row-start: 2; 
-    grid-row-end: 2; 
+    grid-column-start: 3;
+    grid-column-end: 5;
+    grid-row-start: 2;
+    grid-row-end: 2;
     justify-content: flex-start;
 }
 
 /*
-    SLIDERS 
+    SLIDERS
 */
 
 /* The switch - the box around the slider */
@@ -187,7 +187,7 @@ a:hover {
 
 .slider:hover {
     background-color:#d7d7d7;
-    transition-duration: 0.4s; 
+    transition-duration: 0.4s;
 }
 .slider:before {
     position: absolute;
@@ -214,26 +214,12 @@ input:checked + .slider {
 }
 
 input:checked + .slider:before{
-    background-color: white; 
-
-}
-
-/* all sliders coloring - switches to blue background on the next page  */
-.slider.back{
-    background-color:#0078D7;
-}
-
-.slider.back:before{
     background-color: white;
 }
 
-input:checked + .slider.back {
-    background-color: white;
+input:disabled + .slider {
+    background-color: grey;
 }
-
-input:checked + .slider.back:before{
-    background-color:#0078D7;
-  }
 
 /* moves slider */
 input:checked+.slider:before {
