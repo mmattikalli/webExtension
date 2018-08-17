@@ -58,7 +58,7 @@ h2 {
 }
 
 /* calibrate button */
-.calibrate {
+button {
     border-radius: 12px; 
     font-size: 15px; 
     background-color: white; 
@@ -69,11 +69,11 @@ h2 {
     border: none; 
 }
 
-.calibrate:hover {
+button:hover {
     background-color:#d7d7d7;
 }
     
-.calibrate:active{
+button:active{
     background-color: #0078D7; 
     color: white; 
 }
