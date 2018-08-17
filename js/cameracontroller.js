@@ -78,7 +78,7 @@ class CameraController {
 
         if (this.handlerList.size === 0 && this.activeTab) {
             browser.tabs.sendMessage(this.activeTab, { type: 'EndCapture' });
-            this.calibratedFace = null;
+            this.calibrateInfo = null;
         }
     }
 
@@ -170,6 +170,18 @@ setInterval(faceJs => {
         });
     }
 }, CAMERA_UPDATE_TIME, new FaceJS(AZURE_KEYS.keys[0], AZURE_KEYS.region));
+
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    console.log(message.type);
+    switch (message.type) {
+        case 'Recalibrate':
+            m_CameraController.calibrateInfo = null;
+            m_CameraController.calibrating = true;
+            browser.tabs.sendMessage(m_CameraController.activeTab, { type: 'ShowCalibrateScreen' });
+        default:
+            break;
+    }
+});
 
 browser.tabs.onActivated.addListener(activeTabInfo => {
     m_CameraController.changeActiveTab(activeTabInfo.tabId);
