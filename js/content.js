@@ -257,6 +257,8 @@ function addCheckmark() {
     img.style.bottom = "50%";
     img.style.transform = "translate(-50%, -50%)";
 
+    fadeIn(img); 
+
     if (divContainer) {
         divContainer.appendChild(img);
     }
