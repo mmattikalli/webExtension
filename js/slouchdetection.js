@@ -9,6 +9,7 @@ const SLOUCH_ATTRIBUTES = {
     "SLOUCH_DOWN": 1,
     "NONE": 2
 };
+let zoomEnabled = false; //Whether the zoom add-on is enabled
 
 class SlouchDetectEventHandler extends CameraControllerEventHandler {
     onFrame(frame, tab, faces) {
@@ -58,6 +59,19 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
         }
         case 'IsSlouchEnabled': {
             sendResponse(g_SlouchDetectionEventHandler !== null);
+            break;
+        }
+        case 'ToggleZoom': { //Listen for toggle of zoom checkbox
+            zoomEnabled = message.state;
+            if (zoomEnabled) {
+                browser.tabs.sendMessage(m_CameraController.activeTab, { type: 'ZoomEnabled' });
+            } else {
+                browser.tabs.sendMessage(m_CameraController.activeTab, { type: 'ZoomDisabled' });
+            }
+            break;
+        }
+        case 'IsZoomEnabled': {
+            sendResponse(zoomEnabled);
             break;
         }
     }

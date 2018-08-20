@@ -5,6 +5,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let slouchSwitch = document.getElementById("slouchSwitch");
     let slouchCheckbox = slouchSwitch.querySelector('input');
 
+    let extendedItemThree = document.getElementById("item3Extended");
+    let zoomSwitch = document.getElementById("zoomSwitch");
+    extendedItemThree.style.display = "none";
+    let zoomCheckbox = zoomSwitch.querySelector('input');
+
     // Enable the switch if face lock is enabled.
     browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
         faceCheckbox.checked = enabled;
@@ -15,7 +20,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     browser.runtime.sendMessage({ type: 'IsSlouchEnabled' }, enabled => {
-        slouchCheckbox.checked = enabled;
+        if (enabled) {
+            slouchCheckbox.checked = enabled;
+            extendedItemThree.style.display = "inline-block";
+        } else {
+            extendedItemThree.style.display = "none";
+        }
+    });
+
+    browser.runtime.sendMessage({ type: 'IsZoomEnabled' }, enabled => {
+        zoomCheckbox.checked = enabled;
     });
 
     faceCheckbox.addEventListener('click', () => {
@@ -32,9 +46,21 @@ document.addEventListener("DOMContentLoaded", () => {
         browser.runtime.sendMessage({ type: 'IsSlouchEnabled' }, enabled => {
             if (enabled) {
                 browser.runtime.sendMessage({ type: 'DisableSlouch' });
+                extendedItemThree.style.display = "none";
             } else {
                 browser.runtime.sendMessage({ type: 'EnableSlouch' });
                 alert('You have enabled Slouch Detection!');
+                extendedItemThree.style.display = "inline-block";
+            }
+        });
+    });
+
+    zoomCheckbox.addEventListener('click', () => {
+        browser.runtime.sendMessage({ type: 'IsZoomEnabled' }, enabled => {
+            if (enabled) {
+                browser.runtime.sendMessage({ type: 'ToggleZoom', state: false });
+            } else {
+                browser.runtime.sendMessage({ type: 'ToggleZoom', state: true });
             }
         });
     });
