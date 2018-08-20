@@ -35,6 +35,9 @@ const FADE_INTERVAL = 0.1;
 //Gets replaced when the ratio is increased, indicating user might need a more zoomed in screen
 let pastNum = null;
 
+//If the page zoom function is enabled
+let isZoomEnabled = false;
+
 /**
  * @param {HTMLVideoElement} video
  * @param {HTMLCanvasElement} canvas
@@ -147,10 +150,18 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         case "ZoomScreen":
             //If user is leaning forward to see the screen, zooming in will make it easier to see from a healthier position
             alert("scoot back");
-            if (((video.width - request.old.width) / (video.width - request.new.width)) > pastNum || pastNum === null) {
-                pastNum = ((video.width - request.old.width) / (video.width - request.new.width));
-                document.body.style.zoom = 100 * ((video.width - request.old.width) / (video.width - request.new.width)) + "%";
+            if (isZoomEnabled) {
+                if (((video.width - request.old.width) / (video.width - request.new.width)) > pastNum || pastNum === null) {
+                    pastNum = ((video.width - request.old.width) / (video.width - request.new.width));
+                    document.body.style.zoom = 100 * ((video.width - request.old.width) / (video.width - request.new.width)) + "%";
+                }
             }
+            break;
+        case "ZoomEnabled":
+            isZoomEnabled = true;
+            break;
+        case "ZoomDisabled":
+            isZoomEnabled = false;
             break;
         default:
             console.log("Invalid Request Type");
@@ -257,7 +268,7 @@ function addCheckmark() {
     img.style.bottom = "50%";
     img.style.transform = "translate(-50%, -50%)";
 
-    fadeIn(img); 
+    fadeIn(img);
 
     if (divContainer) {
         divContainer.appendChild(img);
