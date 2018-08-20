@@ -61,13 +61,14 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
             sendResponse(g_SlouchDetectionEventHandler !== null);
             break;
         }
-        case 'ToggleZoom': { //Listen for toggle of zoom checkbox
-            zoomEnabled = message.state;
-            if (zoomEnabled) {
-                browser.tabs.sendMessage(m_CameraController.activeTab, { type: 'ZoomEnabled' });
-            } else {
-                browser.tabs.sendMessage(m_CameraController.activeTab, { type: 'ZoomDisabled' });
-            }
+        case 'SetZoomEnabled': {
+            zoomEnabled = true;
+            browser.tabs.sendMessage(m_CameraController.activeTab, { type: 'ZoomEnabled' });
+            break;
+        }
+        case 'SetZoomDisabled': {
+            zoomEnabled = false;
+            browser.tabs.sendMessage(m_CameraController.activeTab, { type: 'ZoomDisabled' });
             break;
         }
         case 'IsZoomEnabled': {

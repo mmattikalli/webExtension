@@ -58,9 +58,9 @@ document.addEventListener("DOMContentLoaded", () => {
     zoomCheckbox.addEventListener('click', () => {
         browser.runtime.sendMessage({ type: 'IsZoomEnabled' }, enabled => {
             if (enabled) {
-                browser.runtime.sendMessage({ type: 'ToggleZoom', state: false });
+                browser.runtime.sendMessage({ type: 'SetZoomDisabled' });
             } else {
-                browser.runtime.sendMessage({ type: 'ToggleZoom', state: true });
+                browser.runtime.sendMessage({ type: 'SetZoomEnabled' });
             }
         });
     });
