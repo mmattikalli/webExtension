@@ -145,11 +145,11 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             // hideCalibrateScreenTimer
             break;
         case "AlertSlouch":
-            alert("You are slouching");
+            notifyMe("You are slouching");
             break;
         case "ZoomScreen":
             //If user is leaning forward to see the screen, zooming in will make it easier to see from a healthier position
-            alert("scoot back");
+            notifyMe("Scoot Back")
             if (isZoomEnabled) {
                 if (((video.width - request.old.width) / (video.width - request.new.width)) > pastNum || pastNum === null) {
                     pastNum = ((video.width - request.old.width) / (video.width - request.new.width));
@@ -450,3 +450,29 @@ observer.observe(
         subtree: true
     }
 );
+
+function notifyMe(message) {
+    // Let's check if the browser supports notifications
+    if (!("Notification" in window)) {
+        alert("This browser does not support desktop notification");
+    }
+
+    // Let's check whether notification permissions have already been granted
+    else if (Notification.permission === "granted") {
+        // If it's okay let's create a notification
+        var notification = new Notification(message);
+    }
+
+    // Otherwise, we need to ask the user for permission
+    else if (Notification.permission !== "denied") {
+        Notification.requestPermission(function (permission) {
+            // If the user accepts, let's create a notification
+            if (permission === "granted") {
+                var notification = new Notification(message);
+            }
+        });
+    }
+
+    // At last, if the user has denied notifications, and you 
+    // want to be respectful there is no need to bother them any more.
+}
