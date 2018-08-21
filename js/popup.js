@@ -10,6 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
     extendedItemThree.style.display = "none";
     let zoomCheckbox = zoomSwitch.querySelector('input');
 
+    let calibrateButton = document.getElementById('calibrate');
+
     // Enable the switch if face lock is enabled.
     browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
         faceCheckbox.checked = enabled;
@@ -66,13 +68,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Calibrate button
-    document.getElementById('calibrate').addEventListener('click', () => {
+    calibrateButton.addEventListener('click', () => {
         browser.runtime.sendMessage({ type: 'Recalibrate' });
     });
 
     setInterval(() => {
         browser.runtime.sendMessage({ type: 'IsLocked' }, locked => {
             faceCheckbox.disabled = locked;
+            calibrateButton.disabled = locked;
         });
     }, 500);
 });
