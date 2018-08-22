@@ -38,6 +38,11 @@ let pastNum = null;
 //If the page zoom function is enabled
 let isZoomEnabled = false;
 
+//set to create a max interval between notification alerts
+let lastNotificationTime = Date.now();
+
+const TIME_BETWEEN_NOTIFICATIONS = 10000;
+
 /**
  * @param {HTMLVideoElement} video
  * @param {HTMLCanvasElement} canvas
@@ -145,11 +150,11 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             // hideCalibrateScreenTimer
             break;
         case "AlertSlouch":
-            alert("You are slouching");
+            sendNotification("You are slouching");
             break;
         case "ZoomScreen":
             //If user is leaning forward to see the screen, zooming in will make it easier to see from a healthier position
-            alert("scoot back");
+            sendNotification("Scoot Back")
             if (isZoomEnabled) {
                 if (((video.width - request.old.width) / (video.width - request.new.width)) > pastNum || pastNum === null) {
                     pastNum = ((video.width - request.old.width) / (video.width - request.new.width));
@@ -450,3 +455,35 @@ observer.observe(
         subtree: true
     }
 );
+
+
+//Add a way to not over spam notifications
+//Fix math for face zoom
+//Help jacob on narrator
+function sendNotification(message) {
+    // Let's check if the browser supports notifications
+    if (!("Notification" in window)) {
+        alert("This browser does not support desktop notification");
+    }
+    else if (Notification.permission === "granted") { // Let's check whether notification permissions have already been granted
+        // If it's okay let's create a notification
+        if (Date.now() > lastNotificationTime + TIME_BETWEEN_NOTIFICATIONS) {
+            var notification = new Notification(message);
+            lastNotificationTime = Date.now();
+        }
+    }
+    else if (Notification.permission !== "denied") { // Otherwise, we need to ask the user for permission
+        Notification.requestPermission(function (permission) {
+            // If the user accepts, let's create a notification
+            if (permission === "granted") {
+                if (Date.now() > lastNotificationTime + TIME_BETWEEN_NOTIFICATIONS) {
+                    var notification = new Notification(message, { body: "To protect the integrity of your back and neck, we recommend you return to your calibrated position or go for a walk" });
+                    lastNotificationTime = Date.now();
+                }
+            }
+        });
+    }
+
+    // At last, if the user has denied notifications, and you 
+    // want to be respectful there is no need to bother them any more.
+}
