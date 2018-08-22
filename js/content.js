@@ -39,9 +39,9 @@ let pastNum = null;
 let isZoomEnabled = false;
 
 //set to create a max interval between notification alerts
-let time = Date.now();
+let lastNotificationTime = Date.now();
 
-const TIME_IN_BETWEEN = 10000;
+const TIME_BETWEEN_NOTIFICATIONS = 10000;
 
 /**
  * @param {HTMLVideoElement} video
@@ -150,11 +150,11 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             // hideCalibrateScreenTimer
             break;
         case "AlertSlouch":
-            notifyMe("You are slouching");
+            sendNotification("You are slouching");
             break;
         case "ZoomScreen":
             //If user is leaning forward to see the screen, zooming in will make it easier to see from a healthier position
-            notifyMe("Scoot Back")
+            sendNotification("Scoot Back")
             if (isZoomEnabled) {
                 if (((video.width - request.old.width) / (video.width - request.new.width)) > pastNum || pastNum === null) {
                     pastNum = ((video.width - request.old.width) / (video.width - request.new.width));
@@ -460,35 +460,27 @@ observer.observe(
 //Add a way to not over spam notifications
 //Fix math for face zoom
 //Help jacob on narrator
-function notifyMe(message) {
+function sendNotification(message) {
     // Let's check if the browser supports notifications
     if (!("Notification" in window)) {
         alert("This browser does not support desktop notification");
     }
-
-    // Let's check whether notification permissions have already been granted
-    else if (Notification.permission === "granted") {
+    else if (Notification.permission === "granted") { // Let's check whether notification permissions have already been granted
         // If it's okay let's create a notification
-        if (Date.now() > time + TIME_IN_BETWEEN) {
+        if (Date.now() > lastNotificationTime + TIME_BETWEEN_NOTIFICATIONS) {
             var notification = new Notification(message);
-            time = Date.now();
-            console.log("new notif fired");
+            lastNotificationTime = Date.now();
         }
-        console.log("alert sent");
     }
-
-    // Otherwise, we need to ask the user for permission
-    else if (Notification.permission !== "denied") {
+    else if (Notification.permission !== "denied") { // Otherwise, we need to ask the user for permission
         Notification.requestPermission(function (permission) {
             // If the user accepts, let's create a notification
             if (permission === "granted") {
-                if (Date.now() > time + TIME_IN_BETWEEN) {
+                if (Date.now() > lastNotificationTime + TIME_BETWEEN_NOTIFICATIONS) {
                     var notification = new Notification(message, { body: "To protect the integrity of your back and neck, we recommend you return to your calibrated position or go for a walk" });
-                    time = Date.now();
-                    console.log("new notif fired");
+                    lastNotificationTime = Date.now();
                 }
             }
-            console.log("alert sent");
         });
     }
 
