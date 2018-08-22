@@ -39,7 +39,7 @@ let pastNum = null;
 let isZoomEnabled = false;
 
 //set to create a max interval between notification alerts
-let currentTime = Date.now();
+let lastSetTime = Date.now();
 
 const TIME_IN_BETWEEN = 10000;
 
@@ -467,18 +467,18 @@ function sendNotification(message) {
     }
     else if (Notification.permission === "granted") { // Let's check whether notification permissions have already been granted
         // If it's okay let's create a notification
-        if (Date.now() > currentTime + TIME_IN_BETWEEN) {
+        if (Date.now() > lastSetTime + TIME_IN_BETWEEN) {
             var notification = new Notification(message);
-            currentTime = Date.now();
+            lastSetTime = Date.now();
         }
     }
     else if (Notification.permission !== "denied") { // Otherwise, we need to ask the user for permission
         Notification.requestPermission(function (permission) {
             // If the user accepts, let's create a notification
             if (permission === "granted") {
-                if (Date.now() > currentTime + TIME_IN_BETWEEN) {
+                if (Date.now() > lastSetTime + TIME_IN_BETWEEN) {
                     var notification = new Notification(message, { body: "To protect the integrity of your back and neck, we recommend you return to your calibrated position or go for a walk" });
-                    currentTime = Date.now();
+                    lastSetTime = Date.now();
                 }
             }
         });
