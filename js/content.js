@@ -70,13 +70,9 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     switch (request.type) {
         case 'StartCapture':
-            console.log(sender.tab ?
-                "from a content script:" + sender.tab.url :
-                "from the extension");
-
             setupVid();
             break;
-        case "EndCapture": //Does it by itself
+        case "EndCapture":
             video.remove();
             break;
         case 'GetFrame':
@@ -89,34 +85,14 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         case "Unblur":
             stopCSSInterval();
             isBlurred = false;
-            removeBlur().then(() => {
-                browser.runtime.sendMessage({
-                    type: 'IsLockEnabled'
-                }, enabled => {
-                    if (enabled) {
-                        setupVid();
-                    }
-                });
-            });
+            removeBlur();
             break;
         case "Blur":
             addBlur("Locked");
             setCSSInterval();
-            navigator.mediaDevices.getUserMedia({ //Get webcam stream
-                video: true
-            }).then(function (stream) { //set video element's src to the webcam stream
-                m_Stream = stream;
-                video.srcObject = stream;
-                let vidTrack = stream.getVideoTracks()[0];
-                video.width = vidTrack.getSettings().width;
-                video.height = vidTrack.getSettings().height;
-            }).catch(function (e) {
-                console.log(e);
-            }); //error catch
             isBlurred = true;
             break;
         case "ShowCalibrateScreen":
-            document.body.removeChild(video);
             addBlur("Calibrating...");
             addSpinnerAnimation();
             isBlurred = true;
@@ -128,23 +104,7 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
             // timeout allows checkmark to load
             setTimeout(() => {
-                removeBlur().then(() => {
-                    browser.runtime.sendMessage({
-                        type: 'IsLockEnabled'
-                    }, enabled => {
-                        if (enabled) {
-                            setupVid();
-                        } else {
-                            browser.runtime.sendMessage({
-                                type: 'IsSlouchEnabled'
-                            }, enabled => {
-                                if (enabled) {
-                                    setupVid();
-                                }
-                            });
-                        }
-                    });
-                });
+                removeBlur();
             }, 1500);
             // create variables for timers, or arbitrary numbers
             // hideCalibrateScreenTimer
@@ -177,22 +137,20 @@ function setupVid() {
     // sets up video element
     video.autoplay = true;
     video.style.display = "none";
-    video.style.width = "450px";
-    video.style.height = "450px";
-    video.style.borderRadius = "350px";
 
     //Getting the video element, first checking if the user has an accessible webcam
-    navigator.mediaDevices.getUserMedia({ //Get webcam stream
+    m_Stream = navigator.mediaDevices.getUserMedia({ //Get webcam stream
         video: true
-    }).then(function (stream) { //set video elemnt's src to the webcam stream
-        m_Stream = stream;
+    });
+
+    m_Stream.then((stream) => { //set video elemnt's src to the webcam stream
         video.srcObject = stream;
         let vidTrack = stream.getVideoTracks()[0];
         video.width = vidTrack.getSettings().width;
         video.height = vidTrack.getSettings().height;
-    }).catch(function (e) {
-        console.log(e);
-    }); //error catch
+    }).catch((e) => {
+        console.error(e);
+    });
 
     document.body.appendChild(video);
 }
@@ -242,11 +200,27 @@ function addBlur(onScreenText) {
 
     divContainer.appendChild(para);
 
+    let video = document.createElement('video');
+    video.autoplay = true;
+    video.style.display = "inherit";
+    video.style.width = "450px";
+    video.style.height = "450px";
+    video.style.borderRadius = "350px";
+
+    m_Stream.then(function (stream) { //set video elemnt's src to the webcam stream
+        video.srcObject = stream;
+        let vidTrack = stream.getVideoTracks()[0];
+        video.width = vidTrack.getSettings().width;
+        video.height = vidTrack.getSettings().height;
+        video.style.width = `${video.width}px`;
+        video.style.height = `${video.height}px`;
+    });
+    divContainer.insertBefore(video, para);
+
     // video attached to divContainer, attached to webpage
     document.body.appendChild(divContainer);
     fadeIn(divContainer).then(() => {
-        video.style.display = 'inherit';
-        divContainer.insertBefore(video, para);
+
     });
 }
 
@@ -424,10 +398,11 @@ var observer = new MutationObserver(function (mutations, observer) {
                     if (node.nodeName === "DIV") { //Only put back element with video in it
                         if (Array.from(node.childNodes).includes(video)) {
                             document.body.appendChild(node);
-                            navigator.mediaDevices.getUserMedia({ //Get webcam stream
+                            m_Stream = navigator.mediaDevices.getUserMedia({ //Get webcam stream
                                 video: true
-                            }).then(function (stream) { //set video element's src to the webcam stream
-                                m_Stream = stream;
+                            });
+
+                            m_Stream.then(function (stream) { //set video element's src to the webcam stream
                                 video.srcObject = stream;
                                 let vidTrack = stream.getVideoTracks()[0];
                                 video.width = vidTrack.getSettings().width;
@@ -481,6 +456,6 @@ function sendNotification(message) {
         });
     }
 
-    // At last, if the user has denied notifications, and you 
+    // At last, if the user has denied notifications, and you
     // want to be respectful there is no need to bother them any more.
 }
