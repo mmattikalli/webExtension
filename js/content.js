@@ -38,6 +38,11 @@ let pastNum = null;
 //If the page zoom function is enabled
 let isZoomEnabled = false;
 
+//set to create a max interval between notification alerts
+let time = Date.now();
+
+const TIME_IN_BETWEEN = 10000;
+
 /**
  * @param {HTMLVideoElement} video
  * @param {HTMLCanvasElement} canvas
@@ -451,6 +456,10 @@ observer.observe(
     }
 );
 
+
+//Add a way to not over spam notifications
+//Fix math for face zoom
+//Help jacob on narrator
 function notifyMe(message) {
     // Let's check if the browser supports notifications
     if (!("Notification" in window)) {
@@ -460,7 +469,12 @@ function notifyMe(message) {
     // Let's check whether notification permissions have already been granted
     else if (Notification.permission === "granted") {
         // If it's okay let's create a notification
-        var notification = new Notification(message);
+        if (Date.now() > time + TIME_IN_BETWEEN) {
+            var notification = new Notification(message);
+            time = Date.now();
+            console.log("new notif fired");
+        }
+        console.log("alert sent");
     }
 
     // Otherwise, we need to ask the user for permission
@@ -468,8 +482,13 @@ function notifyMe(message) {
         Notification.requestPermission(function (permission) {
             // If the user accepts, let's create a notification
             if (permission === "granted") {
-                var notification = new Notification(message);
+                if (Date.now() > time + TIME_IN_BETWEEN) {
+                    var notification = new Notification(message, { body: "To protect the integrity of your back and neck, we recommend you return to your calibrated position or go for a walk" });
+                    time = Date.now();
+                    console.log("new notif fired");
+                }
             }
+            console.log("alert sent");
         });
     }
 
