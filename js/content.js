@@ -223,10 +223,6 @@ function addBlur(onScreenText) {
     divContainer.style.transform = "translate(-50%, -50%)";
     divContainer.style.lineHeight = "200%";
 
-    // adds video to divContainer
-    // video.style.display = "inherit";
-    // divContainer.appendChild(video);
-
     // formats text to put on screen with video element
     let para = document.createElement('h1');
     para.style.all = "initial";
