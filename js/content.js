@@ -39,9 +39,9 @@ let pastNum = null;
 let isZoomEnabled = false;
 
 //set to create a max interval between notification alerts
-let lastSetTime = Date.now();
+let lastNotificationTime = Date.now();
 
-const TIME_IN_BETWEEN = 10000;
+const TIME_BETWEEN_NOTIFICATIONS = 10000;
 
 /**
  * @param {HTMLVideoElement} video
@@ -467,18 +467,18 @@ function sendNotification(message) {
     }
     else if (Notification.permission === "granted") { // Let's check whether notification permissions have already been granted
         // If it's okay let's create a notification
-        if (Date.now() > lastSetTime + TIME_IN_BETWEEN) {
+        if (Date.now() > lastNotificationTime + TIME_BETWEEN_NOTIFICATIONS) {
             var notification = new Notification(message);
-            lastSetTime = Date.now();
+            lastNotificationTime = Date.now();
         }
     }
     else if (Notification.permission !== "denied") { // Otherwise, we need to ask the user for permission
         Notification.requestPermission(function (permission) {
             // If the user accepts, let's create a notification
             if (permission === "granted") {
-                if (Date.now() > lastSetTime + TIME_IN_BETWEEN) {
+                if (Date.now() > lastNotificationTime + TIME_BETWEEN_NOTIFICATIONS) {
                     var notification = new Notification(message, { body: "To protect the integrity of your back and neck, we recommend you return to your calibrated position or go for a walk" });
-                    lastSetTime = Date.now();
+                    lastNotificationTime = Date.now();
                 }
             }
         });
