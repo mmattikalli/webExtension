@@ -203,8 +203,6 @@ function setupVid() {
  * Blurs the current webpage
  */
 function addBlur(onScreenText) {
-    video.remove();
-
     divContainer = document.createElement("div");
     // clears preset div settings
     divContainer.style.clear = "both";
@@ -230,10 +228,6 @@ function addBlur(onScreenText) {
     divContainer.style.transform = "translate(-50%, -50%)";
     divContainer.style.lineHeight = "200%";
 
-    // adds video to divContainer
-    video.style.display = "inherit";
-    divContainer.appendChild(video);
-
     // formats text to put on screen with video element
     let para = document.createElement('h1');
     para.style.all = "initial";
@@ -250,7 +244,10 @@ function addBlur(onScreenText) {
 
     // video attached to divContainer, attached to webpage
     document.body.appendChild(divContainer);
-    fadeIn(divContainer);
+    fadeIn(divContainer).then(() => {
+        video.style.display = 'inherit';
+        divContainer.insertBefore(video, para);
+    });
 }
 
 /**
@@ -284,9 +281,12 @@ function addCheckmark() {
  * Function removing both the check and the blur
  */
 function removeBlur() {
-    return fadeOut(divContainer).then(() => {
-        divContainer.remove();
-        divContainer = null;
+    let container = divContainer;
+
+    divContainer = null;
+
+    return fadeOut(container).then(() => {
+        container.remove();
     });
 }
 
