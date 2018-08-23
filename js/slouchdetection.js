@@ -93,6 +93,7 @@ function slouchDetect(faces) {
         y: faces[0].faceRectangle.top + ((faces[0].faceRectangle.height) / 2),
     }
 
+    //Make conditionals dynamic
     if (faces[0].faceRectangle.height > (m_CameraController.calibrateInfo.face.faceRectangle.height * 1.5) || faces[0].faceRectangle.width > ((m_CameraController.calibrateInfo.face.faceRectangle.width) * 1.5)) {
         return SLOUCH_ATTRIBUTES.FORWARD_LEANING_SLOUCH; //If face size increases, indicating a user leaning in/slouching forward
     } else if (faceCenter.y - calibratedFaceCenter.y > (m_CameraController.calibrateInfo.face.faceRectangle.height * .25)) {

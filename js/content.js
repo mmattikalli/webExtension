@@ -123,11 +123,6 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             //If user is leaning forward to see the screen, zooming in will make it easier to see from a healthier position
             sendNotification("Scoot Back")
             if (isZoomEnabled) {
-                // if (((video.width - request.old.width) / (video.width - request.new.width)) > pastNum || pastNum === null) {
-                //     console.log(((video.width - request.old.width) / (video.width - request.new.width)));
-                //     pastNum = ((video.width - request.old.width) / (video.width - request.new.width));
-                //     document.body.style.zoom = 100 * ((video.width - request.old.width) / (video.width - request.new.width)) + "%";
-                // }
                 if (Math.sqrt((request.new.height * request.new.width) / (request.old.width * request.old.width)) > pastNum || pastNum === null) {
                     console.log(Math.sqrt((request.new.height * request.new.width) / (request.old.width * request.old.width)));
                     pastNum = Math.sqrt((request.new.height * request.new.width) / (request.old.width * request.old.width))
