@@ -34,6 +34,7 @@ const FADE_INTERVAL = 0.1;
 //Stores the ratio of the previous frame's face and the video.width
 //Gets replaced when the ratio is increased, indicating user might need a more zoomed in screen
 let pastNum = null;
+//On page refresh, reset pastNum
 
 //If the page zoom function is enabled
 let isZoomEnabled = false;
@@ -127,6 +128,9 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             break;
         case "ZoomDisabled":
             isZoomEnabled = false;
+            break;
+        case "ResetZoom":
+            pastNum = null;
             break;
         default:
             console.log("Invalid Request Type");
