@@ -2,8 +2,6 @@
 /// <reference path="cameracontroller.js" />
 /// <reference path="face.js" />
 
-const LOWERED_FACE_DISTANCE = 30;
-const TOO_BIG_FACE_SIZE = 200;
 const SLOUCH_ATTRIBUTES = {
     "FORWARD_LEANING_SLOUCH": 0,
     "SLOUCH_DOWN": 1,
@@ -95,9 +93,10 @@ function slouchDetect(faces) {
         y: faces[0].faceRectangle.top + ((faces[0].faceRectangle.height) / 2),
     }
 
-    if (faces[0].faceRectangle.height > TOO_BIG_FACE_SIZE || faces[0].faceRectangle.width > TOO_BIG_FACE_SIZE) {
+    //Make conditionals dynamic
+    if (faces[0].faceRectangle.height > (m_CameraController.calibrateInfo.face.faceRectangle.height * 1.5) || faces[0].faceRectangle.width > ((m_CameraController.calibrateInfo.face.faceRectangle.width) * 1.5)) {
         return SLOUCH_ATTRIBUTES.FORWARD_LEANING_SLOUCH; //If face size increases, indicating a user leaning in/slouching forward
-    } else if (faceCenter.y - calibratedFaceCenter.y > LOWERED_FACE_DISTANCE) {
+    } else if (faceCenter.y - calibratedFaceCenter.y > (m_CameraController.calibrateInfo.face.faceRectangle.height * .25)) {
         return SLOUCH_ATTRIBUTES.SLOUCH_DOWN; //If center of face is lowered, indicating a hunch in the user's back
     }
     return SLOUCH_ATTRIBUTES.NONE; //If neither of the above conditions are satisfied

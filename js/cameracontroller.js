@@ -136,7 +136,7 @@ let m_CameraController = new CameraController();
 setInterval(faceJs => {
     if (m_CameraController.getActiveTab() && m_CameraController.hasEventHandlers()) {
         browser.tabs.sendMessage(m_CameraController.getActiveTab(), { type: 'GetFrame' }, frame => {
-            let bytes = atob(frame);
+            let bytes = atob(frame.data); //get the image data
             let buffer = new ArrayBuffer(bytes.length);
             let byteArr = new Uint8Array(buffer);
 
@@ -154,7 +154,7 @@ setInterval(faceJs => {
                 if (m_CameraController.calibrating) {
                     if (faces.length > 0) {
                         m_CameraController.calibrating = false;
-                        m_CameraController.calibrateInfo = { face: faces[0], frame: byteArr };
+                        m_CameraController.calibrateInfo = { face: faces[0], frame: byteArr, dimensions: { x: frame.width, y: frame.height } }; //Send Video Dimensions
                         m_CameraController.getEventHandlers().forEach(handler => {
                             handler.onCalibration(byteArr, m_CameraController.getActiveTab(), faces[0]);
                         });
