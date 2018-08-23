@@ -54,6 +54,8 @@ function captureFrame(video, canvas) {
     console.log(`Video size: ${video.width}x${video.height}`);
     canvas.width = video.width;
     canvas.height = video.height;
+    let width = canvas.width;
+    let height = canvas.height;
 
     document.body.appendChild(canvas);
     canvas.getContext('2d').drawImage(video, 0, 0);
@@ -62,7 +64,11 @@ function captureFrame(video, canvas) {
     let data = canvas.toDataURL('image/png').split(',')[1];
     document.body.removeChild(canvas);
 
-    return data;
+    return {
+        "data": data,
+        "width": width,
+        "height": height
+    }
 }
 
 //Listener that appends a video element with webcam stream as src
@@ -117,9 +123,15 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
             //If user is leaning forward to see the screen, zooming in will make it easier to see from a healthier position
             sendNotification("Scoot Back")
             if (isZoomEnabled) {
-                if (((video.width - request.old.width) / (video.width - request.new.width)) > pastNum || pastNum === null) {
-                    pastNum = ((video.width - request.old.width) / (video.width - request.new.width));
-                    document.body.style.zoom = 100 * ((video.width - request.old.width) / (video.width - request.new.width)) + "%";
+                // if (((video.width - request.old.width) / (video.width - request.new.width)) > pastNum || pastNum === null) {
+                //     console.log(((video.width - request.old.width) / (video.width - request.new.width)));
+                //     pastNum = ((video.width - request.old.width) / (video.width - request.new.width));
+                //     document.body.style.zoom = 100 * ((video.width - request.old.width) / (video.width - request.new.width)) + "%";
+                // }
+                if (Math.sqrt((request.new.height * request.new.width) / (request.old.width * request.old.width)) > pastNum || pastNum === null) {
+                    console.log(Math.sqrt((request.new.height * request.new.width) / (request.old.width * request.old.width)));
+                    pastNum = Math.sqrt((request.new.height * request.new.width) / (request.old.width * request.old.width))
+                    document.body.style.zoom = 100 * Math.sqrt((request.new.height * request.new.width) / (request.old.width * request.old.width)) + "%";
                 }
             }
             break;
