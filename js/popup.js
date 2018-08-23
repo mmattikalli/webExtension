@@ -5,9 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let slouchSwitch = document.getElementById("slouchSwitch");
     let slouchCheckbox = slouchSwitch.querySelector('input');
 
-    let extendedItemThree = document.getElementById("item3Extended");
-    let zoomSwitch = document.getElementById("zoomSwitch");
-    extendedItemThree.style.display = "none";
+    let zoomSwitch = document.getElementById("zoomSwitch"); 
     let zoomCheckbox = zoomSwitch.querySelector('input');
 
     let calibrateButton = document.getElementById('calibrate');
@@ -21,19 +19,19 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    browser.runtime.sendMessage({ type: 'IsSlouchEnabled' }, enabled => {
-        if (enabled) {
-            slouchCheckbox.checked = enabled;
-            extendedItemThree.style.display = "inline-block";
-        } else {
-            extendedItemThree.style.display = "none";
-        }
+    browser.runtime.sendMessage({ type: 'IsSlouchEnabled' }, slouchEnabled => {
+        slouchCheckbox.checked = slouchEnabled;
+        zoomCheckbox.disabled = !slouchEnabled; 
+
+        //extendedItemThree.style.display = "inline-block";
+        browser.runtime.sendMessage({ type: 'IsZoomEnabled' }, zoomEnabled => {
+            zoomCheckbox.checked = zoomEnabled;
+        });
+    
+        
     });
 
-    browser.runtime.sendMessage({ type: 'IsZoomEnabled' }, enabled => {
-        zoomCheckbox.checked = enabled;
-    });
-
+   
     faceCheckbox.addEventListener('click', () => {
         browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
             if (enabled) {
@@ -48,11 +46,11 @@ document.addEventListener("DOMContentLoaded", () => {
         browser.runtime.sendMessage({ type: 'IsSlouchEnabled' }, enabled => {
             if (enabled) {
                 browser.runtime.sendMessage({ type: 'DisableSlouch' });
-                extendedItemThree.style.display = "none";
+                zoomCheckbox.disabled = true; 
             } else {
-                browser.runtime.sendMessage({ type: 'EnableSlouch' });
+                browser.runtime.sendMessage({ type: 'EnableSlouch' }); 
                 alert('You have enabled Slouch Detection!');
-                extendedItemThree.style.display = "inline-block";
+                zoomCheckbox.disabled = false; 
             }
         });
     });
@@ -76,6 +74,14 @@ document.addEventListener("DOMContentLoaded", () => {
         browser.runtime.sendMessage({ type: 'IsLocked' }, locked => {
             faceCheckbox.disabled = locked;
             calibrateButton.disabled = locked;
+            slouchCheckbox.disabled = locked; 
+            if (locked) {
+                zoomCheckbox.disabled = true; 
+            } else {
+                browser.runtime.sendMessage({ type: 'IsSlouchEnabled'}, enabled => {
+                    zoomCheckbox.disabled = !enabled; 
+                }); 
+            }
         });
     }, 500);
 });
