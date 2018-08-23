@@ -37,6 +37,12 @@ class SlouchDetectEventHandler extends CameraControllerEventHandler {
             }
         }
     }
+    onTabActivated(tab) {
+        browser.tabs.sendMessage(tab, { type: 'ResetZoom' });
+        if (zoomEnabled) {
+            browser.tabs.sendMessage(tab, { type: 'ZoomEnabled' });
+        }
+    }
 }
 
 let g_SlouchDetectionEventHandler = null;
