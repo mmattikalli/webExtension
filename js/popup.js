@@ -5,9 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let slouchSwitch = document.getElementById("slouchSwitch");
     let slouchCheckbox = slouchSwitch.querySelector('input');
 
-    //let extendedItemThree = document.getElementById("item3Extended");
-    let zoomSwitch = document.getElementById("zoomSwitch");
-    //extendedItemThree.style.display = "inline-block"; 
+    let zoomSwitch = document.getElementById("zoomSwitch"); 
     let zoomCheckbox = zoomSwitch.querySelector('input');
 
     let calibrateButton = document.getElementById('calibrate');
@@ -49,12 +47,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if (enabled) {
                 browser.runtime.sendMessage({ type: 'DisableSlouch' });
                 zoomCheckbox.disabled = true; 
-                //extendedItemThree.style.display = "inline-block";
             } else {
                 browser.runtime.sendMessage({ type: 'EnableSlouch' }); 
                 alert('You have enabled Slouch Detection!');
                 zoomCheckbox.disabled = false; 
-                //extendedItemThree.style.display = "inline-block";
             }
         });
     });
