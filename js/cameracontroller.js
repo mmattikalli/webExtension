@@ -175,9 +175,12 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log(message.type);
     switch (message.type) {
         case 'Recalibrate':
-            m_CameraController.calibrateInfo = null;
-            m_CameraController.calibrating = true;
-            browser.tabs.sendMessage(m_CameraController.activeTab, { type: 'ShowCalibrateScreen' });
+            if (m_CameraController.hasEventHandlers()) {
+                m_CameraController.calibrateInfo = null;
+                m_CameraController.calibrating = true;
+                browser.tabs.sendMessage(m_CameraController.activeTab, { type: 'ShowCalibrateScreen' });
+            }
+            break;
         default:
             break;
     }
