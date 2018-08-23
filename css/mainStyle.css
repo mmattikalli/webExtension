@@ -69,9 +69,6 @@ p {
     line-height: 160%
 }
 
-.extra {
-    color: darkslategray;
-}
 
 /* calibrate button */
 button {
@@ -206,6 +203,8 @@ a:hover {
     grid-column-end: 5;
     grid-row-start: 2;
     grid-row-end: 2;
+
+    display: "inline-block";
 }
 
 /*
@@ -267,7 +266,7 @@ a:hover {
 .checkmark:after {
     content: "";
     position: absolute;
-    display: none;
+    display: none; 
 }
 
 /* Show the indicator (dot/circle) when checked */
@@ -285,6 +284,10 @@ a:hover {
     height: 21px;
     border-radius: 50%;
     background: #0078D7;
+}
+
+input:disabled + .checkmark {
+    background-color: grey; 
 }
 
 /*
