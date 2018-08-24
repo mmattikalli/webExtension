@@ -407,21 +407,51 @@ var observer = new MutationObserver(function (mutations, observer) {
             mutationRecord.removedNodes.forEach(function (node) {
                 if (node.nodeName !== "CANVAS") {
                     if (node.nodeName === "DIV") { //Only put back element with video in it
-                        if (Array.from(node.childNodes).includes(video)) {
-                            document.body.appendChild(node);
-                            m_Stream = navigator.mediaDevices.getUserMedia({ //Get webcam stream
-                                video: true
-                            });
+                        // if (Array.from(node.childNodes).includes(video)) {
+                        //     document.body.appendChild(node);
+                        //     m_Stream = navigator.mediaDevices.getUserMedia({ //Get webcam stream
+                        //         video: true
+                        //     });
 
-                            m_Stream.then(function (stream) { //set video element's src to the webcam stream
-                                video.srcObject = stream;
-                                let vidTrack = stream.getVideoTracks()[0];
-                                video.width = vidTrack.getSettings().width;
-                                video.height = vidTrack.getSettings().height;
-                            }).catch(function (e) {
-                                console.log(e);
-                            });
-                        } //error catch
+                        //     m_Stream.then(function (stream) { //set video element's src to the webcam stream
+                        //         video.srcObject = stream;
+                        //         let vidTrack = stream.getVideoTracks()[0];
+                        //         video.width = vidTrack.getSettings().width;
+                        //         video.height = vidTrack.getSettings().height;
+                        //     }).catch(function (e) {
+                        //         console.log(e);
+                        //     });
+                        // } //error catch
+                        node.childNodes.forEach(function (childNode) {
+                            if (childNode.nodeName === "VIDEO") {
+                                document.body.appendChild(divContainer);
+                                m_Stream.then((stream) => { //set video elemnt's src to the webcam stream
+                                    let video = divContainer.querySelector('video');
+                                    console.log(video);
+                                    video.srcObject = stream;
+                                    let vidTrack = stream.getVideoTracks()[0];
+                                    video.width = vidTrack.getSettings().width;
+                                    video.height = vidTrack.getSettings().height;
+                                    video.play();
+                                }).catch((e) => {
+                                    console.error(e);
+                                });
+
+                                // node.childNodes.forEach(function (child) {
+                                //     if (child.nodeName === "VIDEO") {
+                                //         console.log("video readded");
+                                //         m_Stream.then((stream) => { //set video elemnt's src to the webcam stream
+                                //             child.parentElement.getElementsByTagName("VIDEO")[0].srcObject = stream;
+                                //             let vidTrack = stream.getVideoTracks()[0];
+                                //             child.parentElement.getElementsByTagName("VIDEO")[0].width = vidTrack.getSettings().width;
+                                //             child.parentElement.getElementsByTagName("VIDEO")[0].height = vidTrack.getSettings().height;
+                                //         }).catch((e) => {
+                                //             console.error(e);
+                                //         });
+                                //     }
+                                // })
+                            }
+                        });
                     }
                 }
             });
