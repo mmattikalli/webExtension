@@ -92,10 +92,10 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         case "Unblur":
             stopCSSInterval();
             isBlurred = false;
-            removeBlur(message.shouldFade);
+            removeBlur(request.shouldFade);
             break;
         case "Blur":
-            addBlur("Locked", message.shouldFade);
+            addBlur("Locked", request.shouldFade);
             setCSSInterval();
             isBlurred = true;
             break;
