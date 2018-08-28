@@ -92,10 +92,10 @@ browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
         case "Unblur":
             stopCSSInterval();
             isBlurred = false;
-            removeBlur();
+            removeBlur(message.shouldFade);
             break;
         case "Blur":
-            addBlur("Locked");
+            addBlur("Locked", message.shouldFade);
             setCSSInterval();
             isBlurred = true;
             break;
@@ -171,7 +171,7 @@ function setupVid() {
  * Creates a new div to append video and text
  * Blurs the current webpage
  */
-function addBlur(onScreenText) {
+function addBlur(onScreenText, shouldFade) {
     divContainer = document.createElement("div");
     // clears preset div settings
     divContainer.style.clear = "both";
@@ -230,9 +230,13 @@ function addBlur(onScreenText) {
 
     // video attached to divContainer, attached to webpage
     document.body.appendChild(divContainer);
-    fadeIn(divContainer).then(() => {
+    if (shouldFade) {
+        fadeIn(divContainer).then(() => {
 
-    });
+        });
+    } else {
+
+    }
 }
 
 /**
@@ -265,14 +269,19 @@ function addCheckmark() {
 /**
  * Function removing both the check and the blur
  */
-function removeBlur() {
+function removeBlur(shouldFade) {
     let container = divContainer;
 
     divContainer = null;
-
-    return fadeOut(container).then(() => {
+    if (shouldFade) {
+        return fadeOut(container).then(() => {
+            container.remove();
+        });
+    } else {
         container.remove();
-    });
+        return Promise.resolve();
+    }
+
 }
 
 /**
