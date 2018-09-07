@@ -36,10 +36,10 @@ class FaceLockEventHandler extends CameraControllerEventHandler {
 
             if (foundMatch && this.locked) {
                 this.locked = false;
-                browser.tabs.sendMessage(tab, { type: 'Unblur', shouldFade: true });
+                chrome.tabs.sendMessage(tab, { type: 'Unblur', shouldFade: true });
             } else if (!foundMatch && !this.locked) {
                 this.locked = true;
-                browser.tabs.sendMessage(tab, { type: 'Blur', shouldFade: true });
+                chrome.tabs.sendMessage(tab, { type: 'Blur', shouldFade: true });
             }
         });
     }
@@ -47,14 +47,14 @@ class FaceLockEventHandler extends CameraControllerEventHandler {
     onTabActivated(tab) {
         if (this.locked) {
             // If the browser is locked, show the lock screen
-            browser.tabs.sendMessage(tab, { type: 'Blur', shouldFade: false });
+            chrome.tabs.sendMessage(tab, { type: 'Blur', shouldFade: false });
         }
     }
 
     onTabDeactivated(tab) {
         if (this.locked) {
             // If the browser is locked, hide the lock screen
-            browser.tabs.sendMessage(tab, { type: 'Unblur', shouldFade: false });
+            chrome.tabs.sendMessage(tab, { type: 'Unblur', shouldFade: false });
         }
     }
 }
@@ -64,7 +64,7 @@ class FaceLockEventHandler extends CameraControllerEventHandler {
  */
 let g_FaceLockEventHandler = null;
 
-browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     switch (message.type) {
         case 'EnableLock': {
             if (g_FaceLockEventHandler === null) {

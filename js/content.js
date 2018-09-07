@@ -72,7 +72,7 @@ function captureFrame(video, canvas) {
 }
 
 //Listener that appends a video element with webcam stream as src
-browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     console.log(request.type);
 
     switch (request.type) {

@@ -11,20 +11,20 @@ document.addEventListener("DOMContentLoaded", () => {
     let calibrateButton = document.getElementById('calibrate');
 
     // Enable the switch if face lock is enabled.
-    browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
+    chrome.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
         faceCheckbox.checked = enabled;
 
-        browser.runtime.sendMessage({ type: 'IsLocked' }, locked => {
+        chrome.runtime.sendMessage({ type: 'IsLocked' }, locked => {
             faceCheckbox.disabled = locked;
         });
     });
 
-    browser.runtime.sendMessage({ type: 'IsSlouchEnabled' }, slouchEnabled => {
+    chrome.runtime.sendMessage({ type: 'IsSlouchEnabled' }, slouchEnabled => {
         slouchCheckbox.checked = slouchEnabled;
         zoomCheckbox.disabled = !slouchEnabled; 
 
         //extendedItemThree.style.display = "inline-block";
-        browser.runtime.sendMessage({ type: 'IsZoomEnabled' }, zoomEnabled => {
+        chrome.runtime.sendMessage({ type: 'IsZoomEnabled' }, zoomEnabled => {
             zoomCheckbox.checked = zoomEnabled;
         });
     
@@ -33,22 +33,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
    
     faceCheckbox.addEventListener('click', () => {
-        browser.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
+        chrome.runtime.sendMessage({ type: 'IsLockEnabled' }, enabled => {
             if (enabled) {
-                browser.runtime.sendMessage({ type: 'DisableLock' });
+                chrome.runtime.sendMessage({ type: 'DisableLock' });
             } else {
-                browser.runtime.sendMessage({ type: 'EnableLock' });
+                chrome.runtime.sendMessage({ type: 'EnableLock' });
             }
         });
     });
 
     slouchCheckbox.addEventListener('click', () => {
-        browser.runtime.sendMessage({ type: 'IsSlouchEnabled' }, enabled => {
+        chrome.runtime.sendMessage({ type: 'IsSlouchEnabled' }, enabled => {
             if (enabled) {
-                browser.runtime.sendMessage({ type: 'DisableSlouch' });
+                chrome.runtime.sendMessage({ type: 'DisableSlouch' });
                 zoomCheckbox.disabled = true; 
             } else {
-                browser.runtime.sendMessage({ type: 'EnableSlouch' }); 
+                chrome.runtime.sendMessage({ type: 'EnableSlouch' }); 
                 alert('You have enabled Slouch Detection!');
                 zoomCheckbox.disabled = false; 
             }
@@ -56,29 +56,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     zoomCheckbox.addEventListener('click', () => {
-        browser.runtime.sendMessage({ type: 'IsZoomEnabled' }, enabled => {
+        chrome.runtime.sendMessage({ type: 'IsZoomEnabled' }, enabled => {
             if (enabled) {
-                browser.runtime.sendMessage({ type: 'SetZoomDisabled' });
+                chrome.runtime.sendMessage({ type: 'SetZoomDisabled' });
             } else {
-                browser.runtime.sendMessage({ type: 'SetZoomEnabled' });
+                chrome.runtime.sendMessage({ type: 'SetZoomEnabled' });
             }
         });
     });
 
     // Calibrate button
     calibrateButton.addEventListener('click', () => {
-        browser.runtime.sendMessage({ type: 'Recalibrate' });
+        chrome.runtime.sendMessage({ type: 'Recalibrate' });
     });
 
     setInterval(() => {
-        browser.runtime.sendMessage({ type: 'IsLocked' }, locked => {
+        chrome.runtime.sendMessage({ type: 'IsLocked' }, locked => {
             faceCheckbox.disabled = locked;
             calibrateButton.disabled = locked;
             slouchCheckbox.disabled = locked; 
             if (locked) {
                 zoomCheckbox.disabled = true; 
             } else {
-                browser.runtime.sendMessage({ type: 'IsSlouchEnabled'}, enabled => {
+                chrome.runtime.sendMessage({ type: 'IsSlouchEnabled'}, enabled => {
                     zoomCheckbox.disabled = !enabled; 
                 }); 
             }

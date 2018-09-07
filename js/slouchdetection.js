@@ -14,7 +14,7 @@ class SlouchDetectEventHandler extends CameraControllerEventHandler {
         if (faces.length > 0) {
             switch (slouchDetect(faces)) {
                 case SLOUCH_ATTRIBUTES.FORWARD_LEANING_SLOUCH:
-                    browser.tabs.sendMessage(tab, {
+                    chrome.tabs.sendMessage(tab, {
                         //Tells content script to execute script that zooms webpage in proportionally to how much closer user gets
                         type: 'ZoomScreen',
                         new: { //Get dimensions of face in frame
@@ -28,7 +28,7 @@ class SlouchDetectEventHandler extends CameraControllerEventHandler {
                     });
                     break;
                 case SLOUCH_ATTRIBUTES.SLOUCH_DOWN:
-                    browser.tabs.sendMessage(tab, { type: 'AlertSlouch' });
+                    chrome.tabs.sendMessage(tab, { type: 'AlertSlouch' });
                     break;
                 default:
                     break;
@@ -36,16 +36,16 @@ class SlouchDetectEventHandler extends CameraControllerEventHandler {
         }
     }
     onTabActivated(tab) {
-        browser.tabs.sendMessage(tab, { type: 'ResetZoom' });
+        chrome.tabs.sendMessage(tab, { type: 'ResetZoom' });
         if (zoomEnabled) {
-            browser.tabs.sendMessage(tab, { type: 'ZoomEnabled' });
+            chrome.tabs.sendMessage(tab, { type: 'ZoomEnabled' });
         }
     }
 }
 
 let g_SlouchDetectionEventHandler = null;
 
-browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     switch (message.type) {
         case 'EnableSlouch': {
             if (g_SlouchDetectionEventHandler === null) {
@@ -67,12 +67,12 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
         }
         case 'SetZoomEnabled': {
             zoomEnabled = true;
-            browser.tabs.sendMessage(m_CameraController.activeTab, { type: 'ZoomEnabled' });
+            chrome.tabs.sendMessage(m_CameraController.activeTab, { type: 'ZoomEnabled' });
             break;
         }
         case 'SetZoomDisabled': {
             zoomEnabled = false;
-            browser.tabs.sendMessage(m_CameraController.activeTab, { type: 'ZoomDisabled' });
+            chrome.tabs.sendMessage(m_CameraController.activeTab, { type: 'ZoomDisabled' });
             break;
         }
         case 'IsZoomEnabled': {

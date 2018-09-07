@@ -35,7 +35,7 @@ class CameraController {
         this.calibrateInfo = null;
         this.calibrating = false;
 
-        browser.tabs.query({ active: true }, tabs => {
+        chrome.tabs.query({ active: true }, tabs => {
             this.activeTab = tabs[0].id;
         });
     }
@@ -47,7 +47,7 @@ class CameraController {
         this.handlerList.add(handler);
 
         if (this.handlerList.size === 1 && this.activeTab) {
-            browser.tabs.sendMessage(this.activeTab, { type: 'StartCapture' });
+            chrome.tabs.sendMessage(this.activeTab, { type: 'StartCapture' });
         }
 
         if (this.activeTab) {
@@ -60,7 +60,7 @@ class CameraController {
 
                 if (!this.calibrating) {
                     this.calibrating = true;
-                    browser.tabs.sendMessage(this.activeTab, { type: 'ShowCalibrateScreen' });
+                    chrome.tabs.sendMessage(this.activeTab, { type: 'ShowCalibrateScreen' });
                 }
             } else {
                 handler.onCalibration(this.calibrateInfo.frame, this.activeTab, this.calibrateInfo.face);
@@ -77,7 +77,7 @@ class CameraController {
         }
 
         if (this.handlerList.size === 0 && this.activeTab) {
-            browser.tabs.sendMessage(this.activeTab, { type: 'EndCapture' });
+            chrome.tabs.sendMessage(this.activeTab, { type: 'EndCapture' });
             this.calibrateInfo = null;
         }
     }
@@ -111,7 +111,7 @@ class CameraController {
             handler.onTabDeactivated(tabId);
         });
 
-        browser.tabs.sendMessage(tabId, { type: 'EndCapture' });
+        chrome.tabs.sendMessage(tabId, { type: 'EndCapture' });
     }
 
     setupTab(tabId) {
@@ -119,7 +119,7 @@ class CameraController {
             return;
         }
 
-        browser.tabs.sendMessage(tabId, { type: 'StartCapture' });
+        chrome.tabs.sendMessage(tabId, { type: 'StartCapture' });
 
         this.handlerList.forEach(handler => {
             handler.onTabActivated(tabId);
@@ -135,7 +135,7 @@ let m_CameraController = new CameraController();
 
 setInterval(faceJs => {
     if (m_CameraController.getActiveTab() && m_CameraController.hasEventHandlers()) {
-        browser.tabs.sendMessage(m_CameraController.getActiveTab(), { type: 'GetFrame' }, frame => {
+        chrome.tabs.sendMessage(m_CameraController.getActiveTab(), { type: 'GetFrame' }, frame => {
             let bytes = atob(frame.data); //get the image data
             let buffer = new ArrayBuffer(bytes.length);
             let byteArr = new Uint8Array(buffer);
@@ -159,7 +159,7 @@ setInterval(faceJs => {
                             handler.onCalibration(byteArr, m_CameraController.getActiveTab(), faces[0]);
                         });
 
-                        browser.tabs.sendMessage(m_CameraController.activeTab, { type: 'HideCalibrateScreen' });
+                        chrome.tabs.sendMessage(m_CameraController.activeTab, { type: 'HideCalibrateScreen' });
                     }
                 } else {
                     m_CameraController.getEventHandlers().forEach(handler => {
@@ -171,14 +171,14 @@ setInterval(faceJs => {
     }
 }, CAMERA_UPDATE_TIME, new FaceJS(AZURE_KEYS.keys[0], AZURE_KEYS.region));
 
-browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log(message.type);
     switch (message.type) {
         case 'Recalibrate':
             if (m_CameraController.hasEventHandlers()) {
                 m_CameraController.calibrateInfo = null;
                 m_CameraController.calibrating = true;
-                browser.tabs.sendMessage(m_CameraController.activeTab, { type: 'ShowCalibrateScreen' });
+                chrome.tabs.sendMessage(m_CameraController.activeTab, { type: 'ShowCalibrateScreen' });
             }
             break;
         default:
@@ -186,11 +186,11 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 });
 
-browser.tabs.onActivated.addListener(activeTabInfo => {
+chrome.tabs.onActivated.addListener(activeTabInfo => {
     m_CameraController.changeActiveTab(activeTabInfo.tabId);
 });
 
-browser.tabs.onUpdated.addListener((tabId, changeInfo, tabInfo) => {
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tabInfo) => {
     // Only worry about when the tab is fully loaded
     if (changeInfo.status === 'complete') {
         m_CameraController.setupTab(tabId);
